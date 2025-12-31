@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* index.css */
+body {
+  background-color: #111111;
+  color: #e5e7eb;
+  overflow-x: hidden;
+  /* UPDATED: Cinematic transition for ultra-smooth color bleeding */
+  transition: background-color 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: background-color;
+  cursor: none;
+}
+
+/* MARQUEE RULE: Seamless loop animation logic */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee linear infinite;
+}
+
+#glass-cursor {
+  pointer-events: none !important;
+}
+
+@media (pointer: coarse) {
+  body { cursor: auto; }
+  #glass-cursor { display: none !important; }
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { 
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
+}
+
+.hero-title-responsive {
+  font-size: clamp(3rem, 13vw, 16rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}

@@ -1,0 +1,51 @@
+/* src/styles/global.css */
+
+/* High Performance Marquee Animation */
+@keyframes marquee {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+.animate-marquee {
+  display: flex;
+  animation: marquee linear infinite;
+  will-change: transform;
+}
+
+/* Pause drift on hover only if not already manually scrolling */
+.group\/marquee:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+/* Circular Glass Buttons - Matching Header Aesthetic */
+.glass-round-btn {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15); /* Soft glass edge */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+.glass-round-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.glass-round-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.glass-round-btn:hover svg {
+  transform: scale(1.1);
+}
+
+/* Standard scroll hygiene */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
