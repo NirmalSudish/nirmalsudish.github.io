@@ -2,17 +2,34 @@ import React, { useEffect, useRef } from 'react';
 
 const MotionBackground = () => {
   const canvasRef = useRef(null);
-  
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
+
     const ctx = canvas.getContext('2d');
     let animationFrameId;
     let grid = [];
     const gridSize = 30;
     let time = 0;
     const mouse = { x: undefined, y: undefined, radius: 120 };
+
+    let dotColor = '255, 255, 255';
+
+    const updateTheme = () => {
+      if (document.documentElement.classList.contains('dark')) {
+        dotColor = '255, 255, 255';
+        baseOpacity = 0.04;
+      } else {
+        dotColor = '17, 17, 17';
+        baseOpacity = 0.08; // Reduced visibility for light mode (was 0.15)
+      }
+    };
+    let baseOpacity = 0.04;
+    updateTheme();
+
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
@@ -32,7 +49,7 @@ const MotionBackground = () => {
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       time += 0.005;
-      
+
       for (let i = 0; i < grid.length; i++) {
         const point = grid[i];
         let forceX = 0;
@@ -42,31 +59,31 @@ const MotionBackground = () => {
         forceX += springForceX;
         forceY += springForceY;
 
-        let color = '255, 255, 255';
-        // 1. BASE OPACITY: Changed from 0.1 to 0.04
-        let finalOpacity = 0.04; 
+        let color = dotColor;
+        // 1. BASE OPACITY: Uses dynamic baseOpacity based on theme
+        let finalOpacity = baseOpacity;
         let radius = 1.2;
 
         if (mouse.x !== undefined) {
-            const dx = mouse.x - point.x;
-            const dy = mouse.y - point.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
+          const dx = mouse.x - point.x;
+          const dy = mouse.y - point.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
 
-            if (dist < mouse.radius) {
-                const force = (mouse.radius - dist) / mouse.radius;
-                const angle = Math.atan2(dy, dx);
-                forceX -= Math.cos(angle) * force * 1.5;
-                forceY -= Math.sin(angle) * force * 1.5;
-                
-                color = '199, 146, 255'; 
-                // 2. INTERACTIVE OPACITY: Softened for subtle transition
-                finalOpacity = force * 0.4 + 0.04; 
-                radius = 1.5 + force * 4.5; 
+          if (dist < mouse.radius) {
+            const force = (mouse.radius - dist) / mouse.radius;
+            const angle = Math.atan2(dy, dx);
+            forceX -= Math.cos(angle) * force * 1.5;
+            forceY -= Math.sin(angle) * force * 1.5;
 
-                ctx.shadowBlur = 35 * force; 
-                // 3. BLOOM OPACITY: Reduced for a softer lavender glow
-                ctx.shadowColor = `rgba(199, 146, 255, ${force * 0.3})`;
-            }
+            color = '199, 146, 255';
+            // 2. INTERACTIVE OPACITY: Softened for subtle transition
+            finalOpacity = force * 0.4 + baseOpacity;
+            radius = 1.5 + force * 4.5;
+
+            ctx.shadowBlur = 35 * force;
+            // 3. BLOOM OPACITY: Reduced for a softer lavender glow
+            ctx.shadowColor = `rgba(199, 146, 255, ${force * 0.3})`;
+          }
         }
 
         forceX += Math.sin(point.originalY / 60 + time) * 0.02;
@@ -90,14 +107,15 @@ const MotionBackground = () => {
     window.addEventListener('resize', resizeCanvas);
     const handleMouseMove = (e) => { mouse.x = e.clientX; mouse.y = e.clientY; };
     const handleMouseOut = () => { mouse.x = undefined; mouse.y = undefined; };
-    
+
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseout', handleMouseOut);
-    
+
     resizeCanvas();
     animate();
 
     return () => {
+      observer.disconnect();
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseout', handleMouseOut);
@@ -106,10 +124,10 @@ const MotionBackground = () => {
   }, []);
 
   return (
-    <canvas 
-      ref={canvasRef} 
-      className="fixed top-0 left-0 w-full h-full pointer-events-none" 
-      style={{ zIndex: 0 }} 
+    <canvas
+      ref={canvasRef}
+      className="fixed top-0 left-0 w-full h-full pointer-events-none"
+      style={{ zIndex: 0 }}
     />
   );
 };

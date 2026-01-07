@@ -5,7 +5,6 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import CustomCursor from './components/common/CustomCursor';
 import MotionBackground from './components/background/MotionBackground';
 import TransitionCurtain from './components/common/TransitionCurtain';
-import ScrollReveal from './components/common/ScrollReveal'; // Import your new component
 
 import Home from './pages/Home';
 import ProjectDetail from './pages/ProjectDetail';

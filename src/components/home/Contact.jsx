@@ -1,16 +1,19 @@
 import React from 'react';
+import ScrollReveal from '../common/ScrollReveal';
 
 const Contact = () => {
   return (
     <div className="text-center px-6">
-      {/* Animated gradient shimmering text */}
-      <h2 className="text-5xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-none mb-8
-                     bg-gradient-to-r from-white via-[#c792ff] to-white bg-clip-text text-transparent animate-text-gradient">
-        LET'S WORK TOGETHER
-      </h2>
-      <a href="mailto:hello@nirmal.com" className="text-xl md:text-3xl font-bold text-white/60 hover:text-[#c792ff] transition-all duration-500 lowercase tracking-tight">
-        hello@nirmal.com
-      </a>
+      <ScrollReveal>
+        {/* Animated gradient shimmering text */}
+        <h2 className="text-5xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-none mb-8
+                       bg-gradient-to-r from-violet-600 via-fuchsia-500 to-indigo-600 dark:from-violet-400 dark:via-fuchsia-300 dark:to-indigo-400 bg-clip-text text-transparent animate-text-gradient bg-[length:200%_auto]">
+          LET'S WORK TOGETHER
+        </h2>
+        <a href="mailto:hello@nirmal.com" className="text-xl md:text-3xl font-bold opacity-60 hover:opacity-100 hover:text-purple-600 dark:hover:text-[#c792ff] transition-all duration-500 lowercase tracking-tight">
+          hello@nirmal.com
+        </a>
+      </ScrollReveal>
     </div>
   );
 };

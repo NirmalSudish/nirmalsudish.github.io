@@ -5,33 +5,43 @@
 .stretch-letter {
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   display: inline-block;
-  font-weight: 200; /* Starting thin weight for maximum contrast */
+  font-weight: 200;
+  /* Starting thin weight for maximum contrast */
   will-change: transform, font-weight;
   position: relative;
 }
 
 /* Expansion and Bloat on Hover */
 .stretch-letter:hover {
-  font-weight: 900 !important; /* Thickest weight from your Inter Variable Font */
-  transform: scale(1.4) translateY(-12px); /* Inflates and lifts the letter */
-  margin: 0 10px; /* Pushes other letters away for bubble effect */
+  font-weight: 900 !important;
+  /* Thickest weight from your Inter Variable Font */
+  transform: scale(1.4) translateY(-12px);
+  /* Inflates and lifts the letter */
+  margin: 0 10px;
+  /* Pushes other letters away for bubble effect */
   color: #ffffff;
   text-shadow: 0 0 35px rgba(255, 255, 255, 0.5);
-  z-index: 50; /* Ensures the bloated letter stays on top */
+  z-index: 50;
+  /* Ensures the bloated letter stays on top */
   cursor: default;
 }
 
 /* Neighborhood reaction for 'wave' feel */
 /* This makes the letter immediately following the hovered one also react slightly */
-.stretch-letter:hover + .stretch-letter {
+.stretch-letter:hover+.stretch-letter {
   transform: scale(1.2) translateY(-4px);
   font-weight: 500;
 }
 
 /* --- THE AUTOMATIC MARQUEE MOVEMENT --- */
 @keyframes marquee {
-  0% { transform: translate3d(0, 0, 0); }
-  100% { transform: translate3d(-50%, 0, 0); }
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
 .animate-marquee {
@@ -61,13 +71,14 @@
 }
 
 /* --- CLEANUP & CORE STYLES --- */
-.no-scrollbar::-webkit-scrollbar { 
+.no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
-body {
+/* Body styles are handled in index.css */
+/* body {
   transition: background-color 0.8s ease;
   background-color: #111111;
   overflow-x: hidden;
   color: white;
-}
+} */

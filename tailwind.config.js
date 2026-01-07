@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -11,7 +12,7 @@ export default {
       },
       animation: {
         // CHANGED TO 120s FOR VERY SLOW, ELEGANT SCROLL
-        marquee: 'marquee 120s linear infinite', 
+        marquee: 'marquee 120s linear infinite',
         'spin-slow': 'spin 12s linear infinite',
       },
       keyframes: {
