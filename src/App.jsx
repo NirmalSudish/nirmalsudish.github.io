@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 
 // 1. Remove AOS imports to keep the project light
 import CustomCursor from './components/common/CustomCursor';
@@ -37,9 +37,9 @@ const AppContent = () => {
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <AppContent />
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
