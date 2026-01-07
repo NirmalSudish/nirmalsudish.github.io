@@ -6,7 +6,7 @@ const About = () => {
   return (
     <section id="about" className="py-32 bg-transparent relative z-10 overflow-hidden">
       <div className="container mx-auto px-6 md:px-12 lg:px-20">
-        <div className="flex flex-col md:flex-row gap-16 items-center">
+        <div className="flex flex-col md:flex-row gap-16 items-start lg:items-center">
 
           {/* LEFT COLUMN: Personal Image */}
           <div className="w-full md:w-5/12">
@@ -18,7 +18,7 @@ const About = () => {
                   <img
                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop"
                     alt="Nirmal"
-                    className="w-full h-full object-cover transition-all duration-700 scale-105 group-hover:scale-100"
+                    className="w-full h-full object-cover transition-all duration-700"
                   />
                 </div>
               </div>
