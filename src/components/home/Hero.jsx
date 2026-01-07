@@ -22,15 +22,16 @@ const Hero = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3
+        staggerChildren: 0.08,
+        delayChildren: 0.2,
+        ease: "easeOut"
       }
     }
   };
 
   const letterVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.1 } }
+    hidden: { opacity: 0, y: 10, filter: 'blur(10px)' },
+    visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.4, ease: "easeOut" } }
   };
 
   return (
@@ -65,8 +66,9 @@ const Hero = () => {
         {/* Right Side: Spaced Description */}
         <div className="w-full md:w-1/3 flex flex-col items-center md:items-end md:mt-32">
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={nameFinished ? { opacity: 1 } : { opacity: 0 }}
+            initial={{ opacity: 0, x: 20 }}
+            animate={nameFinished ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             className="text-xl md:text-2xl font-light flex flex-col items-center md:items-end gap-1"
           >
             <span className="leading-none">I'm a</span>
