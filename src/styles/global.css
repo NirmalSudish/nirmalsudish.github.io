@@ -62,12 +62,32 @@
   border-radius: 50% !important;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(25px) saturate(180%);
-  border: 4px solid #ffffff !important;
+  border: 2px solid #ffffff !important;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Light mode styles for the button */
+html:not(.dark) .glass-round-btn {
+  background: rgba(24, 24, 24, 0.05);
+  border: 1px solid rgba(24, 24, 24, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(10px) saturate(150%);
+}
+
+html:not(.dark) .glass-round-btn:hover {
+  background: rgba(24, 24, 24, 0.1);
+  transform: scale(1.05);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+}
+
+html:not(.dark) .glass-round-btn:active {
+  background: rgba(24, 24, 24, 0.15);
+  transform: scale(0.95);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 /* --- CLEANUP & CORE STYLES --- */
