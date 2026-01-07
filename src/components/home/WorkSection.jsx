@@ -145,7 +145,7 @@ const WorkSection = () => {
               { id: 'experimental', label: 'EXPERIMENTAL DESIGN' },
               { id: 'motion', label: 'MOTION DESIGN' }
             ].map(f => (
-              <button key={f.id} onClick={() => { setActiveFilter(f.id); setIsPaused(false); }} className={`group relative flex items-center gap-3 px-6 py-3 md:px-10 md:py-4 rounded-full transition-all duration-500 text-[10px] md:text-xs font-black uppercase tracking-widest backdrop-blur-2xl ${activeFilter === f.id ? 'bg-black text-white dark:bg-white dark:text-black ring-2 ring-transparent dark:ring-1 dark:ring-white scale-105 shadow-[0_0_30px_-5px_rgba(199,146,255,0.4)]' : 'bg-transparent ring-2 ring-inset ring-black/10 dark:ring-1 dark:ring-white text-black dark:!text-white hover:bg-black/5 dark:hover:bg-white/10'}`}>
+              <button key={f.id} onClick={() => { setActiveFilter(f.id); setIsPaused(false); }} className={`group relative flex items-center gap-3 px-6 py-3 md:px-10 md:py-4 rounded-full transition-all duration-500 text-[10px] md:text-xs font-black uppercase tracking-widest backdrop-blur-2xl ${activeFilter === f.id ? 'bg-black text-white dark:bg-white dark:text-black ring-2 ring-transparent dark:ring-1 dark:ring-white scale-105 shadow-[0_0_30px_-5px_rgba(199,146,255,0.4)]' : 'bg-transparent ring-2 ring-inset ring-black/10 dark:ring-[0.5px] dark:ring-white/50 text-black dark:!text-white hover:bg-black/5 dark:hover:bg-white/10'}`}>
                 {activeFilter === f.id && <div className="absolute inset-0 rounded-full opacity-30 blur-xl -z-10 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 animate-pulse" />}
                 <span>{categoryLogos[f.id]}</span><span className="relative z-10">{f.label}</span>
               </button>
