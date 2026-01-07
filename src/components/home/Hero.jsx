@@ -36,7 +36,7 @@ const Hero = () => {
 
   return (
     <div className="w-full h-full flex flex-col justify-center relative z-10 overflow-hidden">
-      <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-center md:justify-between h-full pt-24 md:pt-0 gap-12 md:gap-0">
+      <div className="container mx-auto px-6 md:px-12 lg:px-20 flex flex-col md:flex-row items-center justify-center md:justify-between h-full pt-24 md:pt-0 gap-12 md:gap-0">
 
         {/* Left Side: Large Name Heading */}
         <div className="w-full md:w-2/3 lg:w-3/4 text-center md:text-left">

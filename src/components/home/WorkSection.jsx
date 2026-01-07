@@ -132,7 +132,7 @@ const WorkSection = () => {
         )}
       </AnimatePresence>
 
-      <div className="container mx-auto px-6 text-center mb-16 md:mb-24">
+      <div className="container mx-auto px-6 md:px-12 lg:px-20 text-center mb-16 md:mb-24">
         <ScrollReveal>
           <h2 className="text-5xl md:text-8xl font-black mb-12 uppercase tracking-tighter leading-none text-black dark:!text-white">Featured Work</h2>
         </ScrollReveal>

@@ -5,7 +5,7 @@ import ScrollReveal from '../common/ScrollReveal';
 const About = () => {
   return (
     <section id="about" className="py-32 bg-transparent relative z-10 overflow-hidden">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6 md:px-12 lg:px-20">
         <div className="flex flex-col md:flex-row gap-16 items-center">
 
           {/* LEFT COLUMN: Personal Image */}

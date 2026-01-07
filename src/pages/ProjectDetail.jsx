@@ -95,7 +95,7 @@ const ProjectDetail = () => {
     return (
         <div id="project-detail-view" className="min-h-screen text-black dark:text-white relative z-20">
             <header className="fixed top-0 left-0 right-0 z-50 mix-blend-difference w-full pointer-events-none">
-                <div className="container mx-auto px-6 py-6 flex justify-between items-center pointer-events-auto">
+                <div className="container mx-auto px-6 md:px-12 lg:px-20 py-6 flex justify-between items-center pointer-events-auto">
                     <Link
                         to="/"
                         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
@@ -158,7 +158,7 @@ const ProjectDetail = () => {
                         </ScrollReveal>
                     </div>
 
-                    <div className="pb-16 md:pb-24 space-y-8 md:space-y-12 max-w-5xl mx-auto px-6">
+                    <div className="pb-16 md:pb-24 space-y-8 md:space-y-12 max-w-5xl mx-auto px-6 md:px-12 lg:px-20">
                         {project.detailImages.map((src, i) => {
                             const isVideo = src.toLowerCase().endsWith('.mp4');
                             return (
@@ -176,7 +176,7 @@ const ProjectDetail = () => {
                     </div>
 
                     <div ref={footerRef} className="py-32 mt-12 text-black dark:text-white">
-                        <nav className="flex justify-between items-center max-w-7xl mx-auto border-t border-black/10 dark:border-white/10 pt-12 px-6">
+                        <nav className="flex justify-between items-center max-w-7xl mx-auto border-t border-black/10 dark:border-white/10 pt-12 px-6 md:px-12 lg:px-20">
                             <Link to={`/project/${prevProjectId}`} className="group flex flex-col items-start text-left cursor-pointer">
                                 <span className="text-xs uppercase tracking-widest text-gray-500 dark:text-white mb-2 font-bold">Previous</span>
                                 <div className="relative overflow-hidden h-10 md:h-16">
