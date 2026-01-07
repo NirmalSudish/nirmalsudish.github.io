@@ -17,9 +17,20 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3
+      }
+    }
+  };
+
   const letterVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } }
+    visible: { opacity: 1, y: 0, transition: { duration: 0.1 } }
   };
 
   return (
@@ -31,14 +42,22 @@ const Hero = () => {
           <motion.h1
             initial="hidden"
             animate="visible"
-            onAnimationComplete={() => setNameFinished(true)}
+            variants={containerVariants}
             className="font-black hero-title-responsive uppercase tracking-tighter leading-[0.85] select-none"
           >
             <div className="block mb-6">
               {"HI, I'M".split("").map((c, i) => <motion.span key={i} variants={letterVariants}>{c === " " ? "\u00A0" : c}</motion.span>)}
             </div>
             <div className="block">
-              {"NIRMAL".split("").map((c, i) => <motion.span key={i} variants={letterVariants}>{c === " " ? "\u00A0" : c}</motion.span>)}
+              {"NIRMAL".split("").map((c, i) => (
+                <motion.span
+                  key={i}
+                  variants={letterVariants}
+                  onAnimationComplete={i === "NIRMAL".length - 1 ? () => setNameFinished(true) : undefined}
+                >
+                  {c === " " ? "\u00A0" : c}
+                </motion.span>
+              ))}
             </div>
           </motion.h1>
         </div>
