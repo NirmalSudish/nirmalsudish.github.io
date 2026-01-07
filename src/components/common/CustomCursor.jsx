@@ -51,6 +51,11 @@ const CustomCursor = () => {
           width: 80px;
           height: 80px;
         }
+        @media (hover: none) and (pointer: coarse) {
+          #glass-cursor {
+            display: none !important;
+          }
+        }
       `}</style>
       <div id="glass-cursor" ref={cursorRef} />
     </>

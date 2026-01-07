@@ -158,7 +158,7 @@ const ProjectDetail = () => {
                         </ScrollReveal>
                     </div>
 
-                    <div className="pb-16 md:pb-24 space-y-8 md:space-y-12 max-w-5xl mx-auto">
+                    <div className="pb-16 md:pb-24 space-y-8 md:space-y-12 max-w-5xl mx-auto px-6">
                         {project.detailImages.map((src, i) => {
                             const isVideo = src.toLowerCase().endsWith('.mp4');
                             return (
@@ -176,7 +176,7 @@ const ProjectDetail = () => {
                     </div>
 
                     <div ref={footerRef} className="py-32 mt-12 text-black dark:text-white">
-                        <nav className="flex justify-between items-center max-w-7xl mx-auto border-t border-black/10 dark:border-white/10 pt-12">
+                        <nav className="flex justify-between items-center max-w-7xl mx-auto border-t border-black/10 dark:border-white/10 pt-12 px-6">
                             <Link to={`/project/${prevProjectId}`} className="group flex flex-col items-start text-left cursor-pointer">
                                 <span className="text-xs uppercase tracking-widest text-gray-500 dark:text-white mb-2 font-bold">Previous</span>
                                 <div className="relative overflow-hidden h-10 md:h-16">
