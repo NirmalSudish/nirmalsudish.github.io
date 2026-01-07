@@ -1,10 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const logoRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleNavClick = (id) => {
+    setIsOpen(false);
+    if (location.pathname !== '/') {
+      navigate('/');
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,14 +59,14 @@ const Navbar = () => {
             </svg>
           </Link>
           <nav className="hidden md:flex items-center space-x-8 relative z-50">
-            <a href="/#work" className="font-bold hover:opacity-75 transition-opacity uppercase tracking-widest text-sm cursor-pointer">Work</a>
-            <a href="/#about" className="font-bold hover:opacity-75 transition-opacity uppercase tracking-widest text-sm cursor-pointer">About</a>
-            <a href="/#contact" className="bg-white text-black font-bold px-6 py-3 rounded-full hover:bg-gray-200 transition-colors uppercase tracking-widest text-sm cursor-pointer flex items-center gap-2 border border-black dark:border-transparent">
+            <button onClick={() => handleNavClick('work')} className="font-bold hover:opacity-75 transition-opacity uppercase tracking-widest text-sm cursor-pointer bg-transparent border-none p-0 text-current">Work</button>
+            <button onClick={() => handleNavClick('about')} className="font-bold hover:opacity-75 transition-opacity uppercase tracking-widest text-sm cursor-pointer bg-transparent border-none p-0 text-current">About</button>
+            <button onClick={() => handleNavClick('contact')} className="bg-white text-black font-bold px-6 py-3 rounded-full hover:bg-gray-200 transition-colors uppercase tracking-widest text-sm cursor-pointer flex items-center gap-2 border border-black dark:border-transparent">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
               </svg>
               Let's Chat
-            </a>
+            </button>
             <ThemeToggle />
           </nav>
           <div className="flex items-center gap-4 md:hidden z-50">
@@ -65,9 +79,9 @@ const Navbar = () => {
       </div>
       {isOpen && (
         <div className="fixed inset-0 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center z-40 min-h-screen">
-          <a href="/#work" onClick={() => setIsOpen(false)} className="block py-4 text-4xl font-black text-gray-300 hover:text-white uppercase">Work</a>
-          <a href="/#about" onClick={() => setIsOpen(false)} className="block py-4 text-4xl font-black text-gray-300 hover:text-white uppercase">About</a>
-          <a href="/#contact" onClick={() => setIsOpen(false)} className="block py-4 text-4xl font-black text-gray-300 hover:text-white uppercase">Contact</a>
+          <button onClick={() => handleNavClick('work')} className="block py-4 text-4xl font-black text-gray-300 hover:text-white uppercase bg-transparent border-none cursor-pointer">Work</button>
+          <button onClick={() => handleNavClick('about')} className="block py-4 text-4xl font-black text-gray-300 hover:text-white uppercase bg-transparent border-none cursor-pointer">About</button>
+          <button onClick={() => handleNavClick('contact')} className="block py-4 text-4xl font-black text-gray-300 hover:text-white uppercase bg-transparent border-none cursor-pointer">Contact</button>
         </div>
       )}
     </header>
