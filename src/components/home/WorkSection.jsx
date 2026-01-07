@@ -162,8 +162,7 @@ const WorkSection = () => {
         <div className="w-full overflow-hidden">
           <div ref={scrollContainerRef} className="overflow-x-auto no-scrollbar">
             <motion.div
-              layout
-              className={`flex w-max gap-12 md:gap-24 px-[5vw] ${!isPaused ? 'animate-marquee-slow' : ''}`}
+              className={`flex min-w-full w-max gap-12 md:gap-24 px-[5vw] will-change-transform ${!isPaused ? 'animate-marquee-slow' : ''}`}
               style={{ animationPlayState: isPaused ? 'paused' : 'running', animationDuration: `${(filteredItems.length * 2) * SECONDS_PER_ITEM}s` }}
             >
               <AnimatePresence mode="popLayout">
