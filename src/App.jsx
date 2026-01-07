@@ -11,6 +11,7 @@ import ProjectDetail from './pages/ProjectDetail';
 
 const AppContent = () => {
   const location = useLocation();
+  const initialKey = React.useRef(location.key);
 
   useEffect(() => {
     // Keep window scroll to top on route change
@@ -21,7 +22,7 @@ const AppContent = () => {
     <>
       <CustomCursor />
       {/* key triggers the curtain animation on every path change */}
-      <TransitionCurtain key={location.pathname} />
+      {location.key !== initialKey.current && <TransitionCurtain key={location.pathname} />}
       <MotionBackground />
 
       <main className="relative z-10">
