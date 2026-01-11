@@ -81,8 +81,8 @@ body {
     scroll-snap-stop: always;
     justify-content: flex-start;
     /* REPAIRED: Align content to top to prevent cutoff */
-    padding: 0;
-    /* Reset padding for desktop snap layout */
+    padding-top: 6rem;
+    /* Ensure minimal padding for desktop */
   }
 
   /* Specific adjustment for the last section on desktop to accommodate the footer */
