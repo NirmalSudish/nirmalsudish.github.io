@@ -92,7 +92,7 @@ const Home = () => {
           <WorkSection />
         </section>
 
-        <section ref={el => sectionRefs.current[3] = el} className="snap-section w-full h-full">
+        <section ref={el => sectionRefs.current[3] = el} className="snap-section w-full h-full flex flex-col justify-center items-center">
           <About />
         </section>
 

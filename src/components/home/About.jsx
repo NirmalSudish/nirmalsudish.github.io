@@ -1,10 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import ScrollReveal from '../common/ScrollReveal';
+import { resolvePath } from '../../utils/imagePath';
 
 const About = () => {
   return (
-    <section id="about" className="py-32 bg-transparent relative z-10 overflow-hidden">
+    <section id="about" className="w-full py-0 bg-transparent relative z-10 overflow-hidden">
       <div className="container mx-auto px-6 md:px-12 lg:px-20">
         <div className="flex flex-col md:flex-row gap-16 items-start lg:items-center">
 
@@ -16,7 +17,7 @@ const About = () => {
 
                 <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-white/10">
                   <img
-                    src="/images/about-me.jpg"
+                    src={resolvePath('/images/about-me.jpg')}
                     alt="Nirmal"
                     className="w-full h-full object-cover transition-all duration-700"
                   />
@@ -84,7 +85,7 @@ const About = () => {
 
               {/* VIEW RESUME BUTTON */}
               <a
-                href="/resume.pdf"
+                href={resolvePath('/resume.pdf')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 px-8 py-4 bg-black text-white dark:bg-white dark:text-black font-black uppercase tracking-[0.2em] text-sm rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-300 hover:scale-105 active:scale-95"

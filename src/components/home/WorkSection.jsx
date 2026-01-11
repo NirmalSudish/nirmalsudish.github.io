@@ -126,7 +126,7 @@ const WorkSection = () => {
             </motion.button>
 
             <motion.div key={selectedAsset.src} initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="relative z-[210] max-w-[90vw] max-h-[85vh] pointer-events-none">
-              {selectedAsset.src.endsWith('.mp4') ? <video src={selectedAsset.src} controls autoPlay className="max-h-[85vh] rounded-lg pointer-events-auto shadow-2xl" /> : <img src={selectedAsset.src} className="max-h-[85vh] object-contain rounded-lg pointer-events-auto shadow-2xl" alt="" />}
+              {selectedAsset.src.endsWith('.mp4') ? <video src={resolvePath(selectedAsset.src)} controls autoPlay className="max-h-[85vh] rounded-lg pointer-events-auto shadow-2xl" /> : <img src={resolvePath(selectedAsset.src)} className="max-h-[85vh] object-contain rounded-lg pointer-events-auto shadow-2xl" alt="" />}
             </motion.div>
           </div>
         )}
