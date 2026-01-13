@@ -142,7 +142,10 @@ const MotionBackground = () => {
       observer.disconnect();
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchstart', handleTouchMove);
       window.removeEventListener('mouseout', handleMouseOut);
+      window.removeEventListener('touchend', handleMouseOut);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
