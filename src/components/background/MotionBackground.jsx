@@ -15,6 +15,7 @@ const MotionBackground = () => {
     const mouse = { x: undefined, y: undefined, radius: 120 };
 
     let dotColor = '255, 255, 255';
+    let baseOpacity = 0.04;
 
     const updateTheme = () => {
       if (document.documentElement.classList.contains('dark')) {
@@ -25,7 +26,6 @@ const MotionBackground = () => {
         baseOpacity = 0.08; // Reduced visibility for light mode (was 0.15)
       }
     };
-    let baseOpacity = 0.04;
     updateTheme();
 
     const observer = new MutationObserver(updateTheme);
