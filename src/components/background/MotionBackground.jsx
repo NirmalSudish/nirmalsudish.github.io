@@ -50,6 +50,16 @@ const MotionBackground = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       time += 0.005;
 
+      // Mobile auto-movement logic
+      let targetX = mouse.x;
+      let targetY = mouse.y;
+
+      // Auto-wander on mobile if no user interaction
+      if (canvas.width < 768 && mouse.x === undefined) {
+        targetX = (canvas.width / 2) + Math.sin(time * 0.5) * (canvas.width / 3);
+        targetY = (canvas.height / 2) + Math.cos(time * 0.3) * (canvas.height / 3);
+      }
+
       for (let i = 0; i < grid.length; i++) {
         const point = grid[i];
         let forceX = 0;
@@ -64,9 +74,9 @@ const MotionBackground = () => {
         let finalOpacity = baseOpacity;
         let radius = 1.2;
 
-        if (mouse.x !== undefined) {
-          const dx = mouse.x - point.x;
-          const dy = mouse.y - point.y;
+        if (targetX !== undefined) {
+          const dx = targetX - point.x;
+          const dy = targetY - point.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist < mouse.radius) {
@@ -105,11 +115,25 @@ const MotionBackground = () => {
     };
 
     window.addEventListener('resize', resizeCanvas);
-    const handleMouseMove = (e) => { mouse.x = e.clientX; mouse.y = e.clientY; };
+    const handleMouseMove = (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    };
+
+    const handleTouchMove = (e) => {
+      if (e.touches.length > 0) {
+        mouse.x = e.touches[0].clientX;
+        mouse.y = e.touches[0].clientY;
+      }
+    };
+
     const handleMouseOut = () => { mouse.x = undefined; mouse.y = undefined; };
 
     window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchmove', handleTouchMove);
+    window.addEventListener('touchstart', handleTouchMove);
     window.addEventListener('mouseout', handleMouseOut);
+    window.addEventListener('touchend', handleMouseOut);
 
     resizeCanvas();
     animate();

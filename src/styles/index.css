@@ -38,22 +38,25 @@ body {
 
 /* REPAIRED: Default mobile styles */
 .snap-container {
-  height: 100%;
+  height: 100dvh;
+  /* Use dynamic viewport height for mobile too */
   width: 100vw;
   overflow-y: auto;
-  /* Changed from 'scroll' to 'auto' for cleaner mobile experience */
+  scroll-snap-type: y mandatory;
+  overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
 }
 
 .snap-section {
-  min-height: 100vh;
-  /* Ensures sections are at least viewport height, can grow with content */
+  min-height: 100dvh;
+  /* Ensure full viewport height */
   width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
   padding: 8rem 0;
-  /* Add vertical padding for spacing */
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 /* REPAIRED: Snapping behavior for larger screens */
@@ -62,22 +65,17 @@ body {
   /* Changed to 1024px for a more robust desktop breakpoint */
   .snap-container {
     height: 100dvh;
-    /* Use dynamic viewport height */
     overflow-y: scroll;
-    scroll-snap-type: y mandatory;
+    /* scroll-snap-type inherited */
     scroll-behavior: auto;
-    /* Use 'auto' for instant snapping handled by JS */
-    overscroll-behavior-y: contain;
+    /* overscroll-behavior-y inherited */
   }
 
   .snap-section {
     height: 100dvh;
-    /* Enforce strict viewport height */
     min-height: 0;
-    /* Reset min-height */
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-    /* Let specific sections handle justify-content via utility classes */
+    /* scroll-snap-align inherited */
+    /* scroll-snap-stop inherited */
     padding: 0;
   }
 
