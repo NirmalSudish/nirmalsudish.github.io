@@ -81,23 +81,23 @@ const Home = () => {
         ref={containerRef}
         className="snap-container no-scrollbar relative z-10 w-full h-full overflow-y-auto scroll-smooth"
       >
-        <section ref={el => sectionRefs.current[0] = el} className="snap-section flex justify-center w-full">
+        <section ref={el => sectionRefs.current[0] = el} className="snap-section flex justify-center w-full h-[100dvh]">
           <Hero />
         </section>
 
-        <section ref={el => sectionRefs.current[1] = el} className="snap-section w-full flex flex-col justify-center items-center">
+        <section ref={el => sectionRefs.current[1] = el} className="snap-section w-full flex flex-col justify-center items-center h-[100dvh]">
           <BrandSection />
         </section>
 
-        <section ref={el => sectionRefs.current[2] = el} className="snap-section w-full">
+        <section ref={el => sectionRefs.current[2] = el} className="snap-section w-full h-[100dvh]">
           <WorkSection />
         </section>
 
-        <section ref={el => sectionRefs.current[3] = el} className="snap-section w-full flex flex-col justify-center items-center">
+        <section ref={el => sectionRefs.current[3] = el} className="snap-section w-full flex flex-col justify-center items-center h-[100dvh]">
           <About />
         </section>
 
-        <section ref={el => sectionRefs.current[4] = el} className="snap-section w-full">
+        <section ref={el => sectionRefs.current[4] = el} className="snap-section w-full h-[100dvh]">
           <div id="contact" className="flex-grow flex items-center justify-center h-full">
             <Contact />
           </div>
