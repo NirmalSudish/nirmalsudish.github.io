@@ -137,7 +137,7 @@ const WorkSection = () => {
           <h2 className="text-3xl md:text-5xl lg:text-8xl font-black mb-4 uppercase tracking-tighter leading-none text-black dark:!text-white">Featured Work</h2>
         </ScrollReveal>
         <ScrollReveal delay={0.2}>
-          <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap md:justify-center md:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 xl:flex xl:flex-wrap xl:justify-center gap-2 md:gap-4 xl:gap-6">
             {[
               { id: 'ux-branding', label: 'UI / UX and BRANDING' },
               { id: 'packaging-print', label: 'PRINT & PACKAGING' },

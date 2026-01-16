@@ -158,7 +158,7 @@ const ProjectDetail = () => {
                         </ScrollReveal>
                     </div>
 
-                    <div className="pb-16 md:pb-24 space-y-8 md:space-y-12 max-w-5xl mx-auto px-6 md:px-12 lg:px-20">
+                    <div className="pb-16 md:pb-24 space-y-8 md:space-y-12 max-w-5xl mx-auto px-6 md:px-12 lg:px-20 mt-12 md:mt-16">
                         {project.detailImages.map((src, i) => {
                             const isVideo = src.toLowerCase().endsWith('.mp4');
                             return (
