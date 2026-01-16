@@ -6,7 +6,7 @@ import { resolvePath } from '../../utils/imagePath';
 const About = () => {
   return (
     <section id="about" className="w-full h-full flex items-center justify-center bg-transparent relative z-10 overflow-hidden pt-4 md:pt-0">
-      <div className="container mx-auto px-4 md:px-12 lg:px-20 h-full flex flex-col justify-center">
+      <div className="container mx-auto px-0 md:px-12 lg:px-20 h-full flex flex-col justify-center">
         {/* Mobile: Row Reverse (Text Left, Image Right) | Desktop: Normal Row (Image Left, Text Right) */}
         <div className="flex flex-col md:flex-row gap-2 md:gap-16 items-center md:items-center h-full md:h-auto pt-4 md:pt-0">
 
