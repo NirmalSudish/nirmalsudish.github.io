@@ -8,7 +8,7 @@ const About = () => {
     <section id="about" className="w-full h-full flex items-center justify-center bg-transparent relative z-10 overflow-hidden pt-4 md:pt-0">
       <div className="container mx-auto px-4 md:px-12 lg:px-20 h-full flex flex-col justify-center">
         {/* Mobile: Row Reverse (Text Left, Image Right) | Desktop: Normal Row (Image Left, Text Right) */}
-        <div className="flex flex-col md:flex-row gap-4 md:gap-16 items-center md:items-center h-full md:h-auto pt-8 md:pt-0">
+        <div className="flex flex-col md:flex-row gap-2 md:gap-16 items-center md:items-center h-full md:h-auto pt-4 md:pt-0">
 
           {/* IMAGE COLUMN: Top on Mobile, Left on Desktop */}
           {/* Mobile: Order 1 (Top), Desktop: Order 1 (Left) */}
@@ -28,7 +28,7 @@ const About = () => {
           {/* Mobile: Order 2 (Below), Desktop: Order 2 (Right) */}
           <div className="w-full md:w-7/12 text-center md:text-left flex flex-col items-center md:items-start order-2">
             <ScrollReveal delay={0.2}>
-              <h4 className="text-[10px] md:text-3xl font-black text-[#c792ff] uppercase tracking-[0.2em] mb-1 md:mb-6 relative z-20 no-underline whitespace-nowrap">
+              <h4 className="text-[9px] md:text-3xl font-black text-[#c792ff] uppercase tracking-[0.2em] mb-1 md:mb-6 relative z-20 no-underline whitespace-nowrap">
                 The Story So Far
               </h4>
 
@@ -36,7 +36,7 @@ const About = () => {
                 I'm Nirmal.
               </h2>
 
-              <div className="space-y-2 md:space-y-6 text-[11px] md:text-xl opacity-70 leading-relaxed font-medium mb-4 md:mb-10 max-w-full md:max-w-none">
+              <div className="space-y-1 md:space-y-6 text-[10px] md:text-xl opacity-70 leading-relaxed font-medium mb-3 md:mb-10 max-w-full md:max-w-none">
                 <p>
                   I am a multi-disciplinary designer <br className="block md:hidden" />
                   and <span className="font-bold opacity-100">CS student</span> <br className="block md:hidden" />
@@ -53,7 +53,7 @@ const About = () => {
               </div>
 
               {/* MOVING GREEN GRADIENT BUTTON */}
-              <div className="relative inline-flex items-center justify-center p-[1.5px] overflow-hidden rounded-full group scale-[0.8] origin-left md:origin-center md:scale-100 mb-4 md:mb-0">
+              <div className="relative inline-flex items-center justify-center p-[1.5px] overflow-hidden rounded-full group scale-[0.75] origin-center md:scale-100 mb-3 md:mb-0">
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
@@ -69,18 +69,18 @@ const About = () => {
               </div>
 
               {/* MINIMALIST INFORMATION GRID - Stacked on Mobile to fit width */}
-              <div className="flex flex-col gap-3 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-y-8 md:gap-x-12 pt-0 md:pt-12 border-t-0 md:border-t border-black/10 dark:border-white/10 mb-4 md:mb-8 w-full">
-                <div className="flex flex-col items-start">
+              <div className="flex flex-col gap-2 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-y-8 md:gap-x-12 pt-0 md:pt-12 border-t-0 md:border-t border-black/10 dark:border-white/10 mb-3 md:mb-8 w-full">
+                <div className="flex flex-col items-center md:items-start">
                   <span className="text-[8px] md:text-[10px] font-black text-[#c792ff] uppercase tracking-[0.3em] mb-0.5 md:mb-2">Based In</span>
                   <span className="text-sm md:text-xl font-bold uppercase">Dubai, UAE</span>
                 </div>
 
-                <div className="flex flex-col items-start">
+                <div className="flex flex-col items-center md:items-start">
                   <span className="text-[8px] md:text-[10px] font-black text-[#c792ff] uppercase tracking-[0.3em] mb-0.5 md:mb-2">Working At</span>
                   <span className="text-sm md:text-xl font-bold uppercase">Google</span>
                 </div>
 
-                <div className="flex flex-col items-start">
+                <div className="flex flex-col items-center md:items-start">
                   <span className="text-[8px] md:text-[10px] font-black text-[#c792ff] uppercase tracking-[0.3em] mb-0.5 md:mb-2">Past</span>
                   <span className="text-sm md:text-xl font-bold opacity-40 uppercase">Freelance</span>
                 </div>
@@ -91,7 +91,7 @@ const About = () => {
                 href={resolvePath('/resume.pdf')}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 md:px-8 md:py-4 bg-black text-white dark:bg-white dark:text-black font-black uppercase tracking-[0.2em] text-[10px] md:text-sm rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-300 hover:scale-105 active:scale-95 mx-0 mt-0 md:mt-8"
+                className="inline-flex items-center gap-2 px-5 py-2 md:px-8 md:py-4 bg-black text-white dark:bg-white dark:text-black font-black uppercase tracking-[0.2em] text-[9px] md:text-sm rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-300 hover:scale-105 active:scale-95 mx-0 mt-0 md:mt-8"
               >
                 <svg className="w-3 h-3 md:w-5 md:h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                   <path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -103,7 +103,7 @@ const About = () => {
 
         </div>
       </div>
-    </section>
+    </section >
   );
 };
 export default About;

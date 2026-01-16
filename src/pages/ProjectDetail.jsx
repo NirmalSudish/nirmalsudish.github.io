@@ -146,8 +146,8 @@ const ProjectDetail = () => {
                                 `}
                                     />
                                 )}
-                                <h2 className="text-5xl md:text-8xl font-black mb-8 leading-tight uppercase">{project.client}</h2>
-                                <p className="text-xl md:text-3xl leading-relaxed text-gray-800 dark:text-white font-light">{project.description}</p>
+                                <h2 className="text-3xl md:text-8xl font-black mb-8 leading-tight uppercase">{project.client}</h2>
+                                <p className="text-base md:text-3xl leading-relaxed text-gray-800 dark:text-white font-light">{project.description}</p>
                                 <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 text-center border-t border-black/20 dark:border-white/20 pt-8">
                                     <div><p className="text-xs text-gray-600 dark:text-white uppercase tracking-widest mb-2 font-bold">Client</p><p className="font-bold text-lg">{project.client}</p></div>
                                     <div><p className="text-xs text-gray-600 dark:text-white uppercase tracking-widest mb-2 font-bold">Project</p><p className="font-bold text-lg">{project.project}</p></div>
