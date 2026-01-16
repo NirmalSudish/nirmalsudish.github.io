@@ -26,11 +26,11 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index })
     <div className="project-card flex-shrink-0 relative group/card cursor-pointer" onMouseEnter={() => isProject && onMouseEnter(item.bgColor || '#1d1d1d')} onMouseLeave={onMouseLeave} onClick={() => !isProject && onSelect(item, index)}>
       {isProject ? (
         <Link to={`/project/${item.id}`} className="block transition-all duration-500 w-[65vw] md:w-[60vw] lg:w-[45vw] xl:w-[40vw]">
-          <div className="rounded-xl overflow-hidden mb-6 bg-zinc-900 h-[240px] md:h-[400px] lg:h-[500px] w-full relative">
+          <div className="rounded-xl overflow-hidden mb-3 md:mb-6 bg-zinc-900 h-[160px] md:h-[400px] lg:h-[500px] w-full relative">
             <img src={resolvePath(item.mainImageUrl)} className="h-full w-full object-cover dark:group-hover/card:scale-105 transition-all duration-1000" alt={item.client} />
           </div>
           <div className="flex justify-between items-start px-1 w-full">
-            <div className="text-left"><h3 className="font-bold text-xl md:text-2xl uppercase tracking-tighter leading-none mb-1">{item.client}</h3><p className="text-[10px] opacity-60 uppercase tracking-widest font-medium">{item.project}</p></div>
+            <div className="text-left"><h3 className="font-bold text-base md:text-2xl uppercase tracking-tighter leading-none mb-1">{item.client}</h3><p className="text-[10px] opacity-60 uppercase tracking-widest font-medium">{item.project}</p></div>
             <div className="text-right"><span className="text-[10px] text-purple-600 dark:text-[#c792ff] font-black uppercase tracking-[0.2em]">{item.categories.join(' / ')}</span></div>
           </div>
         </Link>
@@ -103,7 +103,7 @@ const WorkSection = () => {
   }, [activeFilter]);
 
   return (
-    <section id="work" className="relative min-h-screen flex flex-col pt-24 md:pt-40 bg-transparent z-10 overflow-hidden">
+    <section id="work" className="relative min-h-screen flex flex-col pt-16 md:pt-40 bg-transparent z-10 overflow-hidden">
 
       <AnimatePresence>
         {selectedAsset && (
@@ -137,7 +137,7 @@ const WorkSection = () => {
           <h2 className="text-3xl md:text-5xl lg:text-8xl font-black mb-4 uppercase tracking-tighter leading-none text-black dark:!text-white">Featured Work</h2>
         </ScrollReveal>
         <ScrollReveal delay={0.2}>
-          <div className="flex flex-nowrap md:flex-wrap justify-start md:justify-center gap-4 md:gap-6 overflow-x-auto no-scrollbar pb-2 mask-linear-fade">
+          <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap md:justify-center md:gap-6">
             {[
               { id: 'ux-branding', label: 'UI / UX and BRANDING' },
               { id: 'packaging-print', label: 'PRINT & PACKAGING' },
@@ -146,7 +146,7 @@ const WorkSection = () => {
               { id: 'experimental', label: 'EXPERIMENTAL DESIGN' },
               { id: 'motion', label: 'MOTION DESIGN' }
             ].map(f => (
-              <button key={f.id} onClick={() => { setActiveFilter(f.id); setIsPaused(false); }} className={`group relative flex-shrink-0 flex items-center gap-3 px-6 py-3 md:px-10 md:py-4 rounded-full transition-all duration-500 text-[10px] md:text-xs font-black uppercase tracking-widest transform-gpu ${activeFilter === f.id ? 'bg-black text-white dark:bg-white dark:text-black ring-2 ring-transparent dark:ring-1 dark:ring-white scale-105 shadow-lg shadow-purple-500/30' : 'bg-white/5 ring-2 ring-inset ring-black/10 dark:ring-[0.5px] dark:ring-white/50 text-black dark:!text-white hover:bg-black/5 dark:hover:bg-white/10'}`}>
+              <button key={f.id} onClick={() => { setActiveFilter(f.id); setIsPaused(false); }} className={`group relative flex items-center justify-center gap-2 px-4 py-2 md:gap-3 md:px-10 md:py-4 rounded-full transition-all duration-500 text-[9px] md:text-xs font-black uppercase tracking-widest transform-gpu ${activeFilter === f.id ? 'bg-black text-white dark:bg-white dark:text-black ring-2 ring-transparent dark:ring-1 dark:ring-white scale-105 shadow-lg shadow-purple-500/30' : 'bg-white/5 ring-2 ring-inset ring-black/10 dark:ring-[0.5px] dark:ring-white/50 text-black dark:!text-white hover:bg-black/5 dark:hover:bg-white/10'}`}>
                 <span className="relative z-10">{categoryLogos[f.id]}</span><span className="relative z-10">{f.label}</span>
               </button>
             ))}
