@@ -126,7 +126,7 @@ body {
 }
 
 .hero-title-responsive {
-  font-size: clamp(3rem, 11vw, 14rem);
+  font-size: clamp(2.5rem, 11vw, 14rem);
   line-height: 0.85;
   letter-spacing: -0.04em;
 }
