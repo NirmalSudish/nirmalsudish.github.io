@@ -25,17 +25,17 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index })
   return (
     <div className="project-card flex-shrink-0 relative group/card cursor-pointer" onMouseEnter={() => isProject && onMouseEnter(item.bgColor || '#1d1d1d')} onMouseLeave={onMouseLeave} onClick={() => !isProject && onSelect(item, index)}>
       {isProject ? (
-        <Link to={`/project/${item.id}`} className="block transition-all duration-500 w-[65vw] md:w-[60vw] lg:w-[45vw] xl:w-[40vw]">
-          <div className="rounded-xl overflow-hidden mb-3 md:mb-6 bg-zinc-900 h-[160px] md:h-[50vh] lg:h-[55vh] w-full relative">
+        <Link to={`/project/${item.id}`} className="block transition-all duration-500 w-[65vw] md:w-[50vw] lg:w-[40vw] xl:w-[40vw]">
+          <div className="rounded-xl overflow-hidden mb-3 md:mb-6 bg-zinc-900 h-[160px] md:h-[40vh] lg:h-[45vh] xl:h-[55vh] w-full relative">
             <img src={resolvePath(item.mainImageUrl)} loading="lazy" className="h-full w-full object-cover dark:group-hover/card:scale-105 transition-all duration-1000" alt={item.client} />
           </div>
           <div className="flex justify-between items-start px-1 w-full">
-            <div className="text-left"><h3 className="font-bold text-base md:text-2xl uppercase tracking-tighter leading-none mb-1">{item.client}</h3><p className="text-[10px] opacity-60 uppercase tracking-widest font-medium">{item.project}</p></div>
+            <div className="text-left"><h3 className="font-bold text-base md:text-xl lg:text-2xl uppercase tracking-tighter leading-none mb-1">{item.client}</h3><p className="text-[10px] opacity-60 uppercase tracking-widest font-medium">{item.project}</p></div>
             <div className="text-right"><span className="text-[10px] text-purple-600 dark:text-[#c792ff] font-black uppercase tracking-[0.2em]">{item.categories.join(' / ')}</span></div>
           </div>
         </Link>
       ) : (
-        <div className="h-[260px] md:h-[50vh] lg:h-[60vh] w-auto rounded-xl overflow-hidden bg-zinc-900 border border-white/5">
+        <div className="h-[260px] md:h-[40vh] lg:h-[50vh] xl:h-[60vh] w-auto rounded-xl overflow-hidden bg-zinc-900 border border-white/5">
           {isVideo ? <video src={resolvePath(item.src)} muted loop playsInline preload="none" className="h-full w-auto object-contain" onMouseEnter={e => e.target.play()} onMouseLeave={e => e.target.pause()} /> : <img src={resolvePath(item.src)} loading="lazy" className="h-full w-auto object-contain" alt="" />}
         </div>
       )}
