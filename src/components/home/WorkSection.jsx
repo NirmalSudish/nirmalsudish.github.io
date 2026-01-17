@@ -26,16 +26,16 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index })
     <div className="project-card flex-shrink-0 relative group/card cursor-pointer" onMouseEnter={() => isProject && onMouseEnter(item.bgColor || '#1d1d1d')} onMouseLeave={onMouseLeave} onClick={() => !isProject && onSelect(item, index)}>
       {isProject ? (
         <Link to={`/project/${item.id}`} className="block transition-all duration-500 w-[65vw] md:w-[45vw] lg:w-[40vw] xl:w-[40vw]">
-          <div className="rounded-xl overflow-hidden mb-2 md:mb-3 bg-zinc-900 h-[160px] md:h-[32vh] lg:h-[38vh] xl:h-[55vh] w-full relative">
+          <div className="rounded-xl overflow-hidden mb-2 md:mb-2 bg-zinc-900 h-[160px] md:h-[28vh] lg:h-[35vh] xl:h-[55vh] w-full relative">
             <img src={resolvePath(item.mainImageUrl)} loading="lazy" className="h-full w-full object-cover dark:group-hover/card:scale-105 transition-all duration-1000" alt={item.client} />
           </div>
           <div className="flex justify-between items-start px-1 w-full">
-            <div className="text-left"><h3 className="font-bold text-base md:text-lg lg:text-2xl uppercase tracking-tighter leading-none mb-1">{item.client}</h3><p className="text-[10px] opacity-60 uppercase tracking-widest font-medium">{item.project}</p></div>
+            <div className="text-left"><h3 className="font-bold text-base md:text-base lg:text-xl xl:text-2xl uppercase tracking-tighter leading-none mb-0.5">{item.client}</h3><p className="text-[9px] md:text-[10px] opacity-60 uppercase tracking-widest font-medium">{item.project}</p></div>
             <div className="text-right"><span className="text-[10px] text-purple-600 dark:text-[#c792ff] font-black uppercase tracking-[0.2em]">{item.categories.join(' / ')}</span></div>
           </div>
         </Link>
       ) : (
-        <div className="h-[260px] md:h-[32vh] lg:h-[38vh] xl:h-[60vh] w-auto rounded-xl overflow-hidden bg-zinc-900 border border-white/5">
+        <div className="h-[260px] md:h-[28vh] lg:h-[35vh] xl:h-[60vh] w-auto rounded-xl overflow-hidden bg-zinc-900 border border-white/5">
           {isVideo ? <video src={resolvePath(item.src)} muted loop playsInline preload="none" className="h-full w-auto object-contain" onMouseEnter={e => e.target.play()} onMouseLeave={e => e.target.pause()} /> : <img src={resolvePath(item.src)} loading="lazy" className="h-full w-auto object-contain" alt="" />}
         </div>
       )}
@@ -103,7 +103,7 @@ const WorkSection = () => {
   }, [activeFilter]);
 
   return (
-    <section id="work" className="relative h-auto md:h-screen flex flex-col pt-16 md:pt-0 bg-transparent z-10 overflow-hidden justify-center md:justify-evenly">
+    <section id="work" className="relative h-auto md:h-screen flex flex-col pt-16 md:pt-0 md:py-4 bg-transparent z-10 overflow-hidden justify-center md:justify-evenly">
 
       <AnimatePresence>
         {selectedAsset && (
@@ -132,12 +132,12 @@ const WorkSection = () => {
         )}
       </AnimatePresence>
 
-      <div className="container mx-auto px-6 md:px-12 lg:px-20 text-center mb-2 md:mb-4">
+      <div className="container mx-auto px-6 md:px-12 lg:px-20 text-center mb-2 md:mb-2 lg:mb-3">
         <ScrollReveal>
-          <h2 className="text-3xl md:text-3xl lg:text-5xl xl:text-7xl font-black mb-2 md:mb-2 uppercase tracking-tighter leading-none text-black dark:!text-white">Featured Work</h2>
+          <h2 className="text-3xl md:text-2xl lg:text-4xl xl:text-7xl font-black mb-1.5 md:mb-1.5 lg:mb-2 uppercase tracking-tighter leading-none text-black dark:!text-white">Featured Work</h2>
         </ScrollReveal>
         <ScrollReveal delay={0.2}>
-          <div className="flex flex-wrap justify-center items-center gap-2 md:gap-3 w-full max-w-6xl mx-auto">
+          <div className="flex flex-wrap justify-center items-center gap-1.5 md:gap-2 lg:gap-3 w-full max-w-6xl mx-auto">
             {[
               { id: 'ux-branding', label: 'UI / UX and BRANDING' },
               { id: 'packaging-print', label: 'PRINT & PACKAGING' },
@@ -146,7 +146,7 @@ const WorkSection = () => {
               { id: 'experimental', label: 'EXPERIMENTAL DESIGN' },
               { id: 'motion', label: 'MOTION DESIGN' }
             ].map(f => (
-              <button key={f.id} onClick={() => { setActiveFilter(f.id); setIsPaused(false); }} className={`group relative flex items-center justify-center gap-1.5 px-4 py-2 md:px-4 md:py-1.5 lg:px-5 lg:py-2.5 rounded-full transition-all duration-500 text-[9px] md:text-[9px] lg:text-[10px] font-black uppercase tracking-widest transform-gpu ${activeFilter === f.id ? 'bg-black text-white dark:bg-white dark:text-black ring-2 ring-transparent dark:ring-1 dark:ring-white scale-105 shadow-lg shadow-purple-500/30' : 'bg-white/5 ring-2 ring-inset ring-black/10 dark:ring-[0.5px] dark:ring-white/50 text-black dark:!text-white hover:bg-black/5 dark:hover:bg-white/10'}`}>
+              <button key={f.id} onClick={() => { setActiveFilter(f.id); setIsPaused(false); }} className={`group relative flex items-center justify-center gap-1 md:gap-1.5 px-3 py-1.5 md:px-3.5 md:py-1 lg:px-5 lg:py-2.5 rounded-full transition-all duration-500 text-[8px] md:text-[8px] lg:text-[10px] font-black uppercase tracking-widest transform-gpu ${activeFilter === f.id ? 'bg-black text-white dark:bg-white dark:text-black ring-2 ring-transparent dark:ring-1 dark:ring-white scale-105 shadow-lg shadow-purple-500/30' : 'bg-white/5 ring-2 ring-inset ring-black/10 dark:ring-[0.5px] dark:ring-white/50 text-black dark:!text-white hover:bg-black/5 dark:hover:bg-white/10'}`}>
                 <span className="relative z-10">{categoryLogos[f.id]}</span><span className="relative z-10">{f.label}</span>
               </button>
             ))}
