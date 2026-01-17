@@ -131,6 +131,91 @@ body {
   letter-spacing: -0.04em;
 }
 
+/* =========================================
+   WORK SECTION - Viewport-Based Scaling
+   ========================================= */
+
+/* Available viewport height: 100vh - navbar(~70px) - progress(~60px) = ~calc(100vh - 130px) */
+/* All sizing uses vh units to scale proportionally with viewport */
+
+@media (min-width: 768px) {
+  .work-section-scaled {
+    /* Use calc to account for fixed navbar and progress bar */
+    --available-height: calc(100vh - 130px);
+
+    /* Fluid heading size: scales from 1.5rem to 3.5rem based on viewport height */
+    --work-heading-size: clamp(1.5rem, 5vh, 3.5rem);
+
+    /* Fluid button padding and font */
+    --work-btn-padding-x: clamp(0.5rem, 1.5vw, 1.25rem);
+    --work-btn-padding-y: clamp(0.25rem, 0.8vh, 0.625rem);
+    --work-btn-font: clamp(0.45rem, 1vh, 0.625rem);
+    --work-btn-gap: clamp(0.25rem, 0.8vh, 0.75rem);
+
+    /* Card height: scales from 20vh to 50vh based on viewport */
+    --work-card-height: clamp(20vh, 32vh, 50vh);
+
+    /* Card text sizing */
+    --work-card-title: clamp(0.875rem, 2vh, 1.5rem);
+    --work-card-subtitle: clamp(0.5rem, 0.9vh, 0.625rem);
+
+    /* Spacing between elements */
+    --work-section-gap: clamp(0.5rem, 1.5vh, 1.5rem);
+    --work-header-margin: clamp(0.25rem, 1vh, 1rem);
+  }
+}
+
+/* Large screens get more generous sizing */
+@media (min-width: 1280px) {
+  .work-section-scaled {
+    --work-heading-size: clamp(2.5rem, 6vh, 4.5rem);
+    --work-card-height: clamp(35vh, 45vh, 55vh);
+    --work-card-title: clamp(1rem, 2.5vh, 1.75rem);
+    --work-btn-font: clamp(0.5rem, 1.2vh, 0.75rem);
+  }
+}
+
+/* Apply the scaled styles */
+.work-section-scaled {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding-top: 70px;
+  /* Account for fixed navbar */
+  padding-bottom: 60px;
+  /* Account for fixed progress bar */
+  box-sizing: border-box;
+}
+
+.work-section-scaled .work-heading {
+  font-size: var(--work-heading-size, 2rem);
+  margin-bottom: var(--work-header-margin, 0.5rem);
+}
+
+.work-section-scaled .work-filters {
+  gap: var(--work-btn-gap, 0.5rem);
+  margin-bottom: var(--work-section-gap, 1rem);
+}
+
+.work-section-scaled .work-filter-btn {
+  padding: var(--work-btn-padding-y, 0.5rem) var(--work-btn-padding-x, 1rem);
+  font-size: var(--work-btn-font, 0.5rem);
+}
+
+.work-section-scaled .work-card-image {
+  height: var(--work-card-height, 30vh);
+}
+
+.work-section-scaled .work-card-title {
+  font-size: var(--work-card-title, 1rem);
+}
+
+.work-section-scaled .work-card-subtitle {
+  font-size: var(--work-card-subtitle, 0.5rem);
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
