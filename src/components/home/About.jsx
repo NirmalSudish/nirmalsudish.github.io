@@ -13,7 +13,7 @@ const About = () => {
           {/* IMAGE COLUMN: Top on Mobile, Left on Desktop */}
           {/* Mobile: Order 1 (Top), Desktop: Order 1 (Left) */}
           <div className="w-full md:w-5/12 order-1 flex justify-center md:justify-start items-center md:block pt-4 md:pt-0">
-            <div className="relative w-48 md:w-full">
+            <div className="relative w-56 md:w-full">
               <div className="relative aspect-[3/4] md:aspect-[4/5] overflow-hidden rounded-xl md:rounded-2xl border border-white/10 shadow-2xl">
                 <img
                   src={resolvePath('/images/about-me.jpg')}
@@ -32,11 +32,11 @@ const About = () => {
                 The Story So Far
               </h4>
 
-              <h2 className="text-2xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-tight mb-3 md:mb-8">
+              <h2 className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-tight mb-3 md:mb-8">
                 I'm Nirmal.
               </h2>
 
-              <div className="space-y-1 md:space-y-6 text-[10px] md:text-lg lg:text-xl opacity-70 leading-relaxed font-medium mb-3 md:mb-10 max-w-full md:max-w-none">
+              <div className="space-y-1 md:space-y-6 text-[11px] md:text-lg lg:text-xl opacity-70 leading-relaxed font-medium mb-3 md:mb-10 max-w-full md:max-w-none">
                 <p>
                   I am a multi-disciplinary designer <br className="block md:hidden" />
                   and <span className="font-bold opacity-100">CS student</span> <br className="block md:hidden" />
