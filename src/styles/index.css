@@ -54,7 +54,7 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 8rem 0;
+  padding: 5rem 0;
   scroll-snap-align: start;
   scroll-snap-stop: always;
 }

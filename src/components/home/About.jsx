@@ -8,12 +8,12 @@ const About = () => {
     <section id="about" className="w-full h-full md:h-screen flex items-center justify-center bg-transparent relative z-10 overflow-visible pt-4 pb-16 md:pt-0 md:pb-0">
       <div className="container mx-auto px-0 md:px-12 lg:px-20 h-full flex flex-col justify-center">
         {/* Mobile: Row Reverse (Text Left, Image Right) | Desktop: Normal Row (Image Left, Text Right) */}
-        <div className="flex flex-col md:flex-row gap-2 md:gap-16 items-center md:items-center h-full md:h-auto pt-4 md:pt-0">
+        <div className="flex flex-col md:flex-row gap-1.5 md:gap-16 items-center md:items-center h-full md:h-auto pt-4 md:pt-0">
 
           {/* IMAGE COLUMN: Top on Mobile, Left on Desktop */}
           {/* Mobile: Order 1 (Top), Desktop: Order 1 (Left) */}
           <div className="w-full md:w-5/12 order-1 flex justify-center md:justify-start items-center md:block pt-4 md:pt-0">
-            <div className="relative w-72 md:w-full">
+            <div className="relative w-64 md:w-full">
               <div className="relative aspect-[3/4] md:aspect-[4/5] overflow-hidden rounded-xl md:rounded-2xl border border-white/10 shadow-2xl">
                 <img
                   src={resolvePath('/images/about-me.jpg')}
@@ -53,7 +53,7 @@ const About = () => {
               </div>
 
               {/* MOVING GREEN GRADIENT BUTTON */}
-              <div className="relative inline-flex items-center justify-center p-[1.5px] overflow-hidden rounded-full group scale-90 origin-center md:scale-100 mb-4 md:mb-0">
+              <div className="relative inline-flex items-center justify-center p-[1.5px] overflow-hidden rounded-full group scale-90 origin-center md:scale-100 mb-3 md:mb-0">
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
@@ -69,7 +69,7 @@ const About = () => {
               </div>
 
               {/* MINIMALIST INFORMATION GRID - Stacked on Mobile to fit width */}
-              <div className="flex flex-col gap-3 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-y-8 md:gap-x-12 pt-0 md:pt-12 border-t-0 md:border-t border-black/10 dark:border-white/10 mb-4 md:mb-8 w-full">
+              <div className="flex flex-col gap-2.5 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-y-8 md:gap-x-12 pt-0 md:pt-12 border-t-0 md:border-t border-black/10 dark:border-white/10 mb-3 md:mb-8 w-full">
                 <div className="flex flex-col items-center md:items-start">
                   <span className="text-[10px] md:text-[10px] font-black text-[#c792ff] uppercase tracking-[0.3em] mb-1 md:mb-2">Based In</span>
                   <span className="text-base md:text-lg lg:text-xl font-bold uppercase">Dubai, UAE</span>
