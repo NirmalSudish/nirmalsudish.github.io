@@ -137,7 +137,7 @@ const WorkSection = () => {
           <h2 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black mb-2 md:mb-3 uppercase tracking-tighter leading-none text-black dark:!text-white">Featured Work</h2>
         </ScrollReveal>
         <ScrollReveal delay={0.2}>
-          <div className="flex flex-wrap justify-center items-center gap-2 md:gap-3 w-full max-w-6xl mx-auto">
+          <div className="flex flex-wrap justify-center items-center gap-2.5 md:gap-3 lg:gap-4 w-full max-w-4xl mx-auto">
             {[
               { id: 'ux-branding', label: 'UI / UX and BRANDING' },
               { id: 'packaging-print', label: 'PRINT & PACKAGING' },
