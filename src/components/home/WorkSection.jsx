@@ -25,7 +25,7 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index })
   return (
     <div className="project-card flex-shrink-0 relative group/card cursor-pointer" onMouseEnter={() => isProject && onMouseEnter(item.bgColor || '#1d1d1d')} onMouseLeave={onMouseLeave} onClick={() => !isProject && onSelect(item, index)}>
       {isProject ? (
-        <Link to={`/project/${item.id}`} className="block transition-all duration-500 w-[70vw] md:w-[50vw] lg:w-[40vw] xl:w-[40vw]">
+        <Link to={`/project/${item.id}`} className="block transition-all duration-500 w-full md:w-[50vw] lg:w-[40vw] xl:w-[40vw]">
           <div className="rounded-xl overflow-hidden mb-2 md:mb-6 bg-zinc-900 h-[180px] md:h-[40vh] lg:h-[45vh] xl:h-[55vh] w-full relative">
             <img src={resolvePath(item.mainImageUrl)} loading="lazy" className="h-full w-full object-cover dark:group-hover/card:scale-105 transition-all duration-1000" alt={item.client} />
           </div>
@@ -137,7 +137,7 @@ const WorkSection = () => {
           <h2 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black mb-2 md:mb-3 uppercase tracking-tighter leading-none text-black dark:!text-white">Featured Work</h2>
         </ScrollReveal>
         <ScrollReveal delay={0.2}>
-          <div className="flex flex-wrap justify-center items-center gap-2.5 md:gap-3 lg:gap-4 w-full max-w-4xl mx-auto">
+          <div className="flex flex-col md:flex-row md:flex-wrap justify-center items-stretch md:items-center gap-2.5 md:gap-3 lg:gap-4 w-full max-w-4xl mx-auto">
             {[
               { id: 'ux-branding', label: 'UI / UX and BRANDING' },
               { id: 'packaging-print', label: 'PRINT & PACKAGING' },
@@ -146,7 +146,7 @@ const WorkSection = () => {
               { id: 'experimental', label: 'EXPERIMENTAL DESIGN' },
               { id: 'motion', label: 'MOTION DESIGN' }
             ].map(f => (
-              <button key={f.id} onClick={() => { setActiveFilter(f.id); setIsPaused(false); }} className={`group relative flex items-center justify-center gap-1.5 px-4 py-2 md:px-5 md:py-2.5 rounded-full transition-all duration-500 text-[9px] md:text-[10px] font-black uppercase tracking-widest transform-gpu ${activeFilter === f.id ? 'bg-black text-white dark:bg-white dark:text-black ring-2 ring-transparent dark:ring-1 dark:ring-white scale-105 shadow-lg shadow-purple-500/30' : 'bg-white/5 ring-2 ring-inset ring-black/10 dark:ring-[0.5px] dark:ring-white/50 text-black dark:!text-white hover:bg-black/5 dark:hover:bg-white/10'}`}>
+              <button key={f.id} onClick={() => { setActiveFilter(f.id); setIsPaused(false); }} className={`group relative flex items-center justify-center gap-1.5 px-4 py-2 md:px-5 md:py-2.5 rounded-full md:rounded-full transition-all duration-500 text-[9px] md:text-[10px] font-black uppercase tracking-widest transform-gpu w-full md:w-auto ${activeFilter === f.id ? 'bg-black text-white dark:bg-white dark:text-black ring-2 ring-transparent dark:ring-1 dark:ring-white scale-105 shadow-lg shadow-purple-500/30' : 'bg-white/5 ring-2 ring-inset ring-black/10 dark:ring-[0.5px] dark:ring-white/50 text-black dark:!text-white hover:bg-black/5 dark:hover:bg-white/10'}`}>
                 <span className="relative z-10">{categoryLogos[f.id]}</span><span className="relative z-10">{f.label}</span>
               </button>
             ))}
@@ -154,7 +154,8 @@ const WorkSection = () => {
         </ScrollReveal>
       </div>
 
-      <div className="w-full relative group/marquee flex-grow flex flex-col justify-center">
+      {/* Desktop: Horizontal Marquee */}
+      <div className="w-full relative group/marquee flex-grow flex-col justify-center hidden md:flex">
         <button onClick={() => handleScroll('left')} className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 z-50 w-16 h-16 rounded-full border border-black/20 dark:border-white/20 bg-black/5 dark:bg-white/5 backdrop-blur-2xl opacity-0 group-hover/marquee:opacity-100 transition-all duration-500 flex items-center justify-center active:scale-90 shadow-2xl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-6 h-6"><path d="M15 18l-6-6 6-6" /></svg></button>
         <button onClick={() => handleScroll('right')} className="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 z-50 w-16 h-16 rounded-full border border-black/20 dark:border-white/20 bg-black/5 dark:bg-white/5 backdrop-blur-2xl opacity-0 group-hover/marquee:opacity-100 transition-all duration-500 flex items-center justify-center active:scale-90 shadow-2xl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-6 h-6"><path d="M9 18l6-6-6-6" /></svg></button>
 
@@ -180,6 +181,27 @@ const WorkSection = () => {
               </AnimatePresence>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Mobile: Vertical Block List */}
+      <div className="w-full flex-grow flex flex-col justify-start md:hidden px-6 overflow-y-auto">
+        <div className="flex flex-col gap-6 pb-8">
+          <AnimatePresence mode="popLayout">
+            {filteredItems.map((item, idx) => (
+              <motion.div
+                key={`${item.id}-mobile`}
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3, delay: idx * 0.05 }}
+                className="w-full"
+              >
+                <ProjectCard index={idx} item={item} onMouseEnter={c => { document.body.style.backgroundColor = c; }} onMouseLeave={() => { document.body.style.backgroundColor = ''; }} onSelect={handleSelect} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       </div>
     </section>
