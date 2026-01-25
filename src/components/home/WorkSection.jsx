@@ -28,7 +28,7 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, p
     <div className="project-card flex-shrink-0 relative group/card cursor-pointer" onMouseEnter={() => isProject && onMouseEnter(item.bgColor || '#1d1d1d')} onMouseLeave={onMouseLeave} onClick={() => !isProject && onSelect(item, index)}>
       {isProject ? (
         <Link to={`/project/${item.id}`} className="block transition-all duration-500 w-full md:w-[50vw] lg:w-[40vw] xl:w-[40vw]">
-          <div className="rounded-xl overflow-hidden mb-4 md:mb-6 bg-zinc-900 aspect-square md:aspect-auto h-auto md:h-[40vh] lg:h-[45vh] xl:h-[55vh] w-full relative">
+          <div className="rounded-xl overflow-hidden mb-3 md:mb-6 bg-zinc-900 aspect-[4/3] md:aspect-auto h-auto max-h-[45vh] md:max-h-none md:h-[40vh] lg:h-[45vh] xl:h-[55vh] w-full relative">
             <img src={resolvePath(item.mainImageUrl)} loading="lazy" className="h-full w-full object-cover dark:group-hover/card:scale-105 transition-all duration-1000" alt={item.client} />
           </div>
           <div className="flex justify-between items-start px-1 w-full">
@@ -37,7 +37,7 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, p
           </div>
         </Link>
       ) : (
-        <div className="h-auto md:h-[40vh] lg:h-[50vh] xl:h-[60vh] w-full md:w-auto rounded-xl overflow-hidden bg-zinc-900 border border-white/5 relative min-h-[200px] flex items-center justify-center">
+        <div className="h-[45vh] md:h-[40vh] lg:h-[50vh] xl:h-[60vh] w-full md:w-auto rounded-xl overflow-hidden bg-zinc-900 border border-white/5 relative flex items-center justify-center">
           {isVideo ? (
             <>
               {isLoading && (
