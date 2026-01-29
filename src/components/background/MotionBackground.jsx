@@ -53,20 +53,23 @@ const MotionBackground = () => {
       // Mobile auto-movement logic
       let targetX = mouse.x;
       let targetY = mouse.y;
+      const isMobile = canvas.width < 1024;
 
-      // Auto-wander on mobile/tablet if no user interaction
-      if (canvas.width < 1024) {
+      // Auto-wander only on Desktop if no user interaction
+      // On Mobile: REMOVED auto-wander to keep dots static
+      if (!isMobile) {
         if (mouse.x === undefined) {
-          // Breathing Auto-Wander
-          targetX = (canvas.width / 2) + Math.sin(time * 0.5) * (canvas.width / 3);
-          targetY = (canvas.height / 2) + Math.cos(time * 0.3) * (canvas.height / 3);
-          mouse.radius = 150 + Math.sin(time * 1.5) * 50; // Breathing effect (100-200px)
+          // No auto-wander logic here anymore for desktop to keep it clean, or keep it depending on preference.
+          // But specifically for mobile, we want it static.
+          mouse.radius = 120;
         } else {
-          // Active Touch: Larger radius to be visible around finger
-          mouse.radius = 200;
+          mouse.radius = 120;
         }
       } else {
-        mouse.radius = 120; // Desktop default
+        // Mobile specific settings
+        if (mouse.x !== undefined) {
+          mouse.radius = 200; // Larger touch radius
+        }
       }
 
       for (let i = 0; i < grid.length; i++) {
@@ -105,8 +108,11 @@ const MotionBackground = () => {
           }
         }
 
-        forceX += Math.sin(point.originalY / 60 + time) * 0.02;
-        forceY += Math.cos(point.originalX / 60 + time) * 0.02;
+        // Only apply wave motion on Desktop
+        if (!isMobile) {
+          forceX += Math.sin(point.originalY / 60 + time) * 0.02;
+          forceY += Math.cos(point.originalX / 60 + time) * 0.02;
+        }
 
         point.vx = (point.vx + forceX) * 0.9;
         point.vy = (point.vy + forceY) * 0.9;
