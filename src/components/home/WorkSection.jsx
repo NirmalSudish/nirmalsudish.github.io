@@ -19,6 +19,107 @@ const categoryLogos = {
   'experimental': (<svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M9 3h6M10 3v7l-4 8a2 2 0 002 2h8a2 2 0 002-2l-4-8V3" /></svg>)
 };
 
+// Mobile-optimized card component for the gallery slider
+const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false }) => {
+  const isProject = item.client !== undefined;
+  const isVideo = typeof item.src === 'string' && item.src.endsWith('.mp4');
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const videoRef = useRef(null);
+
+  // Only load media when visible (lazy loading)
+  useEffect(() => {
+    if (isVisible && !hasLoaded) {
+      setHasLoaded(true);
+    }
+  }, [isVisible, hasLoaded]);
+
+  // Control video playback based on visibility
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isVisible) {
+        videoRef.current.play().catch(() => { });
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  }, [isVisible]);
+
+  const mediaSrc = isProject ? item.mainImageUrl : item.src;
+
+  return (
+    <div
+      className="mobile-project-card w-full flex flex-col items-center cursor-pointer px-2"
+      onClick={() => !isProject && onSelect(item, index)}
+    >
+      {/* Media Container - Responsive with no clipping */}
+      <div className="w-full rounded-2xl overflow-hidden bg-zinc-900/50 border border-white/10 relative">
+        {/* Loading Skeleton */}
+        {isLoading && hasLoaded && (
+          <div className="absolute inset-0 flex items-center justify-center bg-zinc-900/80 z-10">
+            <div className="w-10 h-10 border-3 border-white/20 border-t-purple-500 rounded-full animate-spin" />
+          </div>
+        )}
+
+        {/* Only render media if visible (lazy loading) */}
+        {hasLoaded ? (
+          isVideo ? (
+            <video
+              ref={videoRef}
+              src={resolvePath(mediaSrc)}
+              muted
+              loop
+              playsInline
+              autoPlay
+              preload="auto"
+              onLoadedData={() => setIsLoading(false)}
+              onWaiting={() => setIsLoading(true)}
+              onPlaying={() => setIsLoading(false)}
+              className={`w-full h-auto max-h-[45vh] object-contain transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+            />
+          ) : (
+            <img
+              src={resolvePath(mediaSrc)}
+              onLoad={() => setIsLoading(false)}
+              className={`w-full h-auto max-h-[45vh] object-contain transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+              alt={isProject ? item.client : ''}
+            />
+          )
+        ) : (
+          // Placeholder before lazy load
+          <div className="w-full aspect-video bg-zinc-800/50 flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-white/10 border-t-purple-500/50 rounded-full animate-spin" />
+          </div>
+        )}
+      </div>
+
+      {/* Text Content - Properly contained */}
+      {isProject ? (
+        <Link to={`/project/${item.id}`} className="block w-full mt-4 px-2">
+          <div className="flex flex-col gap-1 text-center">
+            <h3 className="font-bold text-sm uppercase tracking-tight leading-tight text-black dark:text-white line-clamp-2">
+              {item.client}
+            </h3>
+            <p className="text-[10px] opacity-60 uppercase tracking-wide font-medium line-clamp-1">
+              {item.project}
+            </p>
+            <span className="text-[9px] text-purple-600 dark:text-purple-400 font-bold uppercase tracking-wider mt-1">
+              {item.categories.join(' / ')}
+            </span>
+          </div>
+        </Link>
+      ) : (
+        <div className="mt-3 text-center">
+          <span className="text-[10px] text-white/40 uppercase tracking-wider">
+            Tap to view full size
+          </span>
+        </div>
+      )}
+    </div>
+  );
+});
+
+// Desktop card component (unchanged behavior)
 const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, priority = false }) => {
   const isProject = item.client !== undefined;
   const isVideo = typeof item.src === 'string' && item.src.endsWith('.mp4');
@@ -28,8 +129,8 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, p
     <div className="project-card flex-shrink-0 relative group/card cursor-pointer" onMouseEnter={() => isProject && onMouseEnter(item.bgColor || '#1d1d1d')} onMouseLeave={onMouseLeave} onClick={() => !isProject && onSelect(item, index)}>
       {isProject ? (
         <Link to={`/project/${item.id}`} className="block transition-all duration-500 w-full md:w-[50vw] lg:w-[40vw] xl:w-[40vw]">
-          <div className="rounded-xl overflow-hidden mb-3 md:mb-6 bg-zinc-900 aspect-[4/3] md:aspect-auto h-auto max-h-[45vh] md:max-h-none md:h-[40vh] lg:h-[45vh] xl:h-[55vh] w-full relative">
-            <img src={resolvePath(item.mainImageUrl)} loading="lazy" className="h-full w-full object-cover dark:group-hover/card:scale-105 transition-all duration-1000" alt={item.client} />
+          <div className="rounded-xl overflow-hidden mb-3 md:mb-6 bg-zinc-900 aspect-video md:aspect-auto h-auto max-h-[30vh] md:max-h-none md:h-[40vh] lg:h-[45vh] xl:h-[55vh] w-full relative">
+            <img src={resolvePath(item.mainImageUrl)} loading="lazy" className="h-full w-full object-contain md:object-cover dark:group-hover/card:scale-105 transition-all duration-1000" alt={item.client} />
           </div>
           <div className="flex justify-between items-start px-1 w-full">
             <div className="text-left"><h3 className="font-bold text-base md:text-xl lg:text-2xl uppercase tracking-tighter leading-none mb-1">{item.client}</h3><p className="text-[10px] opacity-60 uppercase tracking-widest font-medium">{item.project}</p></div>
@@ -37,7 +138,7 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, p
           </div>
         </Link>
       ) : (
-        <div className="h-[45vh] md:h-[40vh] lg:h-[50vh] xl:h-[60vh] w-full md:w-auto rounded-xl overflow-hidden bg-zinc-900 border border-white/5 relative flex items-center justify-center">
+        <div className="h-[30vh] md:h-[40vh] lg:h-[50vh] xl:h-[60vh] w-full md:w-auto rounded-xl overflow-hidden bg-zinc-900 border border-white/5 relative flex items-center justify-center">
           {isVideo ? (
             <>
               {isLoading && (
@@ -82,6 +183,7 @@ const WorkSection = () => {
   const [mobileGalleryIndex, setMobileGalleryIndex] = useState(0); // Track mobile gallery position
   const scrollContainerRef = useRef(null);
   const pauseTimeoutRef = useRef(null);
+  const mobileAutoAdvanceRef = useRef(null); // Ref for mobile auto-advance interval
 
   useEffect(() => {
     document.body.classList.toggle('lightbox-open', !!selectedAsset);
@@ -126,20 +228,7 @@ const WorkSection = () => {
     pauseTimeoutRef.current = setTimeout(() => setIsPaused(false), 8000);
   };
 
-  // Mobile Gallery Navigation
-  const handleMobileGalleryNav = (direction) => {
-    if (direction === 'next') {
-      setMobileGalleryIndex((prev) => (prev + 1) % filteredItems.length);
-    } else {
-      setMobileGalleryIndex((prev) => (prev - 1 + filteredItems.length) % filteredItems.length);
-    }
-  };
-
-  // Reset mobile gallery index when filter changes
-  useEffect(() => {
-    setMobileGalleryIndex(0);
-  }, [activeFilter]);
-
+  // Define filteredItems FIRST (before any hooks/functions that reference it)
   const filteredItems = useMemo(() => {
     const pMatched = projects.filter(p => activeFilter === 'ux-branding' ? (p.categories.includes('ux-ui') || p.categories.includes('branding')) : (activeFilter === 'packaging-print' ? p.categories.includes('print') : p.categories.includes(activeFilter)));
     const aMap = { 'ux-branding': brandingAssets, 'packaging-print': packagingAssets, 'visual': visuals, 'motion': motionVideos, '3d': threeD, 'experimental': experiments };
@@ -147,6 +236,51 @@ const WorkSection = () => {
     // For indexing, we only use one set (no duplication)
     return [...pMatched, ...aMatched];
   }, [activeFilter]);
+
+  // Helper to reset mobile auto-advance timer
+  const resetMobileAutoAdvance = () => {
+    if (mobileAutoAdvanceRef.current) {
+      clearInterval(mobileAutoAdvanceRef.current);
+    }
+    if (filteredItems.length > 0) {
+      mobileAutoAdvanceRef.current = setInterval(() => {
+        setMobileGalleryIndex((prev) => (prev + 1) % filteredItems.length);
+      }, 10000);
+    }
+  };
+
+  // Mobile Gallery Navigation - resets auto-advance on user interaction
+  const handleMobileGalleryNav = (direction) => {
+    if (direction === 'next') {
+      setMobileGalleryIndex((prev) => (prev + 1) % filteredItems.length);
+    } else {
+      setMobileGalleryIndex((prev) => (prev - 1 + filteredItems.length) % filteredItems.length);
+    }
+    // Reset auto-advance timer when user manually navigates
+    resetMobileAutoAdvance();
+  };
+
+  // Reset mobile gallery index when filter changes
+  useEffect(() => {
+    setMobileGalleryIndex(0);
+  }, [activeFilter]);
+
+  // Auto-advance mobile gallery every 10 seconds
+  useEffect(() => {
+    if (filteredItems.length === 0) return;
+
+    // Start the auto-advance interval
+    mobileAutoAdvanceRef.current = setInterval(() => {
+      setMobileGalleryIndex((prev) => (prev + 1) % filteredItems.length);
+    }, 10000);
+
+    // Cleanup on unmount or when filteredItems changes
+    return () => {
+      if (mobileAutoAdvanceRef.current) {
+        clearInterval(mobileAutoAdvanceRef.current);
+      }
+    };
+  }, [filteredItems.length]);
 
   return (
     <section id="work" className="relative h-auto md:h-screen flex flex-col items-center pt-16 pb-8 md:pt-24 md:pb-0 bg-transparent z-10 overflow-hidden justify-center">
@@ -178,8 +312,8 @@ const WorkSection = () => {
         )}
       </AnimatePresence>
 
-      <div className="container mx-auto px-4 md:px-12 lg:px-20 text-center mb-2 md:mb-4">
-        <ScrollReveal className="mb-4 md:mb-6 lg:mb-8 xl:mb-10">
+      <div className="container mx-auto px-4 md:px-12 lg:px-20 text-center mb-8 md:mb-12">
+        <ScrollReveal className="mb-8 md:mb-10 lg:mb-12 xl:mb-14">
           <h2 className="text-2xl md:text-5xl lg:text-6xl xl:text-7xl font-black uppercase tracking-tighter leading-none text-black dark:!text-white">Featured Work</h2>
         </ScrollReveal>
         <ScrollReveal delay={0.2}>
@@ -230,82 +364,82 @@ const WorkSection = () => {
         </div>
       </div>
 
-      {/* Mobile: Horizontal Gallery with Navigation */}
-      <div className="w-full flex-grow flex flex-col justify-center md:hidden relative">
+      {/* Mobile: Mini Gallery/Slider with Navigation */}
+      <div className="w-full flex-grow flex flex-col justify-center md:hidden relative px-4">
         {filteredItems.length > 0 && (
           <>
-            {/* Navigation Buttons */}
-            <button
-              onClick={() => handleMobileGalleryNav('prev')}
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full border border-black/20 dark:border-white/30 bg-white/80 dark:bg-black/50 backdrop-blur-xl flex items-center justify-center active:scale-90 transition-all shadow-lg"
-              aria-label="Previous item"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5">
-                <path d="M15 18l-6-6 6-6" />
-              </svg>
-            </button>
+            {/* Gallery Container with Navigation */}
+            <div className="relative w-full">
+              {/* Left Navigation Button */}
+              <button
+                onClick={() => handleMobileGalleryNav('prev')}
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-50 w-10 h-10 rounded-full border border-black/20 dark:border-white/30 bg-white/90 dark:bg-black/70 backdrop-blur-xl flex items-center justify-center active:scale-90 transition-all shadow-xl -translate-x-1"
+                aria-label="Previous item"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5">
+                  <path d="M15 18l-6-6 6-6" />
+                </svg>
+              </button>
 
-            <button
-              onClick={() => handleMobileGalleryNav('next')}
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full border border-black/20 dark:border-white/30 bg-white/80 dark:bg-black/50 backdrop-blur-xl flex items-center justify-center active:scale-90 transition-all shadow-lg"
-              aria-label="Next item"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5">
-                <path d="M9 18l6-6-6-6" />
-              </svg>
-            </button>
+              {/* Right Navigation Button */}
+              <button
+                onClick={() => handleMobileGalleryNav('next')}
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-50 w-10 h-10 rounded-full border border-black/20 dark:border-white/30 bg-white/90 dark:bg-black/70 backdrop-blur-xl flex items-center justify-center active:scale-90 transition-all shadow-xl translate-x-1"
+                aria-label="Next item"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5">
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              </button>
 
-            {/* Gallery Container */}
-            <div className="w-full px-6 overflow-hidden">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`mobile-${filteredItems[mobileGalleryIndex]?.id}-${mobileGalleryIndex}`}
-                  initial={{ opacity: 0, x: 100 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -100 }}
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="w-full flex justify-center items-center"
-                >
-                  <ProjectCard
-                    index={mobileGalleryIndex}
-                    item={filteredItems[mobileGalleryIndex]}
-                    priority={true} // Prioritize loading the current item
-                    onMouseEnter={c => { document.body.style.backgroundColor = c; }}
-                    onMouseLeave={() => { document.body.style.backgroundColor = ''; }}
-                    onSelect={handleSelect}
-                  />
-                </motion.div>
-              </AnimatePresence>
+              {/* Gallery Slide Area */}
+              <div className="w-full px-8 overflow-hidden">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={`mobile-${filteredItems[mobileGalleryIndex]?.id}-${mobileGalleryIndex}`}
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -50 }}
+                    transition={{ duration: 0.25, ease: "easeOut" }}
+                    className="w-full"
+                  >
+                    <MobileProjectCard
+                      index={mobileGalleryIndex}
+                      item={filteredItems[mobileGalleryIndex]}
+                      isVisible={true}
+                      onSelect={handleSelect}
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
             </div>
 
-            {/* Hidden Preloader for Next Item */}
-            <div className="hidden">
-              {(() => {
-                const nextIndex = (mobileGalleryIndex + 1) % filteredItems.length;
-                const nextItem = filteredItems[nextIndex];
-                if (!nextItem) return null;
-                const isNextVideo = typeof nextItem.src === 'string' && nextItem.src.endsWith('.mp4');
-                return isNextVideo ? (
-                  <video src={resolvePath(nextItem.src)} preload="auto" muted />
+            {/* Pagination Indicator */}
+            <div className="flex flex-col items-center gap-3 mt-4 pb-4">
+              {/* Progress Bar Style Pagination */}
+              <div className="flex items-center gap-1.5 max-w-[280px] overflow-x-auto no-scrollbar">
+                {filteredItems.length <= 10 ? (
+                  // Dots for small number of items
+                  filteredItems.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setMobileGalleryIndex(idx)}
+                      className={`transition-all duration-300 rounded-full flex-shrink-0 ${idx === mobileGalleryIndex
+                        ? 'w-6 h-2 bg-purple-500'
+                        : 'w-2 h-2 bg-black/20 dark:bg-white/30 hover:bg-black/40 dark:hover:bg-white/50'
+                        }`}
+                      aria-label={`Go to item ${idx + 1}`}
+                    />
+                  ))
                 ) : (
-                  <img src={resolvePath(nextItem.src)} loading="eager" alt="" />
-                );
-              })()}
-            </div>
-
-            {/* Pagination Dots */}
-            <div className="flex justify-center gap-2 mt-6 pb-8">
-              {filteredItems.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setMobileGalleryIndex(idx)}
-                  className={`transition-all duration-300 rounded-full ${idx === mobileGalleryIndex
-                    ? 'w-8 h-2 bg-purple-600 dark:bg-purple-400'
-                    : 'w-2 h-2 bg-black/20 dark:bg-white/30'
-                    }`}
-                  aria-label={`Go to item ${idx + 1}`}
-                />
-              ))}
+                  // Numeric indicator for many items
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="text-purple-500 font-bold">{mobileGalleryIndex + 1}</span>
+                    <span className="text-black/40 dark:text-white/40">/</span>
+                    <span className="text-black/60 dark:text-white/60">{filteredItems.length}</span>
+                  </div>
+                )}
+              </div>
             </div>
           </>
         )}
