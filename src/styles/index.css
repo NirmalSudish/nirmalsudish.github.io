@@ -178,3 +178,83 @@ body {
 .animate-spin {
   animation: spin 1s linear infinite;
 }
+
+/* ========================================
+   MOBILE PERFORMANCE OPTIMIZATIONS
+   ======================================== */
+
+/* Respect user's preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Mobile-specific performance optimizations */
+@media (max-width: 768px) {
+
+  /* Reduce transition durations on mobile */
+  * {
+    transition-duration: 0.15s !important;
+  }
+
+  /* Disable hover effects on touch devices */
+  @media (hover: none) {
+
+    .group-hover\/card\:scale-105,
+    .hover\:scale-105 {
+      transform: none !important;
+    }
+  }
+
+  /* Optimize images for mobile rendering */
+  img {
+    content-visibility: auto;
+    contain-intrinsic-size: 300px 200px;
+  }
+
+  /* Reduce backdrop blur on mobile (GPU intensive) */
+  .backdrop-blur-xl,
+  .backdrop-blur-2xl,
+  .backdrop-blur-3xl {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+
+  /* Simplify shadows on mobile */
+  .shadow-2xl {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
+  }
+
+  /* Disable the marquee animation on mobile */
+  .animate-marquee-slow {
+    animation: none !important;
+  }
+}
+
+/* GPU acceleration hints for smoother animations */
+.mobile-project-card,
+.project-card {
+  will-change: auto;
+  /* Let browser decide, reduces memory usage */
+  contain: layout style paint;
+}
+
+/* Optimize video rendering */
+video {
+  object-fit: contain;
+  background-color: transparent;
+}
+
+/* Touch-friendly tap targets */
+@media (pointer: coarse) {
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}

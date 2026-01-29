@@ -20,11 +20,13 @@ const categoryLogos = {
 };
 
 // Mobile-optimized card component for the gallery slider
+// Performance optimizations: no autoplay, lazy loading, tap-to-play for videos
 const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false }) => {
   const isProject = item.client !== undefined;
   const isVideo = typeof item.src === 'string' && item.src.endsWith('.mp4');
   const [isLoading, setIsLoading] = useState(true);
   const [hasLoaded, setHasLoaded] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef(null);
 
   // Only load media when visible (lazy loading)
@@ -34,61 +36,88 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false }) =>
     }
   }, [isVisible, hasLoaded]);
 
-  // Control video playback based on visibility
+  // Pause video when not visible to save resources
   useEffect(() => {
-    if (videoRef.current) {
-      if (isVisible) {
-        videoRef.current.play().catch(() => { });
-      } else {
-        videoRef.current.pause();
-      }
+    if (videoRef.current && !isVisible && isPlaying) {
+      videoRef.current.pause();
+      setIsPlaying(false);
     }
-  }, [isVisible]);
+  }, [isVisible, isPlaying]);
 
   const mediaSrc = isProject ? item.mainImageUrl : item.src;
+
+  // Handle tap-to-play for videos (saves battery on mobile)
+  const handleVideoTap = (e) => {
+    e.stopPropagation();
+    if (!videoRef.current) return;
+
+    if (isPlaying) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      videoRef.current.play().catch(() => { });
+      setIsPlaying(true);
+    }
+  };
 
   return (
     <div
       className="mobile-project-card w-full flex flex-col items-center cursor-pointer px-2"
-      onClick={() => !isProject && onSelect(item, index)}
+      onClick={() => !isProject && !isVideo && onSelect(item, index)}
     >
       {/* Media Container - Responsive with no clipping */}
       <div className="w-full rounded-2xl overflow-hidden bg-zinc-900/50 border border-white/10 relative">
         {/* Loading Skeleton */}
         {isLoading && hasLoaded && (
           <div className="absolute inset-0 flex items-center justify-center bg-zinc-900/80 z-10">
-            <div className="w-10 h-10 border-3 border-white/20 border-t-purple-500 rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-white/20 border-t-purple-500 rounded-full animate-spin" />
           </div>
         )}
 
         {/* Only render media if visible (lazy loading) */}
         {hasLoaded ? (
           isVideo ? (
-            <video
-              ref={videoRef}
-              src={resolvePath(mediaSrc)}
-              muted
-              loop
-              playsInline
-              autoPlay
-              preload="auto"
-              onLoadedData={() => setIsLoading(false)}
-              onWaiting={() => setIsLoading(true)}
-              onPlaying={() => setIsLoading(false)}
-              className={`w-full h-auto max-h-[45vh] object-contain transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
-            />
+            <div className="relative" onClick={handleVideoTap}>
+              <video
+                ref={videoRef}
+                src={resolvePath(mediaSrc)}
+                muted
+                loop
+                playsInline
+                preload="none" // Don't preload video data to save bandwidth
+                poster="" // Could add a poster image for even better UX
+                onLoadedData={() => setIsLoading(false)}
+                onWaiting={() => setIsLoading(true)}
+                onPlaying={() => setIsLoading(false)}
+                onEnded={() => setIsPlaying(false)}
+                className={`w-full h-auto max-h-[45vh] object-contain transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+              />
+              {/* Play button overlay - shown when video is not playing */}
+              {!isPlaying && !isLoading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                  <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 transition-transform active:scale-90">
+                    <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                </div>
+              )}
+            </div>
           ) : (
             <img
               src={resolvePath(mediaSrc)}
               onLoad={() => setIsLoading(false)}
-              className={`w-full h-auto max-h-[45vh] object-contain transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+              loading="lazy"
+              decoding="async"
+              className={`w-full h-auto max-h-[45vh] object-contain transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
               alt={isProject ? item.client : ''}
+              onClick={() => !isProject && onSelect(item, index)}
             />
           )
         ) : (
-          // Placeholder before lazy load
-          <div className="w-full aspect-video bg-zinc-800/50 flex items-center justify-center">
-            <div className="w-8 h-8 border-2 border-white/10 border-t-purple-500/50 rounded-full animate-spin" />
+          // Placeholder before lazy load - minimal DOM
+          <div className="w-full aspect-video bg-zinc-800/30 flex items-center justify-center">
+            <div className="w-6 h-6 border-2 border-white/10 border-t-purple-500/50 rounded-full animate-spin" />
           </div>
         )}
       </div>
@@ -111,7 +140,7 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false }) =>
       ) : (
         <div className="mt-3 text-center">
           <span className="text-[10px] text-white/40 uppercase tracking-wider">
-            Tap to view full size
+            {isVideo ? 'Tap to play' : 'Tap to view full size'}
           </span>
         </div>
       )}
