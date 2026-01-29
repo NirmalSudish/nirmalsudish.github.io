@@ -28,7 +28,9 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
   const [hasLoaded, setHasLoaded] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [videoSrc, setVideoSrc] = useState(null); // Video source is lazy loaded
+  const [videoReady, setVideoReady] = useState(false); // Track if video has loaded first frame
   const videoRef = useRef(null);
+
 
   const mediaSrc = isProject ? item.mainImageUrl : item.src;
 
@@ -48,6 +50,7 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
     if (!isVisible && videoRef.current) {
       videoRef.current.pause();
       setIsPlaying(false);
+      setVideoReady(false);
       // Clear video source to free memory
       if (videoSrc) {
         setVideoSrc(null);
@@ -70,7 +73,7 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
   const handleVideoTap = (e) => {
     e.stopPropagation();
 
-    // If we somehow don't have source yet, load it
+    // If we don't have source yet, load it first
     if (!videoSrc) {
       setVideoSrc(resolvePath(mediaSrc));
       setIsLoading(true);
@@ -83,16 +86,28 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
       videoRef.current.pause();
       setIsPlaying(false);
     } else {
-      videoRef.current.play().catch(() => { });
-      setIsPlaying(true);
+      // Attempt to play - this works on mobile after user tap
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => setIsPlaying(true))
+          .catch((err) => {
+            console.log('Play failed:', err);
+            // If play fails, try loading video fresh
+            videoRef.current.load();
+          });
+      }
     }
   };
 
   // Auto-load video source when visible (to show first frame/preview)
   useEffect(() => {
     if (isVisible && isVideo && !videoSrc && !isPreload) {
-      setVideoSrc(resolvePath(mediaSrc));
-      // We don't set isPlaying true, just load the source for the poster/metadata
+      // Small delay to ensure the component is mounted
+      const timer = setTimeout(() => {
+        setVideoSrc(resolvePath(mediaSrc));
+      }, 100);
+      return () => clearTimeout(timer);
     }
   }, [isVisible, isVideo, videoSrc, mediaSrc, isPreload]);
 
@@ -108,8 +123,8 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
     >
       {/* Media Container */}
       <div className="w-full rounded-2xl overflow-hidden bg-zinc-900/50 border border-white/10 relative">
-        {/* Loading Skeleton */}
-        {isLoading && hasLoaded && (
+        {/* Loading Skeleton - only show when actively loading */}
+        {isLoading && hasLoaded && videoSrc && (
           <div className="absolute inset-0 flex items-center justify-center bg-zinc-900/80 z-10">
             <div className="w-8 h-8 border-2 border-white/20 border-t-purple-500 rounded-full animate-spin" />
           </div>
@@ -119,7 +134,7 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
         {hasLoaded ? (
           isVideo ? (
             <div className="relative" onClick={handleVideoTap}>
-              {/* Video loads metadata automatically when visible */}
+              {/* Video element with poster for instant preview */}
               {videoSrc ? (
                 <video
                   ref={videoRef}
@@ -127,24 +142,40 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
                   muted
                   loop
                   playsInline
-                  preload="metadata"
-                  onLoadedMetadata={() => setIsLoading(false)}
+                  preload="auto"
+                  onLoadedData={() => {
+                    setIsLoading(false);
+                    setVideoReady(true);
+                  }}
+                  onCanPlay={() => {
+                    setIsLoading(false);
+                    setVideoReady(true);
+                  }}
                   onWaiting={() => setIsLoading(true)}
-                  onPlaying={() => setIsLoading(false)}
+                  onPlaying={() => {
+                    setIsLoading(false);
+                    setIsPlaying(true);
+                  }}
+                  onPause={() => setIsPlaying(false)}
                   onEnded={() => setIsPlaying(false)}
-                  className={`w-full h-auto max-h-[45vh] object-contain transition-opacity duration-300 ${isLoading ? 'opacity-50' : 'opacity-100'}`}
+                  onError={(e) => {
+                    console.log('Video error:', e);
+                    setIsLoading(false);
+                  }}
+                  className={`w-full h-auto max-h-[45vh] object-contain transition-opacity duration-300 ${isLoading && !videoReady ? 'opacity-50' : 'opacity-100'}`}
+                  style={{ backgroundColor: '#1a1a1a' }}
                 />
               ) : (
-                // Temporary placeholder while source loads locally
+                // Placeholder before video source is set - shows loading state
                 <div className="w-full aspect-video bg-zinc-800/50 flex items-center justify-center">
                   <div className="w-8 h-8 border-2 border-white/10 border-t-purple-500/50 rounded-full animate-spin" />
                 </div>
               )}
               {/* Play button overlay when video is loaded but paused */}
-              {videoSrc && !isPlaying && !isLoading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                  <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 transition-transform active:scale-90">
-                    <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+              {videoSrc && !isPlaying && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                  <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/40 transition-transform active:scale-90 shadow-xl">
+                    <svg className="w-7 h-7 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M8 5v14l11-7z" />
                     </svg>
                   </div>
