@@ -324,6 +324,9 @@ const WorkSection = () => {
     if (mobileAutoAdvanceRef.current) {
       clearInterval(mobileAutoAdvanceRef.current);
     }
+    // Disable auto-advance for Motion Design category (user request)
+    if (activeFilter === 'motion') return;
+
     if (filteredItems.length > 0) {
       mobileAutoAdvanceRef.current = setInterval(() => {
         setMobileGalleryIndex((prev) => (prev + 1) % filteredItems.length);
@@ -375,6 +378,9 @@ const WorkSection = () => {
   useEffect(() => {
     if (filteredItems.length === 0) return;
 
+    // Disable auto-advance for Motion Design category (user request)
+    if (activeFilter === 'motion') return;
+
     // Start the auto-advance interval
     mobileAutoAdvanceRef.current = setInterval(() => {
       setMobileGalleryIndex((prev) => (prev + 1) % filteredItems.length);
@@ -386,7 +392,7 @@ const WorkSection = () => {
         clearInterval(mobileAutoAdvanceRef.current);
       }
     };
-  }, [filteredItems.length]);
+  }, [filteredItems.length, activeFilter]);
 
   return (
     <section id="work" className="relative h-[100dvh] md:h-screen flex flex-col items-center pt-20 pb-2 md:pt-24 md:pb-0 bg-transparent z-10 overflow-hidden justify-center">
