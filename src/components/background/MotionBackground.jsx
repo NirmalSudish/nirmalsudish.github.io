@@ -86,7 +86,9 @@ const MotionBackground = () => {
         let finalOpacity = baseOpacity;
         let radius = 1.2;
 
-        if (targetX !== undefined) {
+        let height = canvas.height;
+
+        if (targetX !== undefined && !isMobile) {
           const dx = targetX - point.x;
           const dy = targetY - point.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
