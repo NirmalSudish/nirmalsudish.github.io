@@ -84,16 +84,15 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false }) =>
                 muted
                 loop
                 playsInline
-                preload="none" // Don't preload video data to save bandwidth
-                poster="" // Could add a poster image for even better UX
-                onLoadedData={() => setIsLoading(false)}
+                preload="metadata" // Load first frame for instant display
+                onLoadedMetadata={() => setIsLoading(false)} // Faster trigger
                 onWaiting={() => setIsLoading(true)}
                 onPlaying={() => setIsLoading(false)}
                 onEnded={() => setIsPlaying(false)}
-                className={`w-full h-auto max-h-[45vh] object-contain transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+                className={`w-full h-auto max-h-[45vh] object-contain transition-opacity duration-300 ${isLoading ? 'opacity-50' : 'opacity-100'}`}
               />
-              {/* Play button overlay - shown when video is not playing */}
-              {!isPlaying && !isLoading && (
+              {/* Play button overlay - always shown when not playing */}
+              {!isPlaying && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/20">
                   <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 transition-transform active:scale-90">
                     <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
