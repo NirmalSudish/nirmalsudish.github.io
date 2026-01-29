@@ -143,18 +143,10 @@ const MotionBackground = () => {
       // }
     };
 
-    const handleMouseOut = () => { mouse.x = undefined; mouse.y = undefined; };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('touchmove', handleTouchMove);
-    window.addEventListener('touchstart', handleTouchMove);
-    window.addEventListener('mouseout', handleMouseOut);
-    window.addEventListener('touchend', handleMouseOut);
-
-    resizeCanvas();
-    animate();
+    // ... rest of listeners ...
 
     return () => {
+      // ... cleanup ...
       observer.disconnect();
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('mousemove', handleMouseMove);
