@@ -43,9 +43,6 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
     onSelect(item, index);
   };
 
-  // Generate poster path for video thumbnails (if available)
-  const posterPath = isVideo ? mediaSrc.replace('.mp4', '_thumb.jpg') : null;
-
   // Render preload cards invisibly (for background loading)
   if (isPreload) {
     // Skip rendering for preload items to save memory
@@ -64,22 +61,21 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
         {hasLoaded ? (
           isVideo ? (
             <div className="relative" onClick={handleVideoTap}>
-              {/* Video preview - uses poster for instant display, no video loading */}
-              <div className="w-full aspect-video bg-zinc-900 flex items-center justify-center overflow-hidden rounded-lg">
-                {posterPath ? (
-                  <img
-                    src={resolvePath(posterPath)}
-                    alt="Video preview"
-                    className="w-full h-full object-contain"
-                    onError={(e) => {
-                      // If poster fails, show play icon
-                      e.target.style.display = 'none';
-                    }}
-                  />
-                ) : (
-                  <svg className="w-12 h-12 text-white/30" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
+              {/* Video preview - loads metadata to show first frame as thumbnail */}
+              <div className="w-full aspect-video bg-zinc-900 flex items-center justify-center overflow-hidden rounded-lg relative">
+                <video
+                  src={resolvePath(mediaSrc)}
+                  muted
+                  playsInline
+                  preload="metadata"
+                  className="w-full h-full object-contain"
+                  onLoadedData={() => setIsLoading(false)}
+                />
+                {/* Loading indicator while video metadata loads */}
+                {isLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-zinc-900">
+                    <div className="w-8 h-8 border-2 border-white/20 border-t-purple-500 rounded-full animate-spin" />
+                  </div>
                 )}
               </div>
               {/* Play button overlay - always visible for tap to open modal */}
