@@ -66,11 +66,11 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
     };
   }, []);
 
-  // Handle tap-to-play for videos - loads video source on demand
+  // Handle tap-to-play for videos
   const handleVideoTap = (e) => {
     e.stopPropagation();
 
-    // First tap: load the video source
+    // If we somehow don't have source yet, load it
     if (!videoSrc) {
       setVideoSrc(resolvePath(mediaSrc));
       setIsLoading(true);
@@ -87,6 +87,14 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
       setIsPlaying(true);
     }
   };
+
+  // Auto-load video source when visible (to show first frame/preview)
+  useEffect(() => {
+    if (isVisible && isVideo && !videoSrc && !isPreload) {
+      setVideoSrc(resolvePath(mediaSrc));
+      // We don't set isPlaying true, just load the source for the poster/metadata
+    }
+  }, [isVisible, isVideo, videoSrc, mediaSrc, isPreload]);
 
   // If this is a preload card for a video, render nothing (prevent memory issues)
   if (isPreload && isVideo) {
@@ -111,7 +119,7 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
         {hasLoaded ? (
           isVideo ? (
             <div className="relative" onClick={handleVideoTap}>
-              {/* Video only loads after user taps */}
+              {/* Video loads metadata automatically when visible */}
               {videoSrc ? (
                 <video
                   ref={videoRef}
@@ -120,30 +128,16 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
                   loop
                   playsInline
                   preload="metadata"
-                  onLoadedMetadata={() => {
-                    setIsLoading(false);
-                    // Auto-play after loading
-                    if (videoRef.current) {
-                      videoRef.current.play().catch(() => { });
-                      setIsPlaying(true);
-                    }
-                  }}
+                  onLoadedMetadata={() => setIsLoading(false)}
                   onWaiting={() => setIsLoading(true)}
                   onPlaying={() => setIsLoading(false)}
                   onEnded={() => setIsPlaying(false)}
                   className={`w-full h-auto max-h-[45vh] object-contain transition-opacity duration-300 ${isLoading ? 'opacity-50' : 'opacity-100'}`}
                 />
               ) : (
-                // Placeholder before video is loaded - shows immediately
+                // Temporary placeholder while source loads locally
                 <div className="w-full aspect-video bg-zinc-800/50 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-14 h-14 mx-auto rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
-                      <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </div>
-                    <p className="text-[10px] text-white/50 mt-2">Tap to load video</p>
-                  </div>
+                  <div className="w-8 h-8 border-2 border-white/10 border-t-purple-500/50 rounded-full animate-spin" />
                 </div>
               )}
               {/* Play button overlay when video is loaded but paused */}
@@ -508,7 +502,7 @@ const WorkSection = () => {
                     <button
                       key={idx}
                       onClick={() => setMobileGalleryIndex(idx)}
-                      className={`transition-all duration-300 rounded-full flex-shrink-0 ${idx === mobileGalleryIndex
+                      className={`transition-all duration-300 rounded-full flex-shrink-0 min-w-0 min-h-0 ${idx === mobileGalleryIndex
                         ? 'w-4 h-1.5 bg-purple-500'
                         : 'w-1.5 h-1.5 bg-black/20 dark:bg-white/30 hover:bg-black/40 dark:hover:bg-white/50'
                         }`}
