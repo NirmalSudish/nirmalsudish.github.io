@@ -7,16 +7,16 @@ export default defineConfig({
     react(),
     ViteImageOptimizer({
       png: {
-        quality: 80,
+        quality: 90,
       },
       jpeg: {
-        quality: 80,
+        quality: 90,
       },
       jpg: {
-        quality: 80,
+        quality: 90,
       },
       tiff: {
-        quality: 80,
+        quality: 90,
       },
       gif: {
         optimizationLevel: 3,
