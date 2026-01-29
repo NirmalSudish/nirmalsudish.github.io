@@ -1,6 +1,6 @@
 import React, { useState, useMemo, memo, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { resolvePath } from '../../utils/imagePath';
+import { resolvePath, getOptimizedImagePath } from '../../utils/imagePath';
 import { AnimatePresence, motion } from 'framer-motion';
 import ScrollReveal from '../common/ScrollReveal';
 import {
@@ -105,7 +105,7 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false }) =>
             </div>
           ) : (
             <img
-              src={resolvePath(mediaSrc)}
+              src={getOptimizedImagePath(mediaSrc)}
               onLoad={() => setIsLoading(false)}
               loading="lazy"
               decoding="async"
