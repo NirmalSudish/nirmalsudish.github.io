@@ -136,10 +136,11 @@ const MotionBackground = () => {
     };
 
     const handleTouchMove = (e) => {
-      if (e.touches.length > 0) {
-        mouse.x = e.touches[0].clientX;
-        mouse.y = e.touches[0].clientY;
-      }
+      // Disabled touch interaction on mobile to remove hover effect
+      // if (e.touches.length > 0) {
+      //   mouse.x = e.touches[0].clientX;
+      //   mouse.y = e.touches[0].clientY;
+      // }
     };
 
     const handleMouseOut = () => { mouse.x = undefined; mouse.y = undefined; };
@@ -168,7 +169,7 @@ const MotionBackground = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full pointer-events-none"
+      className="fixed top-0 left-0 w-full h-full pointer-events-none md:hidden"
       style={{ zIndex: 0 }}
     />
   );
