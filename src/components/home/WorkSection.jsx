@@ -61,14 +61,14 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
         {hasLoaded ? (
           isVideo ? (
             <div className="relative" onClick={handleVideoTap}>
-              {/* Video preview - loads metadata to show first frame as thumbnail */}
-              <div className="w-full aspect-video bg-zinc-900 flex items-center justify-center overflow-hidden rounded-lg relative">
+              {/* Video preview - adapts to portrait/landscape aspect ratio */}
+              <div className={`w-full bg-zinc-900 flex items-center justify-center overflow-hidden rounded-lg relative ${isLoading ? 'aspect-video' : ''}`}>
                 <video
                   src={resolvePath(mediaSrc)}
                   muted
                   playsInline
                   preload="metadata"
-                  className="w-full h-full object-contain"
+                  className="w-full h-auto max-h-[50vh] object-contain"
                   onLoadedData={() => setIsLoading(false)}
                 />
                 {/* Loading indicator while video metadata loads */}
