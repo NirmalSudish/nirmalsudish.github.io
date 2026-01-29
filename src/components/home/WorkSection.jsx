@@ -395,7 +395,7 @@ const WorkSection = () => {
           <h2 className="text-2xl md:text-5xl lg:text-6xl xl:text-7xl font-black uppercase tracking-tighter leading-none text-black dark:!text-white">Featured Work</h2>
         </ScrollReveal>
         <ScrollReveal delay={0.2}>
-          <div className="grid grid-cols-2 md:flex md:flex-row md:flex-wrap justify-center items-stretch md:items-center gap-2 md:gap-3 lg:gap-4 w-full max-w-4xl mx-auto">
+          <div className="flex flex-nowrap md:flex-wrap overflow-x-auto no-scrollbar justify-start md:justify-center items-center gap-2 md:gap-3 lg:gap-4 w-full max-w-4xl mx-auto px-4 md:px-0 pb-2 md:pb-0 snap-x">
             {[
               { id: 'ux-branding', label: 'UI / UX and BRANDING' },
               { id: 'packaging-print', label: 'PRINT & PACKAGING' },
@@ -404,7 +404,7 @@ const WorkSection = () => {
               { id: 'experimental', label: 'EXPERIMENTAL DESIGN' },
               { id: 'motion', label: 'MOTION DESIGN' }
             ].map(f => (
-              <button key={f.id} onClick={() => { setActiveFilter(f.id); setIsPaused(false); }} className={`group relative flex items-center justify-center gap-0.5 md:gap-1.5 px-1.5 py-1 md:px-5 md:py-2.5 rounded-full transition-all duration-500 text-[7px] md:text-[10px] font-black uppercase tracking-wider md:tracking-widest transform-gpu md:w-auto ${activeFilter === f.id ? 'bg-black text-white dark:bg-white dark:text-black ring-2 ring-transparent dark:ring-1 dark:ring-white scale-105 shadow-lg shadow-purple-500/30' : 'bg-white/5 ring-2 ring-inset ring-black/10 dark:ring-[0.5px] dark:ring-white/50 text-black dark:!text-white hover:bg-black/5 dark:hover:bg-white/10'}`}>
+              <button key={f.id} onClick={() => { setActiveFilter(f.id); setIsPaused(false); }} className={`group relative flex-shrink-0 snap-center flex items-center justify-center gap-0.5 md:gap-1.5 px-1.5 py-1 md:px-5 md:py-2.5 rounded-full transition-all duration-500 text-[7px] md:text-[10px] font-black uppercase tracking-wider md:tracking-widest transform-gpu md:w-auto ${activeFilter === f.id ? 'bg-black text-white dark:bg-white dark:text-black ring-2 ring-transparent dark:ring-1 dark:ring-white scale-105 shadow-lg shadow-purple-500/30' : 'bg-white/5 ring-2 ring-inset ring-black/10 dark:ring-[0.5px] dark:ring-white/50 text-black dark:!text-white hover:bg-black/5 dark:hover:bg-white/10'}`}>
                 <span className="relative z-10">{categoryLogos[f.id]}</span><span className="relative z-10">{f.label}</span>
               </button>
             ))}
