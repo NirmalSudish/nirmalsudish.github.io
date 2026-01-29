@@ -1,6 +1,6 @@
 import React, { useState, useMemo, memo, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { resolvePath, getOptimizedImagePath } from '../../utils/imagePath';
+import { resolvePath, getOptimizedImagePath, getFallbackImagePath } from '../../utils/imagePath';
 import { AnimatePresence, motion } from 'framer-motion';
 import ScrollReveal from '../common/ScrollReveal';
 import {
@@ -107,6 +107,7 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false }) =>
             <img
               src={getOptimizedImagePath(mediaSrc)}
               onLoad={() => setIsLoading(false)}
+              onError={(e) => { e.target.src = getFallbackImagePath(mediaSrc); }} // Fallback to original
               loading="lazy"
               decoding="async"
               className={`w-full h-auto max-h-[45vh] object-contain transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
@@ -448,14 +449,14 @@ const WorkSection = () => {
               {/* Progress Bar Style Pagination */}
               <div className="flex items-center gap-1.5 max-w-[280px] overflow-x-auto no-scrollbar">
                 {filteredItems.length <= 10 ? (
-                  // Dots for small number of items
+                  // Dots for small number of items - smaller size
                   filteredItems.map((_, idx) => (
                     <button
                       key={idx}
                       onClick={() => setMobileGalleryIndex(idx)}
                       className={`transition-all duration-300 rounded-full flex-shrink-0 ${idx === mobileGalleryIndex
-                        ? 'w-6 h-2 bg-purple-500'
-                        : 'w-2 h-2 bg-black/20 dark:bg-white/30 hover:bg-black/40 dark:hover:bg-white/50'
+                        ? 'w-4 h-1.5 bg-purple-500'
+                        : 'w-1.5 h-1.5 bg-black/20 dark:bg-white/30 hover:bg-black/40 dark:hover:bg-white/50'
                         }`}
                       aria-label={`Go to item ${idx + 1}`}
                     />

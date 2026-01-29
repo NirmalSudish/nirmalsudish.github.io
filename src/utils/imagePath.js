@@ -14,38 +14,53 @@ export const resolvePath = (path) => {
 };
 
 /**
+ * Check if device is mobile based on screen width
+ */
+export const isMobileDevice = () => {
+    return typeof window !== 'undefined' && window.innerWidth <= 768;
+};
+
+/**
  * Get optimized image source for responsive loading
  * Returns mobile WebP for mobile devices, full WebP for desktop
+ * Falls back to original if WebP doesn't exist
  */
 export const getOptimizedImagePath = (originalPath) => {
     if (!originalPath || originalPath.startsWith('http') || originalPath.startsWith('data:')) {
         return originalPath;
     }
 
-    // Check if it's a mobile device (simple check based on screen width)
-    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
-
     // Extract file extension and name
     const lastDot = originalPath.lastIndexOf('.');
-    const lastSlash = originalPath.lastIndexOf('/');
 
     if (lastDot === -1) return resolvePath(originalPath);
 
     const pathWithoutExt = originalPath.substring(0, lastDot);
-    const ext = originalPath.substring(lastDot);
+    const ext = originalPath.substring(lastDot).toLowerCase();
 
-    // Don't optimize videos or already optimized images
-    if (ext === '.mp4' || ext === '.webm' || originalPath.includes('-mobile') || ext === '.webp') {
+    // Don't optimize videos, GIFs, or already optimized images
+    if (ext === '.mp4' || ext === '.webm' || ext === '.gif' || originalPath.includes('-mobile') || ext === '.webp') {
         return resolvePath(originalPath);
     }
 
-    // For mobile: use mobile WebP version if available
+    // Check if it's a mobile device
+    const isMobile = isMobileDevice();
+
+    // For mobile: use mobile WebP version
     if (isMobile) {
         return resolvePath(`${pathWithoutExt}-mobile.webp`);
     }
 
     // For desktop: use full-size WebP
     return resolvePath(`${pathWithoutExt}.webp`);
+};
+
+/**
+ * Get fallback image path (original format) 
+ * Used as onerror fallback if WebP doesn't exist
+ */
+export const getFallbackImagePath = (originalPath) => {
+    return resolvePath(originalPath);
 };
 
 /**
@@ -61,10 +76,10 @@ export const getImageSrcSet = (originalPath) => {
     if (lastDot === -1) return '';
 
     const pathWithoutExt = originalPath.substring(0, lastDot);
-    const ext = originalPath.substring(lastDot);
+    const ext = originalPath.substring(lastDot).toLowerCase();
 
-    // Skip videos and already optimized
-    if (ext === '.mp4' || ext === '.webm' || originalPath.includes('-mobile') || ext === '.webp') {
+    // Skip videos, GIFs, and already optimized
+    if (ext === '.mp4' || ext === '.webm' || ext === '.gif' || originalPath.includes('-mobile') || ext === '.webp') {
         return '';
     }
 
