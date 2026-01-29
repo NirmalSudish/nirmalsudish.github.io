@@ -470,6 +470,27 @@ const WorkSection = () => {
                 )}
               </div>
             </div>
+
+            {/* Hidden Preloader: Pre-fetch next/prev items for instant navigation */}
+            <div className="hidden" aria-hidden="true">
+              {[
+                (mobileGalleryIndex + 1) % filteredItems.length, // Next
+                (mobileGalleryIndex + 2) % filteredItems.length, // Next + 1
+                (mobileGalleryIndex - 1 + filteredItems.length) % filteredItems.length // Prev
+              ].map(nextIdx => {
+                const item = filteredItems[nextIdx];
+                if (!item) return null;
+                return (
+                  <MobileProjectCard
+                    key={`preload-${nextIdx}`}
+                    index={nextIdx}
+                    item={item}
+                    isVisible={true} // Force 'visible' so it triggers the load effect
+                    onSelect={() => { }}
+                  />
+                );
+              })}
+            </div>
           </>
         )}
       </div>
