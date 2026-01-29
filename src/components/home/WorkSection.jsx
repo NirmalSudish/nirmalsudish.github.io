@@ -20,35 +20,63 @@ const categoryLogos = {
 };
 
 // Mobile-optimized card component for the gallery slider
-// Performance optimizations: no autoplay, lazy loading, tap-to-play for videos
-const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false }) => {
+// CRITICAL: Videos are NOT preloaded to prevent memory crashes on mobile
+const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPreload = false }) => {
   const isProject = item.client !== undefined;
   const isVideo = typeof item.src === 'string' && item.src.endsWith('.mp4');
   const [isLoading, setIsLoading] = useState(true);
   const [hasLoaded, setHasLoaded] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [videoSrc, setVideoSrc] = useState(null); // Video source is lazy loaded
   const videoRef = useRef(null);
-
-  // Only load media when visible (lazy loading)
-  useEffect(() => {
-    if (isVisible && !hasLoaded) {
-      setHasLoaded(true);
-    }
-  }, [isVisible, hasLoaded]);
-
-  // Pause video when not visible to save resources
-  useEffect(() => {
-    if (videoRef.current && !isVisible && isPlaying) {
-      videoRef.current.pause();
-      setIsPlaying(false);
-    }
-  }, [isVisible, isPlaying]);
 
   const mediaSrc = isProject ? item.mainImageUrl : item.src;
 
-  // Handle tap-to-play for videos (saves battery on mobile)
+  // CRITICAL: For preload cards, only load images, NEVER load videos
+  useEffect(() => {
+    if (isPreload && isVideo) {
+      // Don't load videos in preloader - this prevents memory crashes
+      return;
+    }
+    if (isVisible && !hasLoaded) {
+      setHasLoaded(true);
+    }
+  }, [isVisible, hasLoaded, isPreload, isVideo]);
+
+  // Stop video and clear source when not visible to free memory
+  useEffect(() => {
+    if (!isVisible && videoRef.current) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+      // Clear video source to free memory
+      if (videoSrc) {
+        setVideoSrc(null);
+      }
+    }
+  }, [isVisible, videoSrc]);
+
+  // Cleanup on unmount - critical for preventing memory leaks
+  useEffect(() => {
+    return () => {
+      if (videoRef.current) {
+        videoRef.current.pause();
+        videoRef.current.src = '';
+        videoRef.current.load(); // Force browser to release video resources
+      }
+    };
+  }, []);
+
+  // Handle tap-to-play for videos - loads video source on demand
   const handleVideoTap = (e) => {
     e.stopPropagation();
+
+    // First tap: load the video source
+    if (!videoSrc) {
+      setVideoSrc(resolvePath(mediaSrc));
+      setIsLoading(true);
+      return;
+    }
+
     if (!videoRef.current) return;
 
     if (isPlaying) {
@@ -60,12 +88,17 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false }) =>
     }
   };
 
+  // If this is a preload card for a video, render nothing (prevent memory issues)
+  if (isPreload && isVideo) {
+    return null;
+  }
+
   return (
     <div
       className="mobile-project-card w-full flex flex-col items-center cursor-pointer px-2"
       onClick={() => !isProject && !isVideo && onSelect(item, index)}
     >
-      {/* Media Container - Responsive with no clipping */}
+      {/* Media Container */}
       <div className="w-full rounded-2xl overflow-hidden bg-zinc-900/50 border border-white/10 relative">
         {/* Loading Skeleton */}
         {isLoading && hasLoaded && (
@@ -78,21 +111,43 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false }) =>
         {hasLoaded ? (
           isVideo ? (
             <div className="relative" onClick={handleVideoTap}>
-              <video
-                ref={videoRef}
-                src={resolvePath(mediaSrc)}
-                muted
-                loop
-                playsInline
-                preload="metadata" // Load first frame for instant display
-                onLoadedMetadata={() => setIsLoading(false)} // Faster trigger
-                onWaiting={() => setIsLoading(true)}
-                onPlaying={() => setIsLoading(false)}
-                onEnded={() => setIsPlaying(false)}
-                className={`w-full h-auto max-h-[45vh] object-contain transition-opacity duration-300 ${isLoading ? 'opacity-50' : 'opacity-100'}`}
-              />
-              {/* Play button overlay - always shown when not playing */}
-              {!isPlaying && (
+              {/* Video only loads after user taps */}
+              {videoSrc ? (
+                <video
+                  ref={videoRef}
+                  src={videoSrc}
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  onLoadedMetadata={() => {
+                    setIsLoading(false);
+                    // Auto-play after loading
+                    if (videoRef.current) {
+                      videoRef.current.play().catch(() => { });
+                      setIsPlaying(true);
+                    }
+                  }}
+                  onWaiting={() => setIsLoading(true)}
+                  onPlaying={() => setIsLoading(false)}
+                  onEnded={() => setIsPlaying(false)}
+                  className={`w-full h-auto max-h-[45vh] object-contain transition-opacity duration-300 ${isLoading ? 'opacity-50' : 'opacity-100'}`}
+                />
+              ) : (
+                // Placeholder before video is loaded - shows immediately
+                <div className="w-full aspect-video bg-zinc-800/50 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-14 h-14 mx-auto rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
+                      <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                    <p className="text-[10px] text-white/50 mt-2">Tap to load video</p>
+                  </div>
+                </div>
+              )}
+              {/* Play button overlay when video is loaded but paused */}
+              {videoSrc && !isPlaying && !isLoading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/20">
                   <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 transition-transform active:scale-90">
                     <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
@@ -106,7 +161,7 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false }) =>
             <img
               src={getOptimizedImagePath(mediaSrc)}
               onLoad={() => setIsLoading(false)}
-              onError={(e) => { e.target.src = getFallbackImagePath(mediaSrc); }} // Fallback to original
+              onError={(e) => { e.target.src = getFallbackImagePath(mediaSrc); }}
               loading="lazy"
               decoding="async"
               className={`w-full h-auto max-h-[45vh] object-contain transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
@@ -115,14 +170,14 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false }) =>
             />
           )
         ) : (
-          // Placeholder before lazy load - minimal DOM
+          // Placeholder before lazy load
           <div className="w-full aspect-video bg-zinc-800/30 flex items-center justify-center">
             <div className="w-6 h-6 border-2 border-white/10 border-t-purple-500/50 rounded-full animate-spin" />
           </div>
         )}
       </div>
 
-      {/* Text Content - Properly contained */}
+      {/* Text Content */}
       {isProject ? (
         <Link to={`/project/${item.id}`} className="block w-full mt-4 px-2">
           <div className="flex flex-col gap-1 text-center">
@@ -140,7 +195,7 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false }) =>
       ) : (
         <div className="mt-3 text-center">
           <span className="text-[10px] text-white/40 uppercase tracking-wider">
-            {isVideo ? 'Tap to play' : 'Tap to view full size'}
+            {isVideo ? 'Tap to load & play' : 'Tap to view full size'}
           </span>
         </div>
       )}
@@ -471,21 +526,24 @@ const WorkSection = () => {
               </div>
             </div>
 
-            {/* Hidden Preloader: Pre-fetch next/prev items for instant navigation */}
+            {/* Hidden Preloader: Pre-fetch next/prev IMAGES only (not videos) */}
             <div className="hidden" aria-hidden="true">
               {[
-                (mobileGalleryIndex + 1) % filteredItems.length, // Next
-                (mobileGalleryIndex + 2) % filteredItems.length, // Next + 1
-                (mobileGalleryIndex - 1 + filteredItems.length) % filteredItems.length // Prev
+                (mobileGalleryIndex + 1) % filteredItems.length,
+                (mobileGalleryIndex - 1 + filteredItems.length) % filteredItems.length
               ].map(nextIdx => {
                 const item = filteredItems[nextIdx];
                 if (!item) return null;
+                // Skip video preloading entirely
+                const isVideo = typeof item.src === 'string' && item.src.endsWith('.mp4');
+                if (isVideo) return null;
                 return (
                   <MobileProjectCard
                     key={`preload-${nextIdx}`}
                     index={nextIdx}
                     item={item}
-                    isVisible={true} // Force 'visible' so it triggers the load effect
+                    isVisible={true}
+                    isPreload={true}
                     onSelect={() => { }}
                   />
                 );
