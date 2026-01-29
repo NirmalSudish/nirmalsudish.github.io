@@ -53,7 +53,7 @@ const About = () => {
               </div>
 
               {/* MOVING GREEN GRADIENT BUTTON */}
-              <div className="relative inline-flex items-center justify-center p-[1.5px] overflow-hidden rounded-full group scale-90 origin-center md:scale-100 mb-3 md:mb-0">
+              <div className="hidden md:inline-flex relative items-center justify-center p-[1.5px] overflow-hidden rounded-full group scale-90 origin-center md:scale-100 mb-3 md:mb-0">
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
@@ -70,7 +70,7 @@ const About = () => {
 
               {/* MINIMALIST INFORMATION GRID - Stacked on Mobile to fit width */}
               <div className="flex flex-col gap-2.5 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-y-8 md:gap-x-12 pt-0 md:pt-12 border-t-0 md:border-t border-black/10 dark:border-white/10 mb-3 md:mb-8 w-full">
-                <div className="flex flex-col items-center md:items-start">
+                <div className="hidden md:flex flex-col items-center md:items-start">
                   <span className="text-[10px] md:text-[10px] font-black text-[#c792ff] uppercase tracking-[0.3em] mb-1 md:mb-2">Based In</span>
                   <span className="text-base md:text-lg lg:text-xl font-bold uppercase">Dubai, UAE</span>
                 </div>
@@ -80,7 +80,7 @@ const About = () => {
                   <span className="text-base md:text-lg lg:text-xl font-bold uppercase">Google</span>
                 </div>
 
-                <div className="flex flex-col items-center md:items-start">
+                <div className="hidden md:flex flex-col items-center md:items-start">
                   <span className="text-[10px] md:text-[10px] font-black text-[#c792ff] uppercase tracking-[0.3em] mb-1 md:mb-2">Past</span>
                   <span className="text-base md:text-lg lg:text-xl font-bold opacity-40 uppercase">Freelance</span>
                 </div>
