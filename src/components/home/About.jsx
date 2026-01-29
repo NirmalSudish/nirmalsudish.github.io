@@ -13,7 +13,7 @@ const About = () => {
           {/* IMAGE COLUMN: Top on Mobile, Left on Desktop */}
           {/* Mobile: Order 1 (Top), Desktop: Order 1 (Left) */}
           <div className="w-full md:w-5/12 order-1 flex justify-center md:justify-start items-center md:block pt-4 md:pt-0">
-            <div className="relative w-56 md:w-full">
+            <div className="relative w-48 md:w-full">
               <div className="relative aspect-[3/4] md:aspect-[4/5] overflow-hidden rounded-xl md:rounded-2xl border border-white/10 shadow-2xl">
                 <img
                   src={resolvePath('/images/about-me.jpg')}
