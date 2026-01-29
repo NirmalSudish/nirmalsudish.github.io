@@ -65,32 +65,10 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
     };
   }, []);
 
-  // Handle tap-to-play for videos
+  // Handle tap for videos - Open full screen modal
   const handleVideoTap = (e) => {
     e.stopPropagation();
-
-    // If we don't have source yet, load it first
-    if (!videoSrc) {
-      setVideoSrc(resolvePath(mediaSrc));
-      setIsLoading(true);
-      return;
-    }
-
-    if (!videoRef.current) return;
-
-    if (isPlaying) {
-      videoRef.current.pause();
-      setIsPlaying(false);
-    } else {
-      const playPromise = videoRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => setIsPlaying(true))
-          .catch((err) => {
-            console.log('Play failed:', err);
-          });
-      }
-    }
+    onSelect(item, index);
   };
 
   // Auto-load video source when visible (to show first frame/preview)
@@ -440,8 +418,8 @@ const WorkSection = () => {
               <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" /></svg>
             </motion.button>
 
-            <motion.div key={selectedAsset.src} initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="relative z-[210] max-w-[90vw] max-h-[85vh] pointer-events-none">
-              {selectedAsset.src.endsWith('.mp4') ? <video src={resolvePath(selectedAsset.src)} controls autoPlay className="max-h-[85vh] rounded-lg pointer-events-auto shadow-2xl" /> : <img src={resolvePath(selectedAsset.src)} className="max-h-[85vh] object-contain rounded-lg pointer-events-auto shadow-2xl" alt="" />}
+            <motion.div key={selectedAsset.src} initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="relative z-[210] w-full md:w-auto md:max-w-[90vw] max-h-[85vh] px-2 md:px-0 pointer-events-none flex items-center justify-center">
+              {selectedAsset.src.endsWith('.mp4') ? <video src={resolvePath(selectedAsset.src)} controls autoPlay className="w-full h-auto max-h-[85vh] object-contain rounded-lg pointer-events-auto shadow-2xl" /> : <img src={resolvePath(selectedAsset.src)} className="w-full h-auto max-h-[85vh] object-contain rounded-lg pointer-events-auto shadow-2xl" alt="" />}
             </motion.div>
           </div>
         )}
