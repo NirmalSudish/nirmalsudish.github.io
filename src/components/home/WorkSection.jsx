@@ -21,7 +21,7 @@ const categoryLogos = {
 
 // Mobile-optimized card component for the gallery slider
 // CRITICAL: Videos are NOT preloaded to prevent memory crashes on mobile
-const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPreload = false }) => {
+const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPreload = false, onVideoEnded }) => {
   const isProject = item.client !== undefined;
   const isVideo = typeof item.src === 'string' && item.src.endsWith('.mp4');
   const [isLoading, setIsLoading] = useState(true);
@@ -34,16 +34,12 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
 
   const mediaSrc = isProject ? item.mainImageUrl : item.src;
 
-  // CRITICAL: For preload cards, only load images, NEVER load videos
+  // Handle visibility and preloading
   useEffect(() => {
-    if (isPreload && isVideo) {
-      // Don't load videos in preloader - this prevents memory crashes
-      return;
-    }
     if (isVisible && !hasLoaded) {
       setHasLoaded(true);
     }
-  }, [isVisible, hasLoaded, isPreload, isVideo]);
+  }, [isVisible, hasLoaded]);
 
   // Stop video and clear source when not visible to free memory
   useEffect(() => {
@@ -69,41 +65,31 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
     };
   }, []);
 
-  // Handle tap-to-play for videos
+  // Handle tap to pause/resume (not required for start, but allows user control)
   const handleVideoTap = (e) => {
     e.stopPropagation();
 
-    // If we don't have source yet, load it first
-    if (!videoSrc) {
-      setVideoSrc(resolvePath(mediaSrc));
-      setIsLoading(true);
-      return;
-    }
-
-    if (!videoRef.current) return;
+    if (!videoRef.current || !videoSrc) return;
 
     if (isPlaying) {
       videoRef.current.pause();
       setIsPlaying(false);
     } else {
-      // Attempt to play - this works on mobile after user tap
       const playPromise = videoRef.current.play();
       if (playPromise !== undefined) {
         playPromise
           .then(() => setIsPlaying(true))
           .catch((err) => {
             console.log('Play failed:', err);
-            // If play fails, try loading video fresh
-            videoRef.current.load();
           });
       }
     }
   };
 
-  // Auto-load video source when visible (to show first frame/preview)
+  // Auto-load and AUTO-PLAY video when visible
   useEffect(() => {
     if (isVisible && isVideo && !videoSrc && !isPreload) {
-      // Small delay to ensure the component is mounted
+      // Load video source
       const timer = setTimeout(() => {
         setVideoSrc(resolvePath(mediaSrc));
       }, 100);
@@ -111,9 +97,27 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
     }
   }, [isVisible, isVideo, videoSrc, mediaSrc, isPreload]);
 
-  // If this is a preload card for a video, render nothing (prevent memory issues)
-  if (isPreload && isVideo) {
-    return null;
+  // AUTOPLAY when video is ready and visible (but not if it's a preload item)
+  useEffect(() => {
+    if (isVisible && !isPreload && videoRef.current && videoSrc && videoReady && !isPlaying) {
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlaying(true);
+            console.log('Autoplay started successfully');
+          })
+          .catch((err) => {
+            console.log('Autoplay blocked or failed:', err);
+            // Autoplay blocked - user will need to tap
+          });
+      }
+    }
+  }, [isVisible, videoSrc, videoReady, isPlaying, isPreload]);
+
+  // Render preload cards invisibly (for background loading)
+  if (isPreload) {
+    // Render the video element but hide it for preloading
   }
 
   return (
@@ -157,7 +161,13 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
                     setIsPlaying(true);
                   }}
                   onPause={() => setIsPlaying(false)}
-                  onEnded={() => setIsPlaying(false)}
+                  onEnded={() => {
+                    setIsPlaying(false);
+                    // Auto-advance to next video
+                    if (onVideoEnded) {
+                      onVideoEnded();
+                    }
+                  }}
                   onError={(e) => {
                     console.log('Video error:', e);
                     setIsLoading(false);
@@ -556,6 +566,7 @@ const WorkSection = () => {
                       item={filteredItems[mobileGalleryIndex]}
                       isVisible={true}
                       onSelect={handleSelect}
+                      onVideoEnded={() => handleMobileGalleryNav('next')}
                     />
                   </motion.div>
                 </AnimatePresence>
@@ -590,17 +601,14 @@ const WorkSection = () => {
               </div>
             </div>
 
-            {/* Hidden Preloader: Pre-fetch next/prev IMAGES only (not videos) */}
+            {/* Hidden Preloader: Pre-fetch next item for instant playback */}
             <div className="hidden" aria-hidden="true">
               {[
-                (mobileGalleryIndex + 1) % filteredItems.length,
-                (mobileGalleryIndex - 1 + filteredItems.length) % filteredItems.length
+                (mobileGalleryIndex + 1) % filteredItems.length
               ].map(nextIdx => {
                 const item = filteredItems[nextIdx];
                 if (!item) return null;
-                // Skip video preloading entirely
-                const isVideo = typeof item.src === 'string' && item.src.endsWith('.mp4');
-                if (isVideo) return null;
+                // Preload next item (including videos) for instant playback
                 return (
                   <MobileProjectCard
                     key={`preload-${nextIdx}`}
