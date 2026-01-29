@@ -143,10 +143,18 @@ const MotionBackground = () => {
       // }
     };
 
-    // ... rest of listeners ...
+    const handleMouseOut = () => { mouse.x = undefined; mouse.y = undefined; };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchmove', handleTouchMove);
+    window.addEventListener('touchstart', handleTouchMove);
+    window.addEventListener('mouseout', handleMouseOut);
+    window.addEventListener('touchend', handleMouseOut);
+
+    resizeCanvas();
+    animate();
 
     return () => {
-      // ... cleanup ...
       observer.disconnect();
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('mousemove', handleMouseMove);
@@ -161,7 +169,7 @@ const MotionBackground = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full pointer-events-none md:hidden"
+      className="fixed top-0 left-0 w-full h-full pointer-events-none"
       style={{ zIndex: 0 }}
     />
   );
