@@ -26,11 +26,6 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
   const isVideo = typeof item.src === 'string' && item.src.endsWith('.mp4');
   const [isLoading, setIsLoading] = useState(true);
   const [hasLoaded, setHasLoaded] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [videoSrc, setVideoSrc] = useState(null); // Video source is lazy loaded
-  const [videoReady, setVideoReady] = useState(false); // Track if video has loaded first frame
-  const videoRef = useRef(null);
-
 
   const mediaSrc = isProject ? item.mainImageUrl : item.src;
 
@@ -38,32 +33,9 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
   useEffect(() => {
     if (isVisible && !hasLoaded) {
       setHasLoaded(true);
+      setIsLoading(false);
     }
   }, [isVisible, hasLoaded]);
-
-  // Stop video and clear source when not visible to free memory
-  useEffect(() => {
-    if (!isVisible && videoRef.current) {
-      videoRef.current.pause();
-      setIsPlaying(false);
-      setVideoReady(false);
-      // Clear video source to free memory
-      if (videoSrc) {
-        setVideoSrc(null);
-      }
-    }
-  }, [isVisible, videoSrc]);
-
-  // Cleanup on unmount - critical for preventing memory leaks
-  useEffect(() => {
-    return () => {
-      if (videoRef.current) {
-        videoRef.current.pause();
-        videoRef.current.src = '';
-        videoRef.current.load(); // Force browser to release video resources
-      }
-    };
-  }, []);
 
   // Handle tap for videos - Open full screen modal
   const handleVideoTap = (e) => {
@@ -71,19 +43,13 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
     onSelect(item, index);
   };
 
-  // Auto-load video source when visible (to show first frame/preview)
-  useEffect(() => {
-    if (isVisible && isVideo && !videoSrc && !isPreload) {
-      const timer = setTimeout(() => {
-        setVideoSrc(resolvePath(mediaSrc));
-      }, 100);
-      return () => clearTimeout(timer);
-    }
-  }, [isVisible, isVideo, videoSrc, mediaSrc, isPreload]);
+  // Generate poster path for video thumbnails (if available)
+  const posterPath = isVideo ? mediaSrc.replace('.mp4', '_thumb.jpg') : null;
 
   // Render preload cards invisibly (for background loading)
   if (isPreload) {
-    // Render the video element but hide it for preloading
+    // Skip rendering for preload items to save memory
+    return null;
   }
 
   return (
@@ -93,64 +59,37 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
     >
       {/* Media Container */}
       <div className="w-full rounded-2xl overflow-hidden bg-zinc-900/50 border border-white/10 relative">
-        {/* Loading Skeleton - only show when actively loading */}
-        {isLoading && hasLoaded && videoSrc && (
-          <div className="absolute inset-0 flex items-center justify-center bg-zinc-900/80 z-10">
-            <div className="w-8 h-8 border-2 border-white/20 border-t-purple-500 rounded-full animate-spin" />
-          </div>
-        )}
 
         {/* Only render media if visible (lazy loading) */}
         {hasLoaded ? (
           isVideo ? (
             <div className="relative" onClick={handleVideoTap}>
-              {/* Video element with poster for instant preview */}
-              {videoSrc ? (
-                <video
-                  ref={videoRef}
-                  src={videoSrc}
-                  muted
-                  loop
-                  playsInline
-                  preload="auto"
-                  onLoadedData={() => {
-                    setIsLoading(false);
-                    setVideoReady(true);
-                  }}
-                  onCanPlay={() => {
-                    setIsLoading(false);
-                    setVideoReady(true);
-                  }}
-                  onWaiting={() => setIsLoading(true)}
-                  onPlaying={() => {
-                    setIsLoading(false);
-                    setIsPlaying(true);
-                  }}
-                  onPause={() => setIsPlaying(false)}
-                  onEnded={() => setIsPlaying(false)}
-                  onError={(e) => {
-                    console.log('Video error:', e);
-                    setIsLoading(false);
-                  }}
-                  className={`w-full h-auto max-h-[45vh] object-contain transition-opacity duration-300 ${isLoading && !videoReady ? 'opacity-50' : 'opacity-100'}`}
-                  style={{ backgroundColor: '#1a1a1a' }}
-                />
-              ) : (
-                // Placeholder before video source is set - shows loading state
-                <div className="w-full aspect-video bg-zinc-800/50 flex items-center justify-center">
-                  <div className="w-8 h-8 border-2 border-white/10 border-t-purple-500/50 rounded-full animate-spin" />
+              {/* Video preview - uses poster for instant display, no video loading */}
+              <div className="w-full aspect-video bg-zinc-900 flex items-center justify-center overflow-hidden rounded-lg">
+                {posterPath ? (
+                  <img
+                    src={resolvePath(posterPath)}
+                    alt="Video preview"
+                    className="w-full h-full object-contain"
+                    onError={(e) => {
+                      // If poster fails, show play icon
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                ) : (
+                  <svg className="w-12 h-12 text-white/30" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                )}
+              </div>
+              {/* Play button overlay - always visible for tap to open modal */}
+              <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center border border-white/40 active:scale-90 shadow-xl">
+                  <svg className="w-7 h-7 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
                 </div>
-              )}
-              {/* Play button overlay when video is loaded but paused */}
-              {videoSrc && !isPlaying && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                  <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/40 transition-transform active:scale-90 shadow-xl">
-                    <svg className="w-7 h-7 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </div>
-                </div>
-              )}
+              </div>
             </div>
           ) : (
             <img
@@ -401,25 +340,39 @@ const WorkSection = () => {
       <AnimatePresence>
         {selectedAsset && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-black/90 backdrop-blur-3xl" onClick={handleCloseModal} />
+            {/* Modal backdrop - NO blur on mobile for performance */}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-black/95 md:bg-black/90 md:backdrop-blur-xl" onClick={handleCloseModal} />
 
-            {/* CLOSE BUTTON */}
-            <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute top-10 right-10 w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white z-[250] shadow-2xl active:scale-90" onClick={handleCloseModal}>
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" /></svg>
+            {/* CLOSE BUTTON - Adjusted for mobile */}
+            <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute top-4 right-4 md:top-10 md:right-10 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white z-[250] shadow-2xl active:scale-90" onClick={handleCloseModal}>
+              <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" /></svg>
             </motion.button>
 
             {/* LEFT NAVIGATION BUTTON */}
-            <motion.button initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-white z-[250] transition-all active:scale-90" onClick={(e) => navigateAsset('prev', e)}>
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" /></svg>
+            <motion.button initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="absolute left-2 md:left-12 top-1/2 -translate-y-1/2 w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center text-white z-[250] transition-all active:scale-90" onClick={(e) => navigateAsset('prev', e)}>
+              <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" /></svg>
             </motion.button>
 
             {/* RIGHT NAVIGATION BUTTON */}
-            <motion.button initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-white z-[250] transition-all active:scale-90" onClick={(e) => navigateAsset('next', e)}>
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" /></svg>
+            <motion.button initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="absolute right-2 md:right-12 top-1/2 -translate-y-1/2 w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center text-white z-[250] transition-all active:scale-90" onClick={(e) => navigateAsset('next', e)}>
+              <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" /></svg>
             </motion.button>
 
-            <motion.div key={selectedAsset.src} initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="relative z-[210] w-full md:w-auto md:max-w-[90vw] max-h-[85vh] px-2 md:px-0 pointer-events-none flex items-center justify-center">
-              {selectedAsset.src.endsWith('.mp4') ? <video src={resolvePath(selectedAsset.src)} controls autoPlay className="w-full h-auto max-h-[85vh] object-contain rounded-lg pointer-events-auto shadow-2xl" /> : <img src={resolvePath(selectedAsset.src)} className="w-full h-auto max-h-[85vh] object-contain rounded-lg pointer-events-auto shadow-2xl" alt="" />}
+            {/* Video/Image Container - Optimized for mobile */}
+            <motion.div key={selectedAsset.src} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }} className="relative z-[210] w-full md:w-auto md:max-w-[90vw] max-h-[80vh] md:max-h-[85vh] px-4 md:px-0 flex items-center justify-center">
+              {selectedAsset.src.endsWith('.mp4') ? (
+                <video
+                  src={resolvePath(selectedAsset.src)}
+                  controls
+                  playsInline
+                  muted
+                  autoPlay
+                  preload="metadata"
+                  className="w-full h-auto max-h-[75vh] md:max-h-[85vh] object-contain rounded-lg pointer-events-auto shadow-2xl bg-black"
+                />
+              ) : (
+                <img src={resolvePath(selectedAsset.src)} className="w-full h-auto max-h-[80vh] md:max-h-[85vh] object-contain rounded-lg pointer-events-auto shadow-2xl" alt="" />
+              )}
             </motion.div>
           </div>
         )}
