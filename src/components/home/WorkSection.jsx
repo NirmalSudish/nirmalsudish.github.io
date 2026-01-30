@@ -169,26 +169,50 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, p
     return () => observer.disconnect();
   }, [isVideo, isProject]);
 
+  // Standardized dimensions for consistency
+  const containerClass = `
+    transition-all duration-500 
+    w-[80vw] md:w-[60vw] lg:w-[45vw] xl:w-[40vw] 2xl:w-[35vw] max-w-[500px]
+    aspect-[4/3] md:aspect-[16/10]
+    relative group/card cursor-pointer flex-shrink-0
+  `;
+
   return (
     <div
       ref={containerRef}
-      className="project-card flex-shrink-0 relative group/card cursor-pointer"
+      className={containerClass}
       onMouseEnter={() => isProject && onMouseEnter(item.bgColor || '#1d1d1d')}
       onMouseLeave={onMouseLeave}
       onClick={() => !isProject && onSelect(item, index)}
     >
       {isProject ? (
-        <Link to={`/project/${item.id}`} className="block transition-all duration-500 w-full md:w-[45vw] lg:w-[38vw] xl:w-[35vw] 2xl:w-[32vw] max-w-[600px]">
-          <div className="rounded-xl overflow-hidden mb-3 md:mb-6 bg-zinc-900 aspect-video md:aspect-auto h-auto max-h-[30vh] md:max-h-none md:h-[38vh] lg:h-[42vh] xl:h-[48vh] 2xl:h-[50vh] w-full relative">
-            <img src={resolvePath(item.mainImageUrl)} loading="lazy" className="h-full w-full object-contain md:object-cover dark:group-hover/card:scale-105 transition-all duration-1000" alt={item.client} />
+        <Link to={`/project/${item.id}`} className="block w-full h-full relative overflow-hidden rounded-xl bg-zinc-900 border border-white/5">
+          {/* Main Image - consistently covers the container to form the rectangle */}
+          <div className="absolute inset-0 z-0">
+            <img
+              src={resolvePath(item.mainImageUrl)}
+              loading="lazy"
+              className="w-full h-full object-cover transition-transform duration-1000 dark:group-hover/card:scale-105"
+              alt={item.client}
+            />
           </div>
-          <div className="flex justify-between items-start px-1 w-full">
-            <div className="text-left"><h3 className="font-bold text-base md:text-xl lg:text-2xl uppercase tracking-tighter leading-none mb-1">{item.client}</h3><p className="text-[10px] opacity-60 uppercase tracking-widest font-medium">{item.project}</p></div>
-            <div className="text-right"><span className="text-[10px] text-purple-600 dark:text-[#c792ff] font-black uppercase tracking-[0.2em]">{item.categories.join(' / ')}</span></div>
+
+          {/* Overlay Content */}
+          <div className="absolute top-0 left-0 w-full p-4 md:p-6 z-10 bg-gradient-to-b from-black/60 to-transparent">
+            <div className="flex justify-between items-start">
+              <div className="text-left">
+                <h3 className="font-bold text-lg md:text-xl lg:text-2xl uppercase tracking-tighter leading-none mb-1 text-white">{item.client}</h3>
+                <p className="text-[10px] opacity-80 uppercase tracking-widest font-medium text-white">{item.project}</p>
+              </div>
+              <div className="text-right">
+                <span className="text-[10px] text-purple-400 font-black uppercase tracking-[0.2em] bg-black/50 px-2 py-1 rounded backdrop-blur-md">{item.categories[0]}</span>
+              </div>
+            </div>
           </div>
         </Link>
       ) : (
-        <div className="h-[30vh] md:h-[38vh] lg:h-[42vh] xl:h-[48vh] 2xl:h-[50vh] w-full md:w-auto rounded-xl overflow-hidden bg-zinc-900 border border-white/5 relative flex items-center justify-center">
+        <div className="w-full h-full rounded-xl overflow-hidden bg-zinc-900 border border-white/5 relative flex items-center justify-center">
+          {/* Non-project asset (Video/Image) */}
           {isVideo ? (
             <>
               {isLoading && (
@@ -206,14 +230,14 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, p
                 onLoadedData={() => setIsLoading(false)}
                 onWaiting={() => setIsLoading(true)}
                 onPlaying={() => setIsLoading(false)}
-                className={`w-full h-auto md:h-full md:w-auto md:object-contain relative z-10 transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+                className={`w-full h-full object-cover relative z-10 transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
               />
             </>
           ) : (
             <img
               src={resolvePath(item.src)}
               loading={priority ? "eager" : "lazy"}
-              className="w-full h-auto md:h-full md:w-auto md:object-contain"
+              className="w-full h-full object-cover"
               alt=""
             />
           )}
@@ -275,9 +299,10 @@ const WorkSection = () => {
     setIsPaused(true);
     if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current);
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: (dir === 'left' ? -1 : 1) * window.innerWidth * 0.6, behavior: 'smooth' });
+      scrollContainerRef.current.scrollBy({ left: (dir === 'left' ? -1 : 1) * window.innerWidth * 0.4, behavior: 'smooth' });
     }
-    pauseTimeoutRef.current = setTimeout(() => setIsPaused(false), 8000);
+    // Resume auto-scroll after interaction
+    pauseTimeoutRef.current = setTimeout(() => setIsPaused(false), 5000);
   };
 
   // Define filteredItems FIRST (before any hooks/functions that reference it)
@@ -430,32 +455,32 @@ const WorkSection = () => {
         </ScrollReveal>
       </div>
 
-      {/* Desktop: Horizontal Marquee */}
-      <div className="w-full relative group/marquee flex-grow flex-col justify-center hidden md:flex">
-        <button onClick={() => handleScroll('left')} className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 z-50 w-16 h-16 rounded-full border border-black/20 dark:border-white/20 bg-black/5 dark:bg-white/5 backdrop-blur-2xl opacity-0 group-hover/marquee:opacity-100 transition-all duration-500 flex items-center justify-center active:scale-90 shadow-2xl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-6 h-6"><path d="M15 18l-6-6 6-6" /></svg></button>
-        <button onClick={() => handleScroll('right')} className="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 z-50 w-16 h-16 rounded-full border border-black/20 dark:border-white/20 bg-black/5 dark:bg-white/5 backdrop-blur-2xl opacity-0 group-hover/marquee:opacity-100 transition-all duration-500 flex items-center justify-center active:scale-90 shadow-2xl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-6 h-6"><path d="M9 18l6-6-6-6" /></svg></button>
+      {/* Desktop: Horizontal Marquee - SMOOTH & STABLE */}
+      <div className="w-full relative group/marquee flex-grow flex-col justify-center hidden md:flex overflow-hidden">
+        {/* Navigation Buttons for Manual Scroll */}
+        <button onClick={() => handleScroll('left')} className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 z-50 w-16 h-16 rounded-full border border-black/20 dark:border-white/20 bg-black/5 dark:bg-white/5 backdrop-blur-2xl opacity-0 group-hover/marquee:opacity-100 transition-all duration-500 flex items-center justify-center active:scale-90 shadow-2xl hover:bg-white/10"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-6 h-6 text-white"><path d="M15 18l-6-6 6-6" /></svg></button>
+        <button onClick={() => handleScroll('right')} className="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 z-50 w-16 h-16 rounded-full border border-black/20 dark:border-white/20 bg-black/5 dark:bg-white/5 backdrop-blur-2xl opacity-0 group-hover/marquee:opacity-100 transition-all duration-500 flex items-center justify-center active:scale-90 shadow-2xl hover:bg-white/10"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-6 h-6 text-white"><path d="M9 18l6-6-6-6" /></svg></button>
 
-        <div className="w-full overflow-hidden">
-          <div ref={scrollContainerRef} className="overflow-x-auto no-scrollbar">
-            <div
-              className={`flex min-w-full w-max gap-12 md:gap-24 px-[5vw] will-change-transform ${!isPaused ? 'animate-marquee-slow' : ''}`}
-              style={{ animationPlayState: isPaused ? 'paused' : 'running', animationDuration: `${(filteredItems.length * 2) * SECONDS_PER_ITEM}s` }}
-            >
-              <AnimatePresence mode="popLayout">
-                {[...filteredItems, ...filteredItems].map((item, idx) => (
-                  <motion.div
-                    key={`${item.id}-${idx}`}
-                    layout
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <ProjectCard index={idx % filteredItems.length} item={item} onMouseEnter={c => { document.body.style.backgroundColor = c; }} onMouseLeave={() => { document.body.style.backgroundColor = ''; }} onSelect={handleSelect} />
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
+        <div ref={scrollContainerRef} className="w-full overflow-x-auto no-scrollbar flex items-center h-full">
+          <div
+            className="flex gap-8 md:gap-16 px-[5vw] h-max"
+            style={{
+              /* Use CSS Animation for silky smooth auto-scroll */
+              animation: isPaused ? 'none' : `marquee ${filteredItems.length * 15}s linear infinite`,
+              width: 'max-content'
+            }}
+          >
+            {/* Duplicate items for infinite loop illusion */}
+            {[...filteredItems, ...filteredItems, ...filteredItems].map((item, idx) => (
+              <ProjectCard
+                key={`${item.id}-${idx}`}
+                index={idx}
+                item={item}
+                onMouseEnter={c => { document.body.style.backgroundColor = c; }}
+                onMouseLeave={() => { document.body.style.backgroundColor = ''; }}
+                onSelect={handleSelect}
+              />
+            ))}
           </div>
         </div>
       </div>
