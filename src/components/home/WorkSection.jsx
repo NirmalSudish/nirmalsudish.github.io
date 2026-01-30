@@ -349,8 +349,8 @@ const WorkSection = () => {
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
     const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
+    const isLeftSwipe = distance > 75;
+    const isRightSwipe = distance < -75;
 
     if (isLeftSwipe) {
       handleMobileGalleryNav('next');
