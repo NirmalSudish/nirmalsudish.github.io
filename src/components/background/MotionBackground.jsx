@@ -43,8 +43,8 @@ const MotionBackground = () => {
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
     const resizeCanvas = () => {
-      // OPTIMIZATION 3: Lower DPR on mobile for performance
-      const dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 2);
+      // OPTIMIZATION 3: Moderate DPR on mobile (was 1, now capped at 1.5 to fix "washed out" color look)
+      const dpr = isMobile ? Math.min(window.devicePixelRatio || 1, 1.5) : Math.min(window.devicePixelRatio || 1, 2);
       const width = window.innerWidth;
       const height = window.innerHeight;
 
@@ -100,7 +100,8 @@ const MotionBackground = () => {
 
         let color = dotColor;
         let finalOpacity = baseOpacity;
-        let radius = isMobile ? 1 : 1.2;
+        // Consistent radius for mobile/desktop to ensure same visual weight
+        let radius = 1.2;
 
         // Desktop-only mouse interaction (performance boost for mobile)
         if (!isMobile && mouse.x !== undefined) {
