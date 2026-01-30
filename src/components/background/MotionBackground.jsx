@@ -18,12 +18,11 @@ const MotionBackground = () => {
     // CRITICAL: Detect mobile and adjust accordingly
     const isMobile = window.innerWidth < 1024;
 
-    // OPTIMIZATION 1: Larger grid size on mobile = fewer points
-    // Re-adjusted to 45 for more dots (was 60, desktop is 30)
-    const gridSize = isMobile ? 45 : 30;
+    // OPTIMIZATION 1: Larger grid size on mobile = fewer points (reduces from ~1000 to ~200)
+    const gridSize = isMobile ? 60 : 30;
 
     // OPTIMIZATION 2: Target 30fps on mobile, 60fps on desktop
-    const targetFPS = isMobile ? 30 : 60;
+    const targetFPS = isMobile ? 24 : 60;
     const frameInterval = 1000 / targetFPS;
 
     let dotColor = '255, 255, 255';
