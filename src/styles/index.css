@@ -42,8 +42,8 @@ body {
   /* Use dynamic viewport height for mobile too */
   width: 100vw;
   overflow-y: auto;
-  scroll-snap-type: y proximity;
-  /* Changed: proximity for smoother mobile experience */
+  scroll-snap-type: y mandatory;
+  /* Changed: mandatory for strict "scroll lock" feel */
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
