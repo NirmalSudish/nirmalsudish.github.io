@@ -169,49 +169,40 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, p
     return () => observer.disconnect();
   }, [isVideo, isProject]);
 
-  // Standardized dimensions for consistency
-  const containerClass = `
-    transition-all duration-500 
-    w-[80vw] md:w-[60vw] lg:w-[45vw] xl:w-[40vw] 2xl:w-[35vw] max-w-[500px]
-    aspect-[4/3] md:aspect-[16/10]
-    relative group/card cursor-pointer flex-shrink-0
-  `;
-
+  // Reverted to previous specific dimensions as requested
   return (
     <div
       ref={containerRef}
-      className={containerClass}
+      className="project-card flex-shrink-0 relative group/card cursor-pointer"
       onMouseEnter={() => isProject && onMouseEnter(item.bgColor || '#1d1d1d')}
       onMouseLeave={onMouseLeave}
       onClick={() => !isProject && onSelect(item, index)}
     >
       {isProject ? (
-        <Link to={`/project/${item.id}`} className="block w-full h-full relative overflow-hidden rounded-xl bg-zinc-900 border border-white/5">
-          {/* Main Image - consistently covers the container to form the rectangle */}
-          <div className="absolute inset-0 z-0">
+        <Link to={`/project/${item.id}`} className="block transition-all duration-500 w-full md:w-[45vw] lg:w-[38vw] xl:w-[35vw] 2xl:w-[32vw] max-w-[600px]">
+          {/* Main Image Container - Restored previous aspect/height logic */}
+          <div className="rounded-xl overflow-hidden mb-3 md:mb-6 bg-zinc-900 aspect-video md:aspect-auto h-auto max-h-[30vh] md:max-h-none md:h-[38vh] lg:h-[42vh] xl:h-[48vh] 2xl:h-[50vh] w-full relative border border-white/5">
             <img
               src={resolvePath(item.mainImageUrl)}
               loading="lazy"
-              className="w-full h-full object-cover transition-transform duration-1000 dark:group-hover/card:scale-105"
+              className="h-full w-full object-contain md:object-cover transition-transform duration-1000 dark:group-hover/card:scale-105"
               alt={item.client}
             />
           </div>
 
-          {/* Overlay Content */}
-          <div className="absolute top-0 left-0 w-full p-4 md:p-6 z-10 bg-gradient-to-b from-black/60 to-transparent">
-            <div className="flex justify-between items-start">
-              <div className="text-left">
-                <h3 className="font-bold text-lg md:text-xl lg:text-2xl uppercase tracking-tighter leading-none mb-1 text-white">{item.client}</h3>
-                <p className="text-[10px] opacity-80 uppercase tracking-widest font-medium text-white">{item.project}</p>
-              </div>
-              <div className="text-right">
-                <span className="text-[10px] text-purple-400 font-black uppercase tracking-[0.2em] bg-black/50 px-2 py-1 rounded backdrop-blur-md">{item.categories[0]}</span>
-              </div>
+          {/* Text Content - Restored previous layout */}
+          <div className="flex justify-between items-start px-1 w-full">
+            <div className="text-left">
+              <h3 className="font-bold text-base md:text-xl lg:text-2xl uppercase tracking-tighter leading-none mb-1 text-black dark:text-white">{item.client}</h3>
+              <p className="text-[10px] opacity-60 uppercase tracking-widest font-medium text-black dark:text-white">{item.project}</p>
+            </div>
+            <div className="text-right">
+              <span className="text-[10px] text-purple-600 dark:text-[#c792ff] font-black uppercase tracking-[0.2em]">{item.categories.join(' / ')}</span>
             </div>
           </div>
         </Link>
       ) : (
-        <div className="w-full h-full rounded-xl overflow-hidden bg-zinc-900 border border-white/5 relative flex items-center justify-center">
+        <div className="h-[30vh] md:h-[38vh] lg:h-[42vh] xl:h-[48vh] 2xl:h-[50vh] w-full md:w-auto rounded-xl overflow-hidden bg-zinc-900 border border-white/5 relative flex items-center justify-center">
           {/* Non-project asset (Video/Image) */}
           {isVideo ? (
             <>
@@ -230,14 +221,14 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, p
                 onLoadedData={() => setIsLoading(false)}
                 onWaiting={() => setIsLoading(true)}
                 onPlaying={() => setIsLoading(false)}
-                className={`w-full h-full object-cover relative z-10 transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+                className={`w-full h-auto md:h-full md:w-auto md:object-contain relative z-10 transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
               />
             </>
           ) : (
             <img
               src={resolvePath(item.src)}
               loading={priority ? "eager" : "lazy"}
-              className="w-full h-full object-cover"
+              className="w-full h-auto md:h-full md:w-auto md:object-contain"
               alt=""
             />
           )}
