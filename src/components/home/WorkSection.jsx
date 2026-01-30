@@ -133,17 +133,53 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
   );
 });
 
-// Desktop card component (unchanged behavior)
+// Desktop card component - OPTIMIZED with IntersectionObserver for videos
 const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, priority = false }) => {
   const isProject = item.client !== undefined;
   const isVideo = typeof item.src === 'string' && item.src.endsWith('.mp4');
   const [isLoading, setIsLoading] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
+  const videoRef = useRef(null);
+  const containerRef = useRef(null);
+
+  // IntersectionObserver for lazy video loading and playback
+  useEffect(() => {
+    if (!isVideo || isProject) return;
+
+    const container = containerRef.current;
+    const video = videoRef.current;
+    if (!container || !video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+
+        if (entry.isIntersecting) {
+          // Only play when visible
+          video.play().catch(() => { });
+        } else {
+          // Pause and reset when not visible to save memory
+          video.pause();
+        }
+      },
+      { threshold: 0.3, rootMargin: '50px' }
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [isVideo, isProject]);
 
   return (
-    <div className="project-card flex-shrink-0 relative group/card cursor-pointer" onMouseEnter={() => isProject && onMouseEnter(item.bgColor || '#1d1d1d')} onMouseLeave={onMouseLeave} onClick={() => !isProject && onSelect(item, index)}>
+    <div
+      ref={containerRef}
+      className="project-card flex-shrink-0 relative group/card cursor-pointer"
+      onMouseEnter={() => isProject && onMouseEnter(item.bgColor || '#1d1d1d')}
+      onMouseLeave={onMouseLeave}
+      onClick={() => !isProject && onSelect(item, index)}
+    >
       {isProject ? (
-        <Link to={`/project/${item.id}`} className="block transition-all duration-500 w-full md:w-[50vw] lg:w-[40vw] xl:w-[40vw]">
-          <div className="rounded-xl overflow-hidden mb-3 md:mb-6 bg-zinc-900 aspect-video md:aspect-auto h-auto max-h-[30vh] md:max-h-none md:h-[40vh] lg:h-[45vh] xl:h-[55vh] w-full relative">
+        <Link to={`/project/${item.id}`} className="block transition-all duration-500 w-full md:w-[45vw] lg:w-[38vw] xl:w-[35vw] 2xl:w-[32vw] max-w-[600px]">
+          <div className="rounded-xl overflow-hidden mb-3 md:mb-6 bg-zinc-900 aspect-video md:aspect-auto h-auto max-h-[30vh] md:max-h-none md:h-[38vh] lg:h-[42vh] xl:h-[48vh] 2xl:h-[50vh] w-full relative">
             <img src={resolvePath(item.mainImageUrl)} loading="lazy" className="h-full w-full object-contain md:object-cover dark:group-hover/card:scale-105 transition-all duration-1000" alt={item.client} />
           </div>
           <div className="flex justify-between items-start px-1 w-full">
@@ -152,7 +188,7 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, p
           </div>
         </Link>
       ) : (
-        <div className="h-[30vh] md:h-[40vh] lg:h-[50vh] xl:h-[60vh] w-full md:w-auto rounded-xl overflow-hidden bg-zinc-900 border border-white/5 relative flex items-center justify-center">
+        <div className="h-[30vh] md:h-[38vh] lg:h-[42vh] xl:h-[48vh] 2xl:h-[50vh] w-full md:w-auto rounded-xl overflow-hidden bg-zinc-900 border border-white/5 relative flex items-center justify-center">
           {isVideo ? (
             <>
               {isLoading && (
@@ -161,18 +197,16 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, p
                 </div>
               )}
               <video
-                src={resolvePath(item.src)}
+                ref={videoRef}
+                src={isVisible ? resolvePath(item.src) : undefined}
                 muted
                 loop
                 playsInline
-                autoPlay
-                preload={priority ? "auto" : "metadata"}
+                preload="none"
                 onLoadedData={() => setIsLoading(false)}
                 onWaiting={() => setIsLoading(true)}
                 onPlaying={() => setIsLoading(false)}
                 className={`w-full h-auto md:h-full md:w-auto md:object-contain relative z-10 transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
-                onMouseEnter={e => e.target.play()}
-                onMouseLeave={e => e.target.pause()}
               />
             </>
           ) : (
@@ -331,7 +365,7 @@ const WorkSection = () => {
   }, [filteredItems.length, activeFilter]);
 
   return (
-    <section id="work" className="relative h-[100dvh] md:h-screen flex flex-col items-center pt-20 pb-2 md:pt-24 md:pb-0 bg-transparent z-10 overflow-hidden justify-center">
+    <section id="work" className="relative h-[100dvh] flex flex-col items-center pt-16 pb-2 md:pt-20 md:pb-0 lg:pt-24 bg-transparent z-10 overflow-hidden justify-center">
 
       <AnimatePresence>
         {selectedAsset && (

@@ -5,10 +5,10 @@ import { resolvePath } from '../../utils/imagePath';
 
 const About = () => {
   return (
-    <section id="about" className="w-full h-full md:h-screen flex items-center justify-center bg-transparent relative z-10 overflow-visible pt-4 pb-16 md:pt-0 md:pb-0">
-      <div className="container mx-auto px-0 md:px-12 lg:px-20 h-full flex flex-col justify-center">
+    <section id="about" className="w-full h-full md:h-[100dvh] flex items-center justify-center bg-transparent relative z-10 overflow-visible pt-4 pb-16 md:pt-0 md:pb-0">
+      <div className="container mx-auto px-0 md:px-12 lg:px-16 xl:px-20 h-full flex flex-col justify-center max-w-7xl">
         {/* Mobile: Row Reverse (Text Left, Image Right) | Desktop: Normal Row (Image Left, Text Right) */}
-        <div className="flex flex-col md:flex-row gap-1.5 md:gap-16 items-center md:items-center h-full md:h-auto pt-4 md:pt-0">
+        <div className="flex flex-col md:flex-row gap-1.5 md:gap-12 lg:gap-16 items-center md:items-center h-full md:h-auto pt-4 md:pt-0">
 
           {/* IMAGE COLUMN: Top on Mobile, Left on Desktop */}
           {/* Mobile: Order 1 (Top), Desktop: Order 1 (Left) */}

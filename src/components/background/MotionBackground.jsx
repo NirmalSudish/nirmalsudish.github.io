@@ -1,18 +1,29 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 
 const MotionBackground = () => {
   const canvasRef = useRef(null);
+  const rafRef = useRef(null);
+  const lastFrameRef = useRef(0);
+  const isVisibleRef = useRef(true);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
-    let animationFrameId;
+    const ctx = canvas.getContext('2d', { alpha: true });
     let grid = [];
-    const gridSize = 30;
     let time = 0;
     const mouse = { x: undefined, y: undefined, radius: 120 };
+
+    // CRITICAL: Detect mobile and adjust accordingly
+    const isMobile = window.innerWidth < 1024;
+
+    // OPTIMIZATION 1: Larger grid size on mobile = fewer points (reduces from ~1000 to ~200)
+    const gridSize = isMobile ? 60 : 30;
+
+    // OPTIMIZATION 2: Target 30fps on mobile, 60fps on desktop
+    const targetFPS = isMobile ? 24 : 60;
+    const frameInterval = 1000 / targetFPS;
 
     let dotColor = '255, 255, 255';
     let baseOpacity = 0.04;
@@ -23,7 +34,7 @@ const MotionBackground = () => {
         baseOpacity = 0.04;
       } else {
         dotColor = '17, 17, 17';
-        baseOpacity = 0.08; // Reduced visibility for light mode (was 0.15)
+        baseOpacity = 0.08;
       }
     };
     updateTheme();
@@ -32,47 +43,53 @@ const MotionBackground = () => {
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      // OPTIMIZATION 3: Lower DPR on mobile for performance
+      const dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 2);
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       createGrid();
     };
 
     const createGrid = () => {
       grid = [];
-      for (let x = 0; x < canvas.width + gridSize; x += gridSize) {
-        for (let y = 0; y < canvas.height + gridSize; y += gridSize) {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      for (let x = 0; x < width + gridSize; x += gridSize) {
+        for (let y = 0; y < height + gridSize; y += gridSize) {
           grid.push({ x, y, originalX: x, originalY: y, vx: 0, vy: 0 });
         }
       }
     };
 
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      time += 0.005;
-
-      // Mobile auto-movement logic
-      let targetX = mouse.x;
-      let targetY = mouse.y;
-      const isMobile = canvas.width < 1024;
-
-      // Auto-wander only on Desktop if no user interaction
-      // On Mobile: REMOVED auto-wander to keep dots static
-      if (!isMobile) {
-        if (mouse.x === undefined) {
-          // No auto-wander logic here anymore for desktop to keep it clean, or keep it depending on preference.
-          // But specifically for mobile, we want it static.
-          mouse.radius = 120;
-        } else {
-          mouse.radius = 120;
-        }
-      } else {
-        // Mobile specific settings
-        if (mouse.x !== undefined) {
-          mouse.radius = 200; // Larger touch radius
-        }
+    const animate = (timestamp) => {
+      // Don't animate if tab is not visible
+      if (!isVisibleRef.current) {
+        rafRef.current = requestAnimationFrame(animate);
+        return;
       }
 
-      for (let i = 0; i < grid.length; i++) {
+      // OPTIMIZATION 4: Frame rate limiting
+      const elapsed = timestamp - lastFrameRef.current;
+      if (elapsed < frameInterval) {
+        rafRef.current = requestAnimationFrame(animate);
+        return;
+      }
+      lastFrameRef.current = timestamp - (elapsed % frameInterval);
+
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      ctx.clearRect(0, 0, width, height);
+      time += 0.005;
+
+      const len = grid.length;
+
+      for (let i = 0; i < len; i++) {
         const point = grid[i];
         let forceX = 0;
         let forceY = 0;
@@ -82,35 +99,35 @@ const MotionBackground = () => {
         forceY += springForceY;
 
         let color = dotColor;
-        // 1. BASE OPACITY: Uses dynamic baseOpacity based on theme
         let finalOpacity = baseOpacity;
-        let radius = 1.2;
+        let radius = isMobile ? 1 : 1.2;
 
-        let height = canvas.height;
+        // Desktop-only mouse interaction (performance boost for mobile)
+        if (!isMobile && mouse.x !== undefined) {
+          const dx = mouse.x - point.x;
+          const dy = mouse.y - point.y;
+          const distSq = dx * dx + dy * dy; // OPTIMIZATION: Avoid sqrt when possible
+          const radiusSq = mouse.radius * mouse.radius;
 
-        if (targetX !== undefined && !isMobile) {
-          const dx = targetX - point.x;
-          const dy = targetY - point.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < mouse.radius) {
+          if (distSq < radiusSq) {
+            const dist = Math.sqrt(distSq);
             const force = (mouse.radius - dist) / mouse.radius;
             const angle = Math.atan2(dy, dx);
             forceX -= Math.cos(angle) * force * 1.5;
             forceY -= Math.sin(angle) * force * 1.5;
-
             color = '199, 146, 255';
-            // 2. INTERACTIVE OPACITY: Softened for subtle transition
             finalOpacity = force * 0.4 + baseOpacity;
             radius = 1.5 + force * 4.5;
 
-            ctx.shadowBlur = 35 * force;
-            // 3. BLOOM OPACITY: Reduced for a softer lavender glow
-            ctx.shadowColor = `rgba(199, 146, 255, ${force * 0.3})`;
+            // Only apply glow for close points
+            if (force > 0.3) {
+              ctx.shadowBlur = 35 * force;
+              ctx.shadowColor = `rgba(199, 146, 255, ${force * 0.3})`;
+            }
           }
         }
 
-        // Only apply wave motion on Desktop
+        // Desktop-only wave motion (disabled on mobile for performance)
         if (!isMobile) {
           forceX += Math.sin(point.originalY / 60 + time) * 0.02;
           forceY += Math.cos(point.originalX / 60 + time) * 0.02;
@@ -121,50 +138,68 @@ const MotionBackground = () => {
         point.x += point.vx;
         point.y += point.vy;
 
+        // Draw point
         ctx.beginPath();
         ctx.arc(point.x, point.y, radius, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${color}, ${finalOpacity})`;
         ctx.fill();
 
-        ctx.shadowBlur = 0;
+        // Reset shadow after each point with glow
+        if (ctx.shadowBlur > 0) {
+          ctx.shadowBlur = 0;
+        }
       }
-      animationFrameId = requestAnimationFrame(animate);
+
+      rafRef.current = requestAnimationFrame(animate);
     };
 
-    window.addEventListener('resize', resizeCanvas);
-    const handleMouseMove = (e) => {
+    // OPTIMIZATION 5: Pause animation when tab is not visible
+    const handleVisibilityChange = () => {
+      isVisibleRef.current = !document.hidden;
+      if (!document.hidden) {
+        lastFrameRef.current = performance.now();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    // Desktop-only mouse handlers
+    const handleMouseMove = isMobile ? null : (e) => {
       mouse.x = e.clientX;
       mouse.y = e.clientY;
     };
 
-    const handleTouchMove = (e) => {
-      // Disabled touch interaction on mobile to remove hover effect
-      // if (e.touches.length > 0) {
-      //   mouse.x = e.touches[0].clientX;
-      //   mouse.y = e.touches[0].clientY;
-      // }
+    const handleMouseOut = isMobile ? null : () => {
+      mouse.x = undefined;
+      mouse.y = undefined;
     };
 
-    const handleMouseOut = () => { mouse.x = undefined; mouse.y = undefined; };
+    // Debounced resize handler
+    let resizeTimeout;
+    const debouncedResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(resizeCanvas, 150);
+    };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('touchmove', handleTouchMove);
-    window.addEventListener('touchstart', handleTouchMove);
-    window.addEventListener('mouseout', handleMouseOut);
-    window.addEventListener('touchend', handleMouseOut);
+    window.addEventListener('resize', debouncedResize);
+    if (!isMobile) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseout', handleMouseOut);
+    }
 
     resizeCanvas();
-    animate();
+    rafRef.current = requestAnimationFrame(animate);
 
     return () => {
       observer.disconnect();
-      window.removeEventListener('resize', resizeCanvas);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchstart', handleTouchMove);
-      window.removeEventListener('mouseout', handleMouseOut);
-      window.removeEventListener('touchend', handleMouseOut);
-      cancelAnimationFrame(animationFrameId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('resize', debouncedResize);
+      clearTimeout(resizeTimeout);
+      if (!isMobile) {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mouseout', handleMouseOut);
+      }
+      cancelAnimationFrame(rafRef.current);
     };
   }, []);
 

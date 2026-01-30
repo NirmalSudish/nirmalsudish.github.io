@@ -1,9 +1,62 @@
-import React, { useEffect, useRef, useState } from 'react'; // Added useState
+import React, { useEffect, useRef, useState, memo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { resolvePath } from '../utils/imagePath';
 import { projects } from '../data/portfolioData';
-import { motion, AnimatePresence } from 'framer-motion'; // Added Framer Motion for the button
+import { motion, AnimatePresence } from 'framer-motion';
 import ScrollReveal from '../components/common/ScrollReveal';
+
+// Lazy-loading video component with IntersectionObserver
+const LazyVideo = memo(({ src }) => {
+    const videoRef = useRef(null);
+    const containerRef = useRef(null);
+    const [isVisible, setIsVisible] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const container = containerRef.current;
+        const video = videoRef.current;
+        if (!container) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsVisible(entry.isIntersecting);
+
+                if (entry.isIntersecting && video) {
+                    video.play().catch(() => { });
+                } else if (video) {
+                    video.pause();
+                }
+            },
+            { threshold: 0.3, rootMargin: '100px' }
+        );
+
+        observer.observe(container);
+        return () => observer.disconnect();
+    }, []);
+
+    return (
+        <div ref={containerRef} className="relative rounded-lg overflow-hidden shadow-lg bg-zinc-900">
+            {isLoading && (
+                <div className="absolute inset-0 flex items-center justify-center z-10">
+                    <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                </div>
+            )}
+            <video
+                ref={videoRef}
+                src={isVisible ? resolvePath(src) : undefined}
+                muted
+                loop
+                playsInline
+                preload="none"
+                onLoadedData={() => setIsLoading(false)}
+                onCanPlay={() => {
+                    if (isVisible) videoRef.current?.play().catch(() => { });
+                }}
+                className={`w-full transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+            />
+        </div>
+    );
+});
 
 const ProjectDetail = () => {
     const { id } = useParams();
@@ -165,9 +218,15 @@ const ProjectDetail = () => {
                                 <ScrollReveal key={i}>
                                     <div>
                                         {isVideo ? (
-                                            <video src={resolvePath(src)} autoPlay muted loop playsInline className="rounded-lg w-full shadow-lg" />
+                                            <LazyVideo src={src} />
                                         ) : (
-                                            <img src={resolvePath(src)} className="rounded-lg w-full shadow-lg" alt="Detail" />
+                                            <img
+                                                src={resolvePath(src)}
+                                                loading="lazy"
+                                                decoding="async"
+                                                className="rounded-lg w-full shadow-lg"
+                                                alt="Detail"
+                                            />
                                         )}
                                     </div>
                                 </ScrollReveal>

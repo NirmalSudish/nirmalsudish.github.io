@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
 import Navbar from '../components/common/Navbar';
 import Hero from '../components/home/Hero';
 import BrandSection from '../components/home/BrandSection';
@@ -9,22 +9,68 @@ import Footer from '../components/common/Footer';
 import MotionBackground from '../components/background/MotionBackground';
 import BottomProgress from '../components/common/BottomProgress';
 
+import { useNavigationType } from 'react-router-dom';
+
 const Home = () => {
   // Mobile layout fix: removed h-full from sections to prevent clipping
   const [activeSection, setActiveSection] = useState(0);
   const containerRef = useRef(null);
   const sectionRefs = useRef([]);
   const [isDesktop, setIsDesktop] = useState(false);
+  const navType = useNavigationType();
+  const saveTimeoutRef = useRef(null);
 
+  // Debounced scroll position save - prevents excessive writes
+  const debouncedSaveScroll = useCallback(() => {
+    if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    saveTimeoutRef.current = setTimeout(() => {
+      const container = containerRef.current;
+      if (container) {
+        sessionStorage.setItem('homeScrollPosition', container.scrollTop.toString());
+      }
+    }, 150);
+  }, []);
+
+  // Restore and save scroll position
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Restore scroll position only if navigating back (POP)
+    const savedPosition = sessionStorage.getItem('homeScrollPosition');
+    if (savedPosition && navType === 'POP') {
+      container.scrollTop = parseInt(savedPosition, 10);
+    }
+
+    // Add scroll listener with passive flag for better scroll performance
+    container.addEventListener('scroll', debouncedSaveScroll, { passive: true });
+
+    // Save scroll position on unmount
+    return () => {
+      container.removeEventListener('scroll', debouncedSaveScroll);
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+      // Final save on unmount
+      sessionStorage.setItem('homeScrollPosition', container.scrollTop.toString());
+    };
+  }, [navType, debouncedSaveScroll]);
+
+  // Debounced resize handler
   useEffect(() => {
+    let resizeTimeout;
     const checkScreenSize = () => {
-      setIsDesktop(window.innerWidth >= 1024);
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        setIsDesktop(window.innerWidth >= 1024);
+      }, 100);
     };
 
     checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
+    window.addEventListener('resize', checkScreenSize, { passive: true });
 
-    return () => window.removeEventListener('resize', checkScreenSize);
+    return () => {
+      window.removeEventListener('resize', checkScreenSize);
+      clearTimeout(resizeTimeout);
+    };
   }, []);
 
   // Use IntersectionObserver to track active section
@@ -57,11 +103,11 @@ const Home = () => {
   }, [isDesktop]);
 
 
-  const scrollToSection = (index) => {
+  const scrollToSection = useCallback((index) => {
     if (sectionRefs.current[index]) {
       sectionRefs.current[index].scrollIntoView({ behavior: 'smooth' });
     }
-  };
+  }, []);
 
   return (
     <div className="relative w-full h-screen overflow-hidden">

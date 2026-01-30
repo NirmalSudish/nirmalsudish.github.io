@@ -42,9 +42,12 @@ body {
   /* Use dynamic viewport height for mobile too */
   width: 100vw;
   overflow-y: auto;
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
+  /* Changed: proximity for smoother mobile experience */
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  /* Added: smooth scrolling */
 }
 
 .snap-section {
@@ -56,7 +59,8 @@ body {
   flex-direction: column;
   padding: 5rem 0;
   scroll-snap-align: start;
-  scroll-snap-stop: always;
+  scroll-snap-stop: normal;
+  /* Changed: from always to normal - reduces jitter */
 }
 
 /* REPAIRED: Snapping behavior for larger screens */
@@ -66,16 +70,19 @@ body {
   .snap-container {
     height: 100dvh;
     overflow-y: scroll;
-    /* scroll-snap-type inherited */
-    scroll-behavior: auto;
-    /* overscroll-behavior-y inherited */
+    scroll-snap-type: y proximity;
+    /* Changed: proximity reduces jitter on desktop */
+    scroll-behavior: smooth;
+    /* Added: smooth scroll behavior */
+    overscroll-behavior-y: contain;
   }
 
   .snap-section {
     height: 100dvh;
     min-height: 0;
-    /* scroll-snap-align inherited */
-    /* scroll-snap-stop inherited */
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+    /* Changed: from always - less aggressive snapping */
     padding: 0;
   }
 
@@ -84,6 +91,89 @@ body {
     justify-content: space-between;
     padding-top: 6rem;
     /* Adjust this value to match your navbar height */
+  }
+}
+
+/* ========================================
+   DESKTOP LAYOUT STABILIZATION
+   Ensures consistent visuals across all desktop/laptop resolutions
+   ======================================== */
+
+@media (min-width: 1024px) {
+
+  /* Force all sections to be exactly viewport height - no overflow */
+  .snap-section {
+    height: 100dvh !important;
+    max-height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  /* Ensure the main container fills viewport exactly */
+  .snap-container {
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  /* Consistent content containment */
+  .snap-section>* {
+    max-height: 100%;
+    overflow: visible;
+  }
+}
+
+/* Resolution-independent scaling for large screens */
+@media (min-width: 1920px) {
+
+  /* Cap maximum content width for ultra-wide displays */
+  .container {
+    max-width: 1600px;
+  }
+}
+
+@media (min-width: 2560px) {
+
+  /* 4K and above: prevent elements from becoming too large */
+  .container {
+    max-width: 1800px;
+  }
+
+  /* Scale down fonts that might become too large on 4K */
+  .hero-title-responsive {
+    font-size: clamp(4.5rem, 10vw, 12rem);
+  }
+}
+
+/* Ensure consistent aspect ratios for project cards across resolutions */
+@media (min-width: 1024px) {
+  .project-card {
+    /* Use consistent relative sizing */
+    flex-shrink: 0;
+    contain: layout style;
+  }
+}
+
+/* Prevent layout shift on viewport resize */
+@media (min-width: 1024px) {
+  section[id="work"] {
+    /* Contain the work section to prevent overflow issues */
+    contain: layout;
+    overflow: hidden;
+  }
+
+  section[id="about"] {
+    /* Ensure about section content stays within bounds */
+    contain: layout;
+    overflow: hidden;
+  }
+
+  section[id="contact"] {
+    /* Contact section containment */
+    contain: layout;
   }
 }
 
