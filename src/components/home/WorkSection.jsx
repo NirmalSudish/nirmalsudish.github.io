@@ -69,6 +69,11 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
                   playsInline
                   preload="metadata"
                   className="w-full h-auto max-h-[50vh] object-contain"
+                  onLoadedMetadata={(e) => {
+                    // Force a seek to render the first frame on iOS/mobile
+                    e.target.currentTime = 0.1;
+                  }}
+                  onSeeked={() => setIsLoading(false)}
                   onLoadedData={() => setIsLoading(false)}
                 />
                 {/* Loading indicator while video metadata loads */}
