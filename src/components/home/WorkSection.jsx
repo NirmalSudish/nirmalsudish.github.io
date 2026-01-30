@@ -179,9 +179,9 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, p
       onClick={() => !isProject && onSelect(item, index)}
     >
       {isProject ? (
-        <Link to={`/project/${item.id}`} className="block transition-all duration-500 w-full md:w-[45vw] lg:w-[38vw] xl:w-[35vw] 2xl:w-[32vw] max-w-[600px]">
-          {/* Main Image Container - Restored previous aspect/height logic */}
-          <div className="rounded-xl overflow-hidden mb-3 md:mb-6 bg-zinc-900 aspect-video md:aspect-auto h-auto max-h-[30vh] md:max-h-none md:h-[38vh] lg:h-[42vh] xl:h-[48vh] 2xl:h-[50vh] w-full relative border border-white/5">
+        <Link to={`/project/${item.id}`} className="block transition-all duration-500 w-full md:w-[60vw] lg:w-[50vw] xl:w-[45vw] 2xl:w-[40vw] max-w-[850px]">
+          {/* Main Image Container - Increased width ratio for rectangular look */}
+          <div className="rounded-xl overflow-hidden mb-3 md:mb-6 bg-zinc-900 aspect-video md:aspect-auto h-auto max-h-[30vh] md:max-h-none md:h-[35vh] lg:h-[40vh] xl:h-[45vh] 2xl:h-[48vh] w-full relative border border-white/5">
             <img
               src={resolvePath(item.mainImageUrl)}
               loading="lazy"
@@ -202,7 +202,7 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, p
           </div>
         </Link>
       ) : (
-        <div className="h-[30vh] md:h-[38vh] lg:h-[42vh] xl:h-[48vh] 2xl:h-[50vh] w-full md:w-auto rounded-xl overflow-hidden bg-zinc-900 border border-white/5 relative flex items-center justify-center">
+        <div className="h-[30vh] md:h-[35vh] lg:h-[40vh] xl:h-[45vh] 2xl:h-[48vh] w-full md:w-auto rounded-xl overflow-hidden bg-zinc-900 border border-white/5 relative flex items-center justify-center">
           {/* Non-project asset (Video/Image) */}
           {isVideo ? (
             <>
