@@ -24,7 +24,7 @@ const categoryLogos = {
 const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPreload = false }) => {
   const isProject = item.client !== undefined;
   const isVideo = typeof item.src === 'string' && item.src.endsWith('.mp4');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
 
   const mediaSrc = isProject ? item.mainImageUrl : item.src;
@@ -62,13 +62,14 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
           isVideo ? (
             <div className="relative" onClick={handleVideoTap}>
               {/* Video preview - adapts to portrait/landscape aspect ratio */}
-              <div className={`w-full bg-zinc-900 flex items-center justify-center overflow-hidden rounded-lg relative ${isLoading ? 'aspect-video' : ''}`}>
+              <div className={`w-full bg-zinc-900 flex items-center justify-center overflow-hidden rounded-lg relative`}>
                 <video
                   src={resolvePath(mediaSrc)}
                   muted
                   playsInline
                   preload="metadata"
-                  className="w-full h-auto max-h-[50vh] object-contain"
+                  poster={resolvePath(mediaSrc.replace('.mp4', '_thumb.jpg'))}
+                  className="w-full h-auto max-h-[50vh] object-contain bg-black"
                   onLoadedMetadata={(e) => {
                     // Force a seek to render the first frame on iOS/mobile
                     e.target.currentTime = 0.1;
@@ -78,7 +79,7 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
                 />
                 {/* Loading indicator while video metadata loads */}
                 {isLoading && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-zinc-900">
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <div className="w-8 h-8 border-2 border-white/20 border-t-purple-500 rounded-full animate-spin" />
                   </div>
                 )}
@@ -142,7 +143,7 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
 const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, priority = false }) => {
   const isProject = item.client !== undefined;
   const isVideo = typeof item.src === 'string' && item.src.endsWith('.mp4');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
@@ -221,12 +222,14 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, p
                 src={isVisible ? resolvePath(item.src) : undefined}
                 muted
                 loop
+                autoPlay
                 playsInline
                 preload="none"
+                poster={resolvePath(item.src.replace('.mp4', '_thumb.jpg'))}
                 onLoadedData={() => setIsLoading(false)}
                 onWaiting={() => setIsLoading(true)}
                 onPlaying={() => setIsLoading(false)}
-                className={`w-full h-auto md:h-full md:w-auto md:object-contain relative z-10 transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+                className={`w-full h-auto md:h-full md:w-auto md:object-contain relative z-10 transition-opacity duration-300 bg-black`}
               />
             </>
           ) : (

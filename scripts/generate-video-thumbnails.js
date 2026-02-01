@@ -17,6 +17,7 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import ffmpegPath from 'ffmpeg-static';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,7 +47,7 @@ function generateThumbnails(directory) {
 
         try {
             // Try to generate using ffmpeg (if available)
-            execSync(`ffmpeg -i "${videoPath}" -ss 00:00:00.5 -vframes 1 -q:v 2 "${thumbPath}"`, {
+            execSync(`"${ffmpegPath}" -i "${videoPath}" -ss 00:00:00.5 -vframes 1 -q:v 2 "${thumbPath}"`, {
                 stdio: 'ignore'
             });
             console.log(`✓ Generated: ${file.replace('.mp4', '_thumb.jpg')}`);
