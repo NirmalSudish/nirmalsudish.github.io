@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState, memo } from 'react';
+import React, { useEffect, useRef, useState, memo, useLayoutEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { resolvePath } from '../utils/imagePath';
 import { projects } from '../data/portfolioData';
 import { motion, AnimatePresence } from 'framer-motion';
 import ScrollReveal from '../components/common/ScrollReveal';
 
+// Lazy-loading video component with IntersectionObserver
 // Lazy-loading video component with IntersectionObserver
 const LazyVideo = memo(({ src }) => {
     const videoRef = useRef(null);
@@ -14,30 +15,34 @@ const LazyVideo = memo(({ src }) => {
 
     useEffect(() => {
         const container = containerRef.current;
-        const video = videoRef.current;
         if (!container) return;
 
         const observer = new IntersectionObserver(
             ([entry]) => {
                 setIsVisible(entry.isIntersecting);
-
-                if (entry.isIntersecting && video) {
-                    video.play().catch(() => { });
-                } else if (video) {
-                    video.pause();
-                }
             },
-            { threshold: 0.3, rootMargin: '100px' }
+            { threshold: 0.2, rootMargin: '0px' }
         );
 
         observer.observe(container);
         return () => observer.disconnect();
     }, []);
 
+    useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+
+        if (isVisible) {
+            video.play().catch(() => { });
+        } else {
+            video.pause();
+        }
+    }, [isVisible]);
+
     return (
-        <div ref={containerRef} className="relative rounded-lg overflow-hidden shadow-lg bg-zinc-900">
+        <div ref={containerRef} className="relative rounded-lg overflow-hidden shadow-lg bg-zinc-900 w-full">
             {isLoading && (
-                <div className="absolute inset-0 flex items-center justify-center z-10">
+                <div className="absolute inset-0 flex items-center justify-center z-10 bg-zinc-800">
                     <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin" />
                 </div>
             )}
@@ -47,12 +52,8 @@ const LazyVideo = memo(({ src }) => {
                 muted
                 loop
                 playsInline
-                preload="none"
                 onLoadedData={() => setIsLoading(false)}
-                onCanPlay={() => {
-                    if (isVisible) videoRef.current?.play().catch(() => { });
-                }}
-                className={`w-full transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+                className={`w-full h-auto transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
             />
         </div>
     );
@@ -67,6 +68,19 @@ const ProjectDetail = () => {
 
     // State for Back to Top button visibility
     const [showTopBtn, setShowTopBtn] = useState(false);
+    const [isLinkHovered, setIsLinkHovered] = useState(false);
+
+    // Force scroll to top when project ID changes (navigation between projects)
+    useLayoutEffect(() => {
+        // Disable browser's default scroll restoration to prevent conflicts
+        if (window.history.scrollRestoration) {
+            window.history.scrollRestoration = 'manual';
+        }
+
+        window.scrollTo(0, 0);
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }, [id]);
 
     useEffect(() => {
         if (!project) {
@@ -87,7 +101,6 @@ const ProjectDetail = () => {
 
         // Initial apply
         updateBackgroundColor();
-        window.scrollTo(0, 0);
 
         // Listen for theme changes
         const themeObserver = new MutationObserver(updateBackgroundColor);
@@ -183,7 +196,7 @@ const ProjectDetail = () => {
                     <div className="min-h-[80vh] flex flex-col items-center justify-center text-center px-4 sm:px-8">
                         <ScrollReveal>
                             <div className="max-w-4xl w-full">
-                                {project.client !== 'Icons of Kerala' && (
+                                {project.client !== 'Icons of Kerala' && project.client !== 'Magazine Layout' && (
                                     <img
                                         src={resolvePath(project.logoUrl)}
                                         alt="Logo"
@@ -200,7 +213,7 @@ const ProjectDetail = () => {
                                     />
                                 )}
                                 <h2 className="text-2xl md:text-8xl font-black mb-8 leading-tight uppercase">{project.client}</h2>
-                                <p className="text-base md:text-3xl leading-relaxed text-gray-800 dark:text-white font-light">{project.description}</p>
+                                <p className="text-base md:text-2xl leading-relaxed text-gray-800 dark:text-white font-light max-w-4xl mx-auto">{project.description}</p>
                                 <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 text-center border-t border-black/20 dark:border-white/20 pt-8">
                                     <div><p className="text-xs text-gray-600 dark:text-white uppercase tracking-widest mb-2 font-bold">Client</p><p className="font-bold text-sm md:text-lg">{project.client}</p></div>
                                     <div><p className="text-xs text-gray-600 dark:text-white uppercase tracking-widest mb-2 font-bold">Project</p><p className="font-bold text-sm md:text-lg">{project.project}</p></div>
@@ -211,12 +224,19 @@ const ProjectDetail = () => {
                         </ScrollReveal>
                     </div>
 
-                    <div className="pb-16 md:pb-24 space-y-8 md:space-y-12 max-w-5xl mx-auto px-6 md:px-12 lg:px-20 mt-12 md:mt-16">
+                    <div className="pb-16 md:pb-24 space-y-8 md:space-y-12 w-full mt-12 md:mt-16">
                         {project.detailImages.map((src, i) => {
                             const isVideo = src.toLowerCase().endsWith('.mp4');
+                            const isGif = src.toLowerCase().endsWith('.gif');
+
+                            // Standard container classes
+                            const standardClasses = "max-w-5xl mx-auto px-6 md:px-12 lg:px-20";
+                            // Expanded container classes for GIFs (Kaapi District)
+                            const expandedClasses = "max-w-7xl mx-auto px-4 md:px-8";
+
                             return (
                                 <ScrollReveal key={i}>
-                                    <div>
+                                    <div className={isGif ? expandedClasses : standardClasses}>
                                         {isVideo ? (
                                             <LazyVideo src={src} />
                                         ) : (
@@ -224,7 +244,7 @@ const ProjectDetail = () => {
                                                 src={resolvePath(src)}
                                                 loading="lazy"
                                                 decoding="async"
-                                                className="rounded-lg w-full shadow-lg"
+                                                className={`rounded-lg w-full shadow-lg ${isGif ? 'w-full' : ''}`}
                                                 alt="Detail"
                                             />
                                         )}
@@ -234,18 +254,45 @@ const ProjectDetail = () => {
                         })}
                     </div>
 
+                    {project.linkUrl && (
+                        <ScrollReveal>
+                            <div className="container mx-auto px-6 md:px-12 lg:px-20 mb-20 md:mb-32 text-center">
+                                {project.linkDescription && (
+                                    <p className="text-lg md:text-2xl mb-8 font-light text-gray-800 dark:text-gray-200">
+                                        {project.linkDescription}
+                                    </p>
+                                )}
+                                <a
+                                    href={project.linkUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-block px-8 py-4 bg-black dark:bg-white text-white dark:text-black font-bold uppercase tracking-widest text-base md:text-lg hover:scale-105 transition-all duration-300 rounded-full"
+                                    style={{
+                                        backgroundColor: isLinkHovered ? project.bgColor : undefined,
+                                        color: isLinkHovered ? '#ffffff' : undefined,
+                                        borderColor: isLinkHovered ? project.bgColor : undefined
+                                    }}
+                                    onMouseEnter={() => setIsLinkHovered(true)}
+                                    onMouseLeave={() => setIsLinkHovered(false)}
+                                >
+                                    {project.linkText || 'View Project'}
+                                </a>
+                            </div>
+                        </ScrollReveal>
+                    )}
+
                     <div ref={footerRef} className="py-32 mt-12 text-black dark:text-white">
                         <nav className="flex justify-between items-center max-w-7xl mx-auto border-t border-black/10 dark:border-white/10 pt-12 px-6 md:px-12 lg:px-20">
-                            <Link to={`/project/${prevProjectId}`} className="group flex flex-col items-start text-left cursor-pointer">
-                                <span className="text-xs uppercase tracking-widest text-gray-500 dark:text-white mb-2 font-bold">Previous</span>
-                                <div className="relative overflow-hidden h-10 md:h-16">
+                            <Link to={`/project/${prevProjectId}`} className="group flex flex-col items-start text-left cursor-pointer max-w-[45%]">
+                                <span className="text-xs uppercase tracking-widest text-gray-500 dark:text-white mb-2 font-bold line-clamp-1">{projects.find(p => p.id === prevProjectId)?.client}</span>
+                                <div className="relative overflow-hidden h-10 md:h-16 w-full">
                                     <span className="block text-3xl md:text-6xl font-black uppercase transition-transform duration-500 group-hover:-translate-y-full">Prev</span>
                                     <span className="absolute top-0 left-0 block text-3xl md:text-6xl font-black uppercase transition-transform duration-500 translate-y-full group-hover:translate-y-0 text-gray-400 dark:text-white">Prev</span>
                                 </div>
                             </Link>
-                            <Link to={`/project/${nextProjectId}`} className="group flex flex-col items-end text-right cursor-pointer">
-                                <span className="text-xs uppercase tracking-widest text-gray-500 dark:text-white mb-2 font-bold">Next</span>
-                                <div className="relative overflow-hidden h-10 md:h-16">
+                            <Link to={`/project/${nextProjectId}`} className="group flex flex-col items-end text-right cursor-pointer max-w-[45%]">
+                                <span className="text-xs uppercase tracking-widest text-gray-500 dark:text-white mb-2 font-bold line-clamp-1">{projects.find(p => p.id === nextProjectId)?.client}</span>
+                                <div className="relative overflow-hidden h-10 md:h-16 w-full flex justify-end">
                                     <span className="block text-3xl md:text-6xl font-black uppercase transition-transform duration-500 group-hover:-translate-y-full">Next</span>
                                     <span className="absolute top-0 right-0 block text-3xl md:text-6xl font-black uppercase transition-transform duration-500 translate-y-full group-hover:translate-y-0 text-gray-400 dark:text-white">Next</span>
                                 </div>

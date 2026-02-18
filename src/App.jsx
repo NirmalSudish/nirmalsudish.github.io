@@ -22,7 +22,8 @@ const AppContent = () => {
     <>
       <CustomCursor />
       {/* key triggers the curtain animation on every path change */}
-      {location.key !== initialKey.current && <TransitionCurtain key={location.pathname} />}
+      {/* Only show curtain when navigating TO a project detail page */}
+      {location.pathname.startsWith('/project/') && <TransitionCurtain key={location.pathname} />}
       <MotionBackground />
 
       <main className="relative z-10">
