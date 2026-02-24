@@ -124,27 +124,30 @@ const ProjectDetail = () => {
 
         if (footerRef.current) observer.observe(footerRef.current);
 
-        const handleScroll = () => {
+        const handleScroll = (e) => {
+            const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || (e.target && e.target.scrollTop) || 0;
+
             // Handle rotation logic
             if (projectLogoRef.current) {
-                const rotation = window.scrollY / 3;
+                const rotation = scrollY / 3;
                 projectLogoRef.current.style.transform = `rotate(${rotation}deg)`;
             }
 
             // Handle Back to Top visibility
-            if (window.scrollY > 600) {
+            if (scrollY > 600) {
                 setShowTopBtn(true);
             } else {
                 setShowTopBtn(false);
             }
         };
 
-        window.addEventListener('scroll', handleScroll);
+        // Use capture: true to catch scroll events if body is the scrolling container
+        window.addEventListener('scroll', handleScroll, true);
 
         return () => {
             observer.disconnect();
             themeObserver.disconnect();
-            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('scroll', handleScroll, true);
             document.body.style.backgroundColor = '';
         };
     }, [project, navigate]);
@@ -156,6 +159,8 @@ const ProjectDetail = () => {
 
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (document.body) document.body.scrollTo({ top: 0, behavior: 'smooth' });
+        if (document.documentElement) document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     return (
@@ -310,7 +315,7 @@ const ProjectDetail = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 20 }}
                         onClick={scrollToTop}
-                        className="fixed bottom-10 right-10 z-[100] bg-white text-black p-4 rounded-full shadow-xl hover:scale-110 active:scale-95 transition-all cursor-pointer group"
+                        className="hidden md:block fixed bottom-10 right-10 z-[100] bg-white text-black p-4 rounded-full shadow-xl hover:scale-110 active:scale-95 transition-all cursor-pointer group"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 group-hover:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 10l7-7m0 0l7 7m-7-7v18" />

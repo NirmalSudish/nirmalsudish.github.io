@@ -4,7 +4,7 @@ import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 // 1. Remove AOS imports to keep the project light
 import CustomCursor from './components/common/CustomCursor';
 import MotionBackground from './components/background/MotionBackground';
-import TransitionCurtain from './components/common/TransitionCurtain';
+import PageReveal from './components/common/PageReveal';
 
 import Home from './pages/Home';
 import ProjectDetail from './pages/ProjectDetail';
@@ -21,9 +21,9 @@ const AppContent = () => {
   return (
     <>
       <CustomCursor />
-      {/* key triggers the curtain animation on every path change */}
-      {/* Only show curtain when navigating TO a project detail page */}
-      {location.pathname.startsWith('/project/') && <TransitionCurtain key={location.pathname} />}
+      {/* key triggers the reveal animation on every path change */}
+      {/* Only show reveal when navigating TO a project detail page */}
+      {location.pathname.startsWith('/project/') && <PageReveal key={location.pathname} />}
       <MotionBackground />
 
       <main className="relative z-10">
