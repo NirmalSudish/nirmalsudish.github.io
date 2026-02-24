@@ -15,8 +15,9 @@ const MotionBackground = () => {
     let time = 0;
     const mouse = { x: undefined, y: undefined, radius: 120 };
 
-    // CRITICAL: Detect mobile and adjust accordingly
-    const isMobile = window.innerWidth < 1024;
+    // CRITICAL: Detect true mobile devices vs narrow desktop browsers
+    const isMobile = window.matchMedia('(any-pointer: coarse)').matches ||
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
     // OPTIMIZATION 1: Larger grid size on mobile = fewer points (reduces from ~1000 to ~200)
     const gridSize = isMobile ? 60 : 30;
