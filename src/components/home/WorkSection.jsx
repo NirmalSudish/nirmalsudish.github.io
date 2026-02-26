@@ -462,15 +462,11 @@ const WorkSection = () => {
 
         <div ref={scrollContainerRef} className="w-full overflow-x-auto no-scrollbar flex items-center h-full">
           <div
-            className="flex gap-8 md:gap-16 px-[5vw] h-max"
-            style={{
-              /* Use CSS Animation for silky smooth auto-scroll */
-              animation: isPaused ? 'none' : `marquee ${filteredItems.length * 15}s linear infinite`,
-              width: 'max-content'
-            }}
+            className="flex gap-8 md:gap-16 px-[5vw] h-max transition-transform duration-500"
+            style={{ width: 'max-content' }}
           >
-            {/* Duplicate items for infinite loop illusion */}
-            {[...filteredItems, ...filteredItems, ...filteredItems].map((item, idx) => (
+            {/* Display items for manual scrolling */}
+            {filteredItems.map((item, idx) => (
               <ProjectCard
                 key={`${item.id}-${idx}`}
                 index={idx}

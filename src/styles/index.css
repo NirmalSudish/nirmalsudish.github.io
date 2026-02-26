@@ -274,7 +274,7 @@ body {
    MOBILE PERFORMANCE OPTIMIZATIONS
    ======================================== */
 
-/* Respect user's preference for reduced motion */
+/* Respect user's preference for reduced motion - temporarily disabled as it prevents marquee on PCs with OS animations turned off
 @media (prefers-reduced-motion: reduce) {
 
   *,
@@ -285,6 +285,7 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+*/
 
 /* Mobile-specific performance optimizations */
 @media (max-width: 768px) {

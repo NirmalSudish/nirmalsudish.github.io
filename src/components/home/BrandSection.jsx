@@ -6,18 +6,18 @@ const BrandSection = () => {
   // Replace the 'src' with your actual image paths from your public folder.
   const logos = [
     { name: 'Client 1', src: '/images/Yamanote Logo_White.png', scale: 1.4 },
-    { name: 'Client 2', src: '/images/four-2.png', scale: 2.2 }, // Four Seasons has extreme padding
-    { name: 'Client 3', src: '/images/HardeesArtboard.png', scale: 0.65 }, // Hardees is very wide
-    { name: 'Client 4', src: '/images/LOGOS-02.png', scale: 1.2 },
-    { name: 'Client 5', src: '/images/logo-white.png', scale: 1.2 },
-    { name: 'Client 6', src: '/images/LunaArtboard.png', scale: 1.4 },
-    { name: 'Client 7', src: '/images/MatagiArtboard.png', scale: 0.9 },
-    { name: 'Client 8', src: '/images/mercuryArtboard.png', scale: 0.85 },
+    { name: 'Client 2', src: '/images/four-2.png', scale: 2.1 }, // Four Seasons has extreme padding
+    { name: 'Client 3', src: '/images/HardeesArtboard.png', scale: 0.85 }, // Hardees is very wide
+    { name: 'Client 4', src: '/images/LOGOS-02.png', scale: 2.0 },
+    { name: 'Client 5', src: '/images/logo-white.png', scale: 1.9 },
+    { name: 'Client 6', src: '/images/LunaArtboard.png', scale: 1.6 },
+    { name: 'Client 7', src: '/images/MatagiArtboard.png', scale: 0.8 },
+    { name: 'Client 8', src: '/images/mercuryArtboard.png', scale: 1.1 },
     { name: 'Client 9', src: '/images/MinaArtboard.png', scale: 1.1 },
     { name: 'Client 10', src: '/images/SolaArtboard.png', scale: 1.3 },
-    { name: 'Client 11', src: '/images/white-logo.png', scale: 1.3 },
+    { name: 'Client 11', src: '/images/white-logo.png', scale: 2.9 },
     { name: 'Client 12', src: '/images/Tomologo.png', scale: 1.3 },
-    { name: 'Client 13', src: '/images/SeafuArtboard.png', scale: 1.4 },
+    { name: 'Client 13', src: '/images/SeafuArtboard.png', scale: 2.0 },
     { name: 'Client 14', src: '/images/Raffles.png', scale: 1.1 },
     { name: 'Client 15', src: '/images/PiattiArtboard.png', scale: 1.0 },
   ];
@@ -44,7 +44,7 @@ const BrandSection = () => {
         <div className="bg-black/[0.03] dark:bg-white/[0.03] backdrop-blur-md border border-black/10 dark:border-white/10 rounded-full py-6 px-6 md:px-12 w-full overflow-hidden">
           {/* Two identical sets — translateX(-50%) moves exactly one full set off screen for a seamless loop */}
           <div
-            className="flex w-max gap-16 md:gap-20 items-center grayscale opacity-50"
+            className="flex w-max gap-16 md:gap-20 items-center opacity-90 transition-opacity duration-300 hover:opacity-100"
             style={{ animation: 'marquee 50s linear infinite' }}
           >
             {[...logos, ...logos].map((logo, i) => (
