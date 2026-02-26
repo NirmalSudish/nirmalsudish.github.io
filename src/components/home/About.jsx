@@ -79,7 +79,7 @@ const About = () => {
 
                 <div className="flex flex-col items-center md:items-start">
                   <span className="text-[10px] md:text-[10px] font-black text-[#c792ff] uppercase tracking-[0.3em] mb-1 md:mb-2">Working At</span>
-                  <a href="https://www.instagram.com/yamanoteatelier/" target="_blank" rel="noopener noreferrer" className="text-base md:text-lg lg:text-xl font-bold uppercase hover:text-[#c792ff] transition-colors">Yamanote Atelier</a>
+                  <a href="https://www.instagram.com/yamanoteatelier/" target="_blank" rel="noopener noreferrer" className="text-base md:text-lg lg:text-xl font-bold uppercase hover:text-[#c792ff] transition-colors whitespace-nowrap">Yamanote Atelier</a>
                 </div>
 
                 <div className="hidden md:flex flex-col items-center md:items-start">

@@ -187,7 +187,7 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, p
       {isProject ? (
         <Link to={`/project/${item.id}`} className="block transition-all duration-500 w-full md:w-[60vw] lg:w-[50vw] xl:w-[45vw] 2xl:w-[40vw] max-w-[850px]">
           {/* Main Image Container - Increased width ratio for rectangular look */}
-          <div className="rounded-xl overflow-hidden mb-3 md:mb-6 bg-zinc-900 aspect-video md:aspect-auto h-auto max-h-[30vh] md:max-h-none md:h-[35vh] lg:h-[40vh] xl:h-[45vh] 2xl:h-[48vh] w-full relative border border-white/5">
+          <div className="rounded-xl overflow-hidden mb-3 md:mb-6 bg-zinc-900 aspect-video md:aspect-auto h-auto max-h-[30vh] md:max-h-none md:h-[33vh] lg:h-[36vh] xl:h-[42vh] 2xl:h-[46vh] w-full relative border border-white/5">
             <img
               src={resolvePath(item.mainImageUrl)}
               loading="lazy"
@@ -208,7 +208,7 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, p
           </div>
         </Link>
       ) : (
-        <div className="h-[30vh] md:h-[35vh] lg:h-[40vh] xl:h-[45vh] 2xl:h-[48vh] w-full md:w-auto rounded-xl overflow-hidden bg-zinc-900 border border-white/5 relative flex items-center justify-center">
+        <div className="h-[30vh] md:h-[33vh] lg:h-[36vh] xl:h-[42vh] 2xl:h-[46vh] w-full md:w-auto rounded-xl overflow-hidden bg-zinc-900 border border-white/5 relative flex items-center justify-center">
           {/* Non-project asset (Video/Image) */}
           {isVideo ? (
             <>
@@ -389,7 +389,7 @@ const WorkSection = () => {
   }, [filteredItems.length, activeFilter]);
 
   return (
-    <section id="work" className="relative h-[100dvh] flex flex-col items-center pt-24 pb-4 md:pt-20 md:pb-0 lg:pt-24 bg-transparent z-10 overflow-hidden justify-center">
+    <section id="work" className="relative h-[100dvh] flex flex-col items-center pt-20 pb-4 md:pt-16 md:pb-0 lg:pt-16 bg-transparent z-10 overflow-hidden justify-center">
 
       <AnimatePresence>
         {selectedAsset && (
@@ -432,7 +432,7 @@ const WorkSection = () => {
         )}
       </AnimatePresence>
 
-      <div className="container mx-auto px-4 md:px-12 lg:px-20 text-center mb-4 md:mb-12">
+      <div className="container mx-auto px-4 md:px-12 lg:px-20 text-center mb-3 md:mb-8 lg:mb-6">
         <ScrollReveal className="mb-3 md:mb-10 lg:mb-12 xl:mb-14">
           <h2 className="text-2xl md:text-5xl lg:text-6xl xl:text-7xl font-black uppercase tracking-tighter leading-none text-black dark:!text-white">Featured Work</h2>
         </ScrollReveal>
