@@ -13,8 +13,8 @@ const About = () => {
           {/* IMAGE COLUMN: Top on Mobile, Left on Desktop */}
           {/* Mobile: Order 1 (Top), Desktop: Order 1 (Left) */}
           <div className="w-full md:w-5/12 order-1 flex justify-center md:justify-start items-center md:block pt-4 md:pt-0">
-            <div className="relative w-48 md:w-full">
-              <div className="relative aspect-[3/4] md:aspect-[4/5] overflow-hidden rounded-xl md:rounded-2xl border border-white/10 shadow-2xl">
+            <div className="relative w-48 md:w-full md:max-w-[320px] lg:max-w-[380px] xl:max-w-none mx-auto md:mx-0">
+              <div className="relative aspect-[3/4] md:aspect-[4/5] h-auto max-h-[45vh] md:max-h-[60vh] xl:max-h-none overflow-hidden rounded-xl md:rounded-2xl border border-white/10 shadow-2xl">
                 <img
                   src={resolvePath('/images/about-me.jpg')}
                   alt="Nirmal"
@@ -28,24 +28,26 @@ const About = () => {
           {/* Mobile: Order 2 (Below), Desktop: Order 2 (Right) */}
           <div className="w-full md:w-7/12 text-center md:text-left flex flex-col items-center md:items-start order-2">
             <ScrollReveal delay={0.2}>
-              <h4 className="text-xs md:text-3xl font-black text-[#c792ff] uppercase tracking-[0.2em] mb-2 md:mb-6 relative z-20 no-underline whitespace-nowrap">
+              <h4 className="text-xs md:text-2xl lg:text-3xl font-black text-[#c792ff] uppercase tracking-[0.2em] mb-2 md:mb-4 lg:mb-6 relative z-20 no-underline whitespace-nowrap">
                 The Story So Far
               </h4>
 
-              <h2 className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-tight mb-3 md:mb-8">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black uppercase tracking-tighter leading-tight mb-3 md:mb-6 lg:mb-8">
                 I'm Nirmal.
               </h2>
 
-              <div className="space-y-1.5 md:space-y-6 text-xs md:text-lg lg:text-xl opacity-70 leading-relaxed font-medium mb-3 md:mb-10 max-w-full md:max-w-none">
-                <p>
+              <div className="space-y-1.5 md:space-y-4 lg:space-y-6 text-xs md:text-base lg:text-lg xl:text-xl opacity-70 leading-relaxed font-medium mb-3 md:mb-6 lg:mb-10 max-w-full md:max-w-[420px] lg:max-w-xl">
+                <p className="md:hidden">
                   I am a multi-disciplinary designer <br className="block md:hidden" />
                   and <span className="font-bold opacity-100">CS student</span> <br className="block md:hidden" />
                   born and raised in the UAE.
                 </p>
-                <p className="hidden md:block">
-                  My work lives at the edge of design <br />
-                  and logic, specializing in <br />
-                  <span className="text-[#c792ff] italic font-black">human-centered UI/UX.</span>
+                <p className="hidden md:block text-pretty">
+                  I am a multi-disciplinary designer and <span className="font-bold opacity-100">CS student</span> born and raised in the UAE.
+                </p>
+
+                <p className="hidden md:block text-pretty">
+                  My work lives at the edge of design and logic, specializing in <span className="text-[#c792ff] italic font-black">human-centered UI/UX.</span>
                 </p>
                 <p className="block md:hidden">
                   Specializing in <span className="text-[#c792ff] italic font-black">human-centered UI/UX.</span>
