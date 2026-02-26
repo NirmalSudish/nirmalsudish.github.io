@@ -71,7 +71,7 @@ const Navbar = () => {
           </nav>
           <div className="flex items-center gap-4 md:hidden z-50">
             <ThemeToggle />
-            <button onClick={() => setIsOpen(!isOpen)} className="text-white cursor-pointer mix-blend-difference">
+            <button onClick={() => setIsOpen(!isOpen)} className={`cursor-pointer transition-colors duration-300 ${isOpen ? 'text-white' : 'text-black dark:text-white'}`}>
               {isOpen ? 'CLOSE' : <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>}
             </button>
           </div>
