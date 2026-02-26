@@ -389,7 +389,7 @@ const WorkSection = () => {
   }, [filteredItems.length, activeFilter]);
 
   return (
-    <section id="work" className="relative h-[100dvh] flex flex-col items-center pt-20 pb-4 md:pt-16 md:pb-0 lg:pt-0 bg-transparent z-10 overflow-hidden justify-center">
+    <section id="work" className="relative h-[100dvh] flex flex-col items-center pt-20 pb-4 md:pt-16 md:pb-0 lg:pt-20 bg-transparent z-10 overflow-hidden justify-start">
 
       <AnimatePresence>
         {selectedAsset && (
@@ -432,9 +432,9 @@ const WorkSection = () => {
         )}
       </AnimatePresence>
 
-      <div className="container mx-auto px-4 md:px-12 lg:px-20 text-center mb-2 md:mb-6 lg:mb-3">
-        <ScrollReveal className="mb-2 md:mb-6 lg:mb-3">
-          <h2 className="text-2xl md:text-5xl lg:text-4xl xl:text-7xl font-black uppercase tracking-tighter leading-none text-black dark:!text-white">Featured Work</h2>
+      <div className="container mx-auto px-4 md:px-12 lg:px-20 text-center mb-2 md:mb-6 lg:mb-1">
+        <ScrollReveal className="mb-2 md:mb-6 lg:mb-1">
+          <h2 className="text-2xl md:text-5xl lg:text-4xl xl:text-6xl font-black uppercase tracking-tighter leading-none text-black dark:!text-white">Featured Work</h2>
         </ScrollReveal>
         <ScrollReveal delay={0.2}>
           <div className="grid grid-cols-2 md:flex md:flex-row md:flex-wrap lg:flex-nowrap justify-center items-stretch md:items-center gap-2 md:gap-3 lg:gap-2 w-full max-w-5xl mx-auto">
