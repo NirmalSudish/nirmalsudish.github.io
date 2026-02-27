@@ -389,7 +389,7 @@ const WorkSection = () => {
   }, [filteredItems.length, activeFilter]);
 
   return (
-    <section id="work" className="relative h-[100dvh] flex flex-col items-center pt-20 pb-4 md:pt-16 md:pb-0 lg:pt-24 xl:pt-20 lg:pb-4 bg-transparent z-10 overflow-hidden justify-start lg:justify-between">
+    <section id="work" className="relative h-[100dvh] flex flex-col items-center pt-20 pb-4 md:pt-16 md:pb-0 lg:pt-32 xl:pt-20 lg:pb-4 bg-transparent z-10 overflow-hidden justify-start lg:justify-between">
 
       <AnimatePresence>
         {selectedAsset && (
@@ -433,7 +433,7 @@ const WorkSection = () => {
       </AnimatePresence>
 
       <div className="w-full mx-auto px-4 md:px-12 lg:px-10 xl:px-20 max-w-[1024px] xl:max-w-7xl text-center mb-2 md:mb-6 lg:mb-0">
-        <ScrollReveal className="mb-2 md:mb-4 lg:mb-2">
+        <ScrollReveal className="mb-2 md:mb-4 lg:mb-4">
           <h2 className="text-2xl md:text-5xl lg:text-4xl xl:text-6xl font-black uppercase tracking-tighter leading-none text-black dark:!text-white">Featured Work</h2>
         </ScrollReveal>
         <ScrollReveal delay={0.2}>
