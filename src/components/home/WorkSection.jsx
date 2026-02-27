@@ -11,12 +11,12 @@ import {
 const SECONDS_PER_ITEM = 12;
 
 const categoryLogos = {
-  'ux-branding': (<svg className="w-3 h-3 md:w-5 md:h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8m-4-4v4" /></svg>),
-  'packaging-print': (<svg className="w-3 h-3 md:w-5 md:h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M21 8l-9-4-9 4m18 0l-9 4m9-4v8l-9 4m0-12L3 8m9 4v8m-9-12v8l9 4" /></svg>),
-  'visual': (<svg className="w-3 h-3 md:w-5 md:h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="9" cy="9" r="2" /><path d="M21 15l-5-5L5 21" /></svg>),
-  '3d': (<svg className="w-3 h-3 md:w-5 md:h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 2L3 7v10l9 5 9-5V7l-9-5zM12 22V12M21 7l-9 5L3 7" /></svg>),
-  'motion': (<svg className="w-3 h-3 md:w-5 md:h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3" /></svg>),
-  'experimental': (<svg className="w-3 h-3 md:w-5 md:h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M9 3h6M10 3v7l-4 8a2 2 0 002 2h8a2 2 0 002-2l-4-8V3" /></svg>)
+  'ux-branding': (<svg className="w-3 h-3 md:w-5 md:h-5 lg:w-3.5 lg:h-3.5 xl:w-5 xl:h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8m-4-4v4" /></svg>),
+  'packaging-print': (<svg className="w-3 h-3 md:w-5 md:h-5 lg:w-3.5 lg:h-3.5 xl:w-5 xl:h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M21 8l-9-4-9 4m18 0l-9 4m9-4v8l-9 4m0-12L3 8m9 4v8m-9-12v8l9 4" /></svg>),
+  'visual': (<svg className="w-3 h-3 md:w-5 md:h-5 lg:w-3.5 lg:h-3.5 xl:w-5 xl:h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="9" cy="9" r="2" /><path d="M21 15l-5-5L5 21" /></svg>),
+  '3d': (<svg className="w-3 h-3 md:w-5 md:h-5 lg:w-3.5 lg:h-3.5 xl:w-5 xl:h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 2L3 7v10l9 5 9-5V7l-9-5zM12 22V12M21 7l-9 5L3 7" /></svg>),
+  'motion': (<svg className="w-3 h-3 md:w-5 md:h-5 lg:w-3.5 lg:h-3.5 xl:w-5 xl:h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3" /></svg>),
+  'experimental': (<svg className="w-3 h-3 md:w-5 md:h-5 lg:w-3.5 lg:h-3.5 xl:w-5 xl:h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M9 3h6M10 3v7l-4 8a2 2 0 002 2h8a2 2 0 002-2l-4-8V3" /></svg>)
 };
 
 // Mobile-optimized card component for the gallery slider
@@ -389,7 +389,7 @@ const WorkSection = () => {
   }, [filteredItems.length, activeFilter]);
 
   return (
-    <section id="work" className="relative h-[100dvh] flex flex-col items-center pt-20 pb-4 md:pt-16 md:pb-0 lg:pt-20 lg:pb-6 bg-transparent z-10 overflow-hidden justify-start lg:justify-between">
+    <section id="work" className="relative h-[100dvh] flex flex-col items-center pt-20 pb-4 md:pt-16 md:pb-0 lg:pt-24 xl:pt-20 lg:pb-4 bg-transparent z-10 overflow-hidden justify-start lg:justify-between">
 
       <AnimatePresence>
         {selectedAsset && (
@@ -432,22 +432,22 @@ const WorkSection = () => {
         )}
       </AnimatePresence>
 
-      <div className="container mx-auto px-4 md:px-12 lg:px-20 text-center mb-2 md:mb-6 lg:mb-0">
-        <ScrollReveal className="mb-2 md:mb-4 lg:mb-1">
-          <h2 className="text-2xl md:text-5xl lg:text-3xl xl:text-6xl font-black uppercase tracking-tighter leading-none text-black dark:!text-white">Featured Work</h2>
+      <div className="w-full mx-auto px-4 md:px-12 lg:px-10 xl:px-20 max-w-[1024px] xl:max-w-7xl text-center mb-2 md:mb-6 lg:mb-0">
+        <ScrollReveal className="mb-2 md:mb-4 lg:mb-2">
+          <h2 className="text-2xl md:text-5xl lg:text-4xl xl:text-6xl font-black uppercase tracking-tighter leading-none text-black dark:!text-white">Featured Work</h2>
         </ScrollReveal>
         <ScrollReveal delay={0.2}>
-          <div className="grid grid-cols-2 md:flex md:flex-row md:flex-wrap lg:flex-nowrap justify-center items-stretch md:items-center gap-2 md:gap-3 lg:gap-1.5 w-full max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 md:flex md:flex-row md:flex-nowrap justify-center items-stretch md:items-center gap-2 md:gap-2 lg:gap-1 xl:gap-2 w-full mx-auto">
             {[
-              { id: 'ux-branding', label: 'UI / UX and BRANDING' },
-              { id: 'packaging-print', label: 'PRINT & PACKAGING' },
-              { id: '3d', label: '3D DESIGN' },
-              { id: 'visual', label: 'VISUAL DESIGN' },
-              { id: 'experimental', label: 'EXPERIMENTAL DESIGN' },
-              { id: 'motion', label: 'MOTION DESIGN' }
+              { id: 'ux-branding', label: 'UI / UX and BRANDING', lgLabel: 'UI/UX' },
+              { id: 'packaging-print', label: 'PRINT & PACKAGING', lgLabel: 'PRINT' },
+              { id: '3d', label: '3D DESIGN', lgLabel: '3D' },
+              { id: 'visual', label: 'VISUAL DESIGN', lgLabel: 'VISUAL' },
+              { id: 'experimental', label: 'EXPERIMENTAL DESIGN', lgLabel: 'EXPERIMENTAL' },
+              { id: 'motion', label: 'MOTION DESIGN', lgLabel: 'MOTION' }
             ].map(f => (
-              <button key={f.id} onClick={() => { setActiveFilter(f.id); setIsPaused(false); }} className={`group relative flex items-center justify-center gap-0.5 md:gap-1.5 px-1.5 py-1 md:px-4 md:py-2 lg:px-3 lg:py-1.5 rounded-full transition-all duration-500 text-[7px] md:text-[10px] lg:text-[8px] font-black uppercase tracking-wider md:tracking-widest transform-gpu md:w-auto ${activeFilter === f.id ? 'bg-black text-white dark:bg-white dark:text-black ring-2 ring-transparent dark:ring-1 dark:ring-white scale-105 shadow-lg shadow-purple-500/30' : 'bg-white/5 ring-2 ring-inset ring-black/10 dark:ring-[0.5px] dark:ring-white/50 text-black dark:!text-white hover:bg-black/5 dark:hover:bg-white/10'}`}>
-                <span className="relative z-10">{categoryLogos[f.id]}</span><span className="relative z-10">{f.label}</span>
+              <button key={f.id} onClick={() => { setActiveFilter(f.id); setIsPaused(false); }} className={`group relative flex items-center justify-center gap-0.5 md:gap-1.5 lg:gap-0.5 xl:gap-1.5 px-1.5 py-1 md:px-4 md:py-2 lg:px-2 lg:py-1 xl:px-4 xl:py-2 rounded-full transition-all duration-500 text-[7px] md:text-[10px] lg:text-[8px] xl:text-[10px] font-black uppercase tracking-wider md:tracking-widest lg:tracking-wide xl:tracking-widest transform-gpu md:w-auto whitespace-nowrap ${activeFilter === f.id ? 'bg-black text-white dark:bg-white dark:text-black ring-2 ring-transparent dark:ring-1 dark:ring-white scale-105 shadow-lg shadow-purple-500/30' : 'bg-white/5 ring-2 ring-inset ring-black/10 dark:ring-[0.5px] dark:ring-white/50 text-black dark:!text-white hover:bg-black/5 dark:hover:bg-white/10'}`}>
+                <span className="relative z-10">{categoryLogos[f.id]}</span><span className="relative z-10 hidden xl:inline">{f.label}</span><span className="relative z-10 inline xl:hidden">{f.lgLabel}</span>
               </button>
             ))}
           </div>

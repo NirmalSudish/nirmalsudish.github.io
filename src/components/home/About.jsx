@@ -5,7 +5,7 @@ import { resolvePath } from '../../utils/imagePath';
 
 const About = () => {
   return (
-    <section id="about" className="w-full h-full md:h-[100dvh] flex items-center justify-center bg-transparent relative z-10 overflow-visible pt-4 pb-16 md:pt-0 md:pb-0">
+    <section id="about" className="w-full h-full md:h-[100dvh] flex items-center justify-center bg-transparent relative z-10 overflow-visible pt-4 pb-16 md:pt-0 md:pb-0 lg:pt-20 xl:pt-0">
       <div className="container mx-auto px-0 md:px-12 lg:px-16 xl:px-20 h-full flex flex-col justify-center max-w-7xl">
         {/* Mobile: Row Reverse (Text Left, Image Right) | Desktop: Normal Row (Image Left, Text Right) */}
         <div className="flex flex-col md:flex-row gap-1.5 md:gap-12 lg:gap-16 items-center md:items-center h-full md:h-auto pt-4 md:pt-0">
@@ -14,7 +14,7 @@ const About = () => {
           {/* Mobile: Order 1 (Top), Desktop: Order 1 (Left) */}
           <div className="w-full md:w-5/12 order-1 flex justify-center md:justify-start items-center md:block pt-4 md:pt-0">
             <div className="relative w-48 md:w-full md:max-w-[320px] lg:max-w-[380px] xl:max-w-none mx-auto md:mx-0">
-              <div className="relative aspect-[3/4] md:aspect-[4/5] h-auto max-h-[45vh] md:max-h-[60vh] xl:max-h-none overflow-hidden rounded-xl md:rounded-2xl border border-white/10 shadow-2xl">
+              <div className="relative aspect-[3/4] md:aspect-[4/5] h-auto max-h-[45vh] md:max-h-[55vh] lg:max-h-[50vh] xl:max-h-[60vh] 2xl:max-h-none overflow-hidden rounded-xl md:rounded-2xl border border-white/10 shadow-2xl">
                 <img
                   src={resolvePath('/images/about-me.jpg')}
                   alt="Nirmal"
@@ -32,11 +32,11 @@ const About = () => {
                 The Story So Far
               </h4>
 
-              <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black uppercase tracking-tighter leading-tight mb-3 md:mb-6 lg:mb-8">
+              <h2 className="text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-black uppercase tracking-tighter leading-tight mb-3 md:mb-4 lg:mb-4 xl:mb-8">
                 I'm Nirmal.
               </h2>
 
-              <div className="space-y-1.5 md:space-y-4 lg:space-y-6 text-xs md:text-base lg:text-lg xl:text-xl opacity-70 leading-relaxed font-medium mb-3 md:mb-6 lg:mb-10 max-w-full md:max-w-[420px] lg:max-w-xl">
+              <div className="space-y-1.5 md:space-y-3 lg:space-y-4 xl:space-y-6 text-xs md:text-base lg:text-base xl:text-xl opacity-70 leading-relaxed font-medium mb-3 md:mb-4 lg:mb-6 xl:mb-10 max-w-full md:max-w-[420px] lg:max-w-xl">
                 <p className="md:hidden">
                   I am a multi-disciplinary designer <br className="block md:hidden" />
                   and <span className="font-bold opacity-100">CS student</span> <br className="block md:hidden" />
@@ -71,7 +71,7 @@ const About = () => {
               </div>
 
               {/* MINIMALIST INFORMATION GRID - Stacked on Mobile to fit width */}
-              <div className="flex flex-col gap-2.5 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-y-8 md:gap-x-12 pt-0 md:pt-12 border-t-0 md:border-t border-black/10 dark:border-white/10 mb-3 md:mb-8 w-full">
+              <div className="flex flex-col gap-2.5 md:grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 md:gap-y-6 md:gap-x-12 lg:gap-y-4 pt-0 md:pt-8 lg:pt-6 xl:pt-12 border-t-0 md:border-t border-black/10 dark:border-white/10 mb-3 md:mb-6 lg:mb-4 xl:mb-8 w-full">
                 <div className="hidden md:flex flex-col items-center md:items-start">
                   <span className="text-[10px] md:text-[10px] font-black text-[#c792ff] uppercase tracking-[0.3em] mb-1 md:mb-2">Based In</span>
                   <span className="text-base md:text-lg lg:text-xl font-bold uppercase">Dubai, UAE</span>
@@ -93,7 +93,7 @@ const About = () => {
                 href={resolvePath('/resume.pdf')}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-2.5 md:px-8 md:py-4 bg-black text-white dark:bg-white dark:text-black font-black uppercase tracking-[0.2em] text-xs md:text-sm rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-300 hover:scale-105 active:scale-95 mx-0 mt-0 md:mt-8"
+                className="inline-flex items-center gap-2 px-6 py-2.5 md:px-8 md:py-3 lg:py-3 xl:py-4 bg-black text-white dark:bg-white dark:text-black font-black uppercase tracking-[0.2em] text-xs md:text-sm rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 transition-all duration-300 hover:scale-105 active:scale-95 mx-0 mt-0 md:mt-4 lg:mt-4 xl:mt-8"
               >
                 <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                   <path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
