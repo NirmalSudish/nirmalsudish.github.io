@@ -187,7 +187,7 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, p
       {isProject ? (
         <Link to={`/project/${item.id}`} className="block transition-all duration-500 w-full md:w-[60vw] lg:w-[50vw] xl:w-[45vw] 2xl:w-[40vw] max-w-[850px]">
           {/* Main Image Container - Increased width ratio for rectangular look */}
-          <div className="rounded-xl overflow-hidden mb-3 md:mb-4 lg:mb-2 bg-zinc-900 aspect-video md:aspect-auto h-auto max-h-[30vh] md:max-h-none md:h-[33vh] lg:h-[30vh] xl:h-[42vh] 2xl:h-[46vh] w-full relative border border-white/5">
+          <div className="rounded-xl overflow-hidden mb-3 md:mb-4 lg:mb-2 bg-zinc-900 aspect-video md:aspect-auto h-auto max-h-[30vh] md:max-h-none md:h-[33vh] lg:h-[38vh] xl:h-[42vh] 2xl:h-[46vh] w-full relative border border-white/5">
             <img
               src={resolvePath(item.mainImageUrl)}
               loading="lazy"
@@ -208,7 +208,7 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, p
           </div>
         </Link>
       ) : (
-        <div className="h-[30vh] md:h-[33vh] lg:h-[30vh] xl:h-[42vh] 2xl:h-[46vh] w-full md:w-auto rounded-xl overflow-hidden bg-zinc-900 border border-white/5 relative flex items-center justify-center">
+        <div className="h-[30vh] md:h-[33vh] lg:h-[38vh] xl:h-[42vh] 2xl:h-[46vh] w-full md:w-auto rounded-xl overflow-hidden bg-zinc-900 border border-white/5 relative flex items-center justify-center">
           {/* Non-project asset (Video/Image) */}
           {isVideo ? (
             <>
@@ -389,7 +389,7 @@ const WorkSection = () => {
   }, [filteredItems.length, activeFilter]);
 
   return (
-    <section id="work" className="relative h-[100dvh] flex flex-col items-center pt-20 pb-4 md:pt-16 md:pb-0 lg:pt-20 bg-transparent z-10 overflow-hidden justify-start">
+    <section id="work" className="relative h-[100dvh] flex flex-col items-center pt-20 pb-4 md:pt-16 md:pb-0 lg:pt-20 lg:pb-6 bg-transparent z-10 overflow-hidden justify-start lg:justify-between">
 
       <AnimatePresence>
         {selectedAsset && (
@@ -432,12 +432,12 @@ const WorkSection = () => {
         )}
       </AnimatePresence>
 
-      <div className="container mx-auto px-4 md:px-12 lg:px-20 text-center mb-2 md:mb-6 lg:mb-1">
-        <ScrollReveal className="mb-2 md:mb-6 lg:mb-1">
-          <h2 className="text-2xl md:text-5xl lg:text-4xl xl:text-6xl font-black uppercase tracking-tighter leading-none text-black dark:!text-white">Featured Work</h2>
+      <div className="container mx-auto px-4 md:px-12 lg:px-20 text-center mb-2 md:mb-6 lg:mb-0">
+        <ScrollReveal className="mb-2 md:mb-4 lg:mb-1">
+          <h2 className="text-2xl md:text-5xl lg:text-3xl xl:text-6xl font-black uppercase tracking-tighter leading-none text-black dark:!text-white">Featured Work</h2>
         </ScrollReveal>
         <ScrollReveal delay={0.2}>
-          <div className="grid grid-cols-2 md:flex md:flex-row md:flex-wrap lg:flex-nowrap justify-center items-stretch md:items-center gap-2 md:gap-3 lg:gap-2 w-full max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 md:flex md:flex-row md:flex-wrap lg:flex-nowrap justify-center items-stretch md:items-center gap-2 md:gap-3 lg:gap-1.5 w-full max-w-5xl mx-auto">
             {[
               { id: 'ux-branding', label: 'UI / UX and BRANDING' },
               { id: 'packaging-print', label: 'PRINT & PACKAGING' },
