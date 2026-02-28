@@ -43,8 +43,8 @@ body {
   width: 100vw;
   overflow-y: auto;
   /* scroll-snap-type removed for mobile/tablet */
-  overscroll-behavior-y: contain;
-  -webkit-overflow-scrolling: touch;
+  /* Set to auto to reduce scroll momentum and make it feel less sensitive */
+  -webkit-overflow-scrolling: auto;
   scroll-behavior: smooth;
   /* Added: smooth scrolling */
 }
