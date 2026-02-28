@@ -1,5 +1,5 @@
 import React, { useState, useMemo, memo, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { resolvePath, getOptimizedImagePath, getFallbackImagePath } from '../../utils/imagePath';
 import { AnimatePresence, motion } from 'framer-motion';
 import ScrollReveal from '../common/ScrollReveal';
@@ -22,6 +22,7 @@ const categoryLogos = {
 // Mobile-optimized card component for the gallery slider
 // CRITICAL: Videos are NOT preloaded to prevent memory crashes on mobile
 const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPreload = false }) => {
+  const navigate = useNavigate();
   const isProject = item.client !== undefined;
   const isVideo = typeof item.src === 'string' && item.src.endsWith('.mp4');
   const [isLoading, setIsLoading] = useState(false);
@@ -52,7 +53,13 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
   return (
     <div
       className="mobile-project-card w-full flex flex-col items-center cursor-pointer px-2"
-      onClick={() => !isProject && !isVideo && onSelect(item, index)}
+      onClick={() => {
+        if (isProject) {
+          navigate(`/project/${item.id}`);
+        } else if (!isVideo) {
+          onSelect(item, index);
+        }
+      }}
     >
       {/* Media Container */}
       <div className="w-full rounded-2xl overflow-hidden bg-zinc-900/50 border border-white/10 relative">
@@ -102,7 +109,9 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
               decoding="async"
               className={`w-full h-auto max-h-[45vh] object-contain transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
               alt={isProject ? item.client : ''}
-              onClick={() => !isProject && onSelect(item, index)}
+              onClick={() => {
+                if (!isProject) onSelect(item, index);
+              }}
             />
           )
         ) : (
@@ -115,7 +124,7 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
 
       {/* Text Content */}
       {isProject ? (
-        <Link to={`/project/${item.id}`} className="block w-full mt-4 px-2">
+        <div className="block w-full mt-4 px-2">
           <div className="flex flex-col gap-1 text-center">
             <h3 className="font-bold text-sm uppercase tracking-tight leading-tight text-black dark:text-white line-clamp-2">
               {item.client}
@@ -127,7 +136,7 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
               {item.categories.join(' / ')}
             </span>
           </div>
-        </Link>
+        </div>
       ) : (
         <div className="mt-3 text-center">
           <span className="text-[10px] text-white/40 uppercase tracking-wider">
