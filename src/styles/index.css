@@ -42,8 +42,7 @@ body {
   /* Use dynamic viewport height for mobile too */
   width: 100vw;
   overflow-y: auto;
-  scroll-snap-type: y proximity;
-  /* Changed: proximity reduces aggressive hijacking of scroll */
+  /* scroll-snap-type removed for mobile/tablet */
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
@@ -58,9 +57,7 @@ body {
   display: flex;
   flex-direction: column;
   padding: 5rem 0;
-  scroll-snap-align: start;
-  scroll-snap-stop: normal;
-  /* Changed: from always to normal - reduces jitter */
+  /* scroll-snap-align and scroll-snap-stop removed for mobile/tablet */
 }
 
 /* REPAIRED: Snapping behavior for larger screens */
