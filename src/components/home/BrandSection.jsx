@@ -26,7 +26,7 @@ const BrandSection = () => {
     <div className="h-auto md:h-[100dvh] flex flex-col justify-center text-center px-6 w-full max-w-[90vw] lg:max-w-6xl xl:max-w-7xl mx-auto">
       {/* 5-LINE PHILOSOPHY */}
       <ScrollReveal>
-        <div className="text-xl md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-medium leading-[1.2] mb-12 uppercase tracking-tight">
+        <div className="text-[13px] leading-[1.4] md:text-[clamp(1rem,1.8vw,2.5rem)] md:leading-[1.2] font-medium mb-6 md:mb-12 uppercase tracking-tight">
           <div className="">DRIVEN BY THE LOGIC OF SYSTEMS AND</div>
           <div className="">THE PRECISION OF VISUAL COMMUNICATION.</div>
           <div className="">I BUILD <span className="font-black">HIGH-END DIGITAL PRODUCTS</span></div>
@@ -37,7 +37,7 @@ const BrandSection = () => {
 
       {/* CLIENT MARQUEE PILL SECTION */}
       <div className="flex flex-col items-center w-full max-w-4xl mx-auto">
-        <p className="text-xs font-black uppercase tracking-[0.5em] mb-8">
+        <p className="text-xs font-black uppercase tracking-[0.15em] md:tracking-[0.5em] mb-4 md:mb-8">
           Clients I have worked for
         </p>
 

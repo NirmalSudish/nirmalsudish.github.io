@@ -36,7 +36,7 @@ const Hero = () => {
 
   return (
     <div className="w-full h-full flex flex-col justify-center relative z-10 overflow-hidden">
-      <div className="container mx-auto px-6 md:px-12 lg:px-16 xl:px-20 flex flex-col md:flex-row items-center justify-center md:justify-between h-full pt-16 md:pt-0 gap-8 md:gap-0 max-w-7xl">
+      <div className="container mx-auto px-6 md:px-12 lg:px-16 xl:px-20 flex flex-col md:flex-row items-center justify-center md:justify-between h-full pt-16 md:pt-0 gap-5 md:gap-0 max-w-7xl">
 
         {/* Left Side: Large Name Heading */}
         <div className="w-full md:w-2/3 lg:w-3/4 text-center md:text-left">
@@ -46,7 +46,7 @@ const Hero = () => {
             variants={containerVariants}
             className="font-black hero-title-responsive uppercase tracking-tighter leading-[0.85] select-none"
           >
-            <div className="block mb-6">
+            <div className="block mb-3 md:mb-6">
               {"HI, I'M".split("").map((c, i) => <motion.span key={i} variants={letterVariants}>{c === " " ? "\u00A0" : c}</motion.span>)}
             </div>
             <div className="block">
@@ -69,7 +69,7 @@ const Hero = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={nameFinished ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-xl md:text-xl lg:text-2xl font-light flex flex-col items-center md:items-end gap-1"
+            className="text-base md:text-xl lg:text-2xl font-light flex flex-col items-center md:items-end gap-1"
           >
             <span className="leading-none">I'm a</span>
 

@@ -83,11 +83,10 @@ body {
     padding: 0;
   }
 
-  /* Specific adjustment for the last section on desktop to accommodate the footer */
+  /* Fluid top padding for last section — accommodates navbar at any resolution */
   .snap-section:last-child {
     justify-content: space-between;
-    padding-top: 6rem;
-    /* Adjust this value to match your navbar height */
+    padding-top: clamp(4rem, 6vh, 8rem);
   }
 }
 
@@ -123,25 +122,51 @@ body {
   }
 }
 
-/* Resolution-independent scaling for large screens */
-@media (min-width: 1920px) {
+/* ========================================
+   FLUID CONTAINER SCALING
+   Scales content width proportionally between 1366px and 4K
+   ======================================== */
 
-  /* Cap maximum content width for ultra-wide displays */
+/* 1366px–1919px: moderate padding so content breathes without wasting space */
+@media (min-width: 1366px) and (max-width: 1919px) {
+  .container {
+    max-width: min(90vw, 1400px);
+  }
+}
+
+/* 1920px: original design target — generous but not full-bleed */
+@media (min-width: 1920px) {
   .container {
     max-width: 1600px;
   }
 }
 
+/* QHD 2560px: widen slightly to avoid narrow-column feel */
 @media (min-width: 2560px) {
-
-  /* 4K and above: prevent elements from becoming too large */
   .container {
     max-width: 1800px;
   }
 
-  /* Scale down fonts that might become too large on 4K */
+  /* Keep hero title from growing beyond readable size at QHD+ */
   .hero-title-responsive {
-    font-size: clamp(4.5rem, 10vw, 12rem);
+    font-size: clamp(4.5rem, 10vw, 14rem);
+  }
+}
+
+/* ========================================
+   SHORT-VIEWPORT DESKTOP ADJUSTMENTS
+   Targets wide but short screens (e.g. 1366×768, 1440×900)
+   where height is the constraint, not width
+   ======================================== */
+@media (min-width: 1280px) and (max-height: 860px) {
+  /* Reduce WorkSection top spacing so gallery has more room */
+  section#work {
+    padding-top: clamp(4rem, 8vh, 6rem) !important;
+  }
+
+  /* Tighten the header/title margin in WorkSection */
+  section#work .container {
+    margin-bottom: clamp(0.5rem, 2vh, 2rem);
   }
 }
 
