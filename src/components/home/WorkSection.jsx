@@ -442,7 +442,7 @@ const WorkSection = () => {
       </AnimatePresence>
 
       <div className="container mx-auto px-4 md:px-12 lg:px-20 text-center mb-4 md:mb-12">
-        <ScrollReveal className="mb-3 md:mb-10 lg:mb-[clamp(1.5rem,3vh,3.5rem)]">
+        <ScrollReveal className="mb-6 md:mb-10 lg:mb-[clamp(1.5rem,3vh,3.5rem)]">
           <h2 className="text-2xl md:text-5xl lg:text-[clamp(3.75rem,5vw,4.5rem)] font-black uppercase tracking-tighter leading-none text-black dark:!text-white">Featured Work</h2>
         </ScrollReveal>
         <ScrollReveal delay={0.2}>
@@ -464,7 +464,7 @@ const WorkSection = () => {
       </div>
 
       {/* Desktop: Horizontal Marquee - SMOOTH & STABLE */}
-      <div className="w-full relative group/marquee flex-grow flex-col justify-center hidden md:flex overflow-hidden">
+      <div className="w-full relative group/marquee flex-grow flex-col justify-center hidden md:flex overflow-hidden" style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)' }}>
         {/* Navigation Buttons for Manual Scroll */}
         <button onClick={() => handleScroll('left')} className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 z-50 w-16 h-16 rounded-full border border-black/20 dark:border-white/20 bg-black/5 dark:bg-white/5 backdrop-blur-2xl opacity-0 group-hover/marquee:opacity-100 transition-all duration-500 flex items-center justify-center active:scale-90 shadow-2xl hover:bg-white/10"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-6 h-6 text-white"><path d="M15 18l-6-6 6-6" /></svg></button>
         <button onClick={() => handleScroll('right')} className="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 z-50 w-16 h-16 rounded-full border border-black/20 dark:border-white/20 bg-black/5 dark:bg-white/5 backdrop-blur-2xl opacity-0 group-hover/marquee:opacity-100 transition-all duration-500 flex items-center justify-center active:scale-90 shadow-2xl hover:bg-white/10"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-6 h-6 text-white"><path d="M9 18l6-6-6-6" /></svg></button>

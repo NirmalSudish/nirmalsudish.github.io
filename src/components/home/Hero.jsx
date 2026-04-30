@@ -69,39 +69,39 @@ const Hero = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={nameFinished ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-base md:text-xl lg:text-2xl font-light flex flex-col items-center md:items-end gap-1"
+            className="text-base md:text-xl lg:text-2xl font-light flex flex-col items-center md:items-end gap-1 text-center md:text-right"
           >
-            <span className="leading-none">I'm a</span>
-
-            {/* Reserved space for Role */}
-            <div className="h-[1.1em] relative w-full flex justify-center md:justify-end">
+            {/* Line 1: "I'm a [role]" */}
+            <div className="flex items-baseline gap-1.5 justify-center md:justify-end">
+              <span className="leading-none whitespace-nowrap">I'm a</span>
               <AnimatePresence mode="wait">
                 <motion.span
                   key={roleIndex}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="absolute font-bold text-center md:text-right"
+                  transition={{ duration: 0.3 }}
+                  className="font-bold whitespace-nowrap"
                 >
                   {roles[roleIndex]}
                 </motion.span>
               </AnimatePresence>
             </div>
 
-            <div className="flex flex-col items-center md:items-end leading-tight text-center md:text-right gap-1">
-              <span>passionate about</span>
-              <span>creating visuals that</span>
-            </div>
+            {/* Line 2: static */}
+            <span>passionate about creating</span>
 
-            {/* Reserved space for Flipwords */}
-            <div className="h-[1.25em] relative w-full flex justify-center md:justify-end">
+            {/* Line 3: "visuals that [word]" */}
+            <div className="flex items-baseline gap-1.5 justify-center md:justify-end">
+              <span className="leading-none whitespace-nowrap">visuals that</span>
               <AnimatePresence mode="wait">
                 <motion.span
                   key={wordIndex}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  className="absolute font-bold text-purple-600 dark:text-[#c792ff] text-center md:text-right"
+                  transition={{ duration: 0.3 }}
+                  className="font-bold text-purple-600 dark:text-[#c792ff] whitespace-nowrap"
                 >
                   {flipWords[wordIndex]}
                 </motion.span>

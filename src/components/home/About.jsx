@@ -36,11 +36,9 @@ const About = () => {
                 I'm Nirmal.
               </h2>
 
-              <div className="space-y-1.5 md:space-y-3 lg:space-y-[clamp(0.75rem,1.5vh,1.5rem)] text-xs md:text-base lg:text-[clamp(0.9rem,1.2vw,1.25rem)] opacity-70 leading-relaxed font-medium mb-3 md:mb-4 lg:mb-[clamp(1rem,2.5vh,2.5rem)] max-w-full md:max-w-[420px] lg:max-w-xl">
+              <div className="space-y-1.5 md:space-y-3 lg:space-y-[clamp(0.75rem,1.5vh,1.5rem)] text-sm md:text-base lg:text-[clamp(0.9rem,1.2vw,1.25rem)] opacity-70 leading-relaxed font-medium mb-3 md:mb-4 lg:mb-[clamp(1rem,2.5vh,2.5rem)] max-w-full md:max-w-[420px] lg:max-w-xl">
                 <p className="md:hidden">
-                  I am a multi-disciplinary designer <br className="block md:hidden" />
-                  and <span className="font-bold opacity-100">CS student</span> <br className="block md:hidden" />
-                  born and raised in the UAE.
+                  I am a multi-disciplinary designer and <span className="font-bold opacity-100">CS student</span> born and raised in the UAE.
                 </p>
                 <p className="hidden md:block text-pretty">
                   I am a multi-disciplinary designer and <span className="font-bold opacity-100">CS student</span> born and raised in the UAE.
