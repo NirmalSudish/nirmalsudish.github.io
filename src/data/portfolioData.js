@@ -143,7 +143,7 @@ export const projects = [
             '/images/abucrispy9.jpeg',
             '/images/abucrispy10.jpg',
         ],
-        categories: ['branding', 'print']
+        categories: ['branding']
     },
     {
         id: 7,
@@ -162,7 +162,7 @@ export const projects = [
             '/images/novelimg4.jpg',
             '/images/novelimg7.jpg'
         ],
-        categories: ['branding', 'print']
+        categories: ['branding']
     },
 
     {

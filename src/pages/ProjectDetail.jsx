@@ -290,16 +290,16 @@ const ProjectDetail = () => {
                         <nav className="flex justify-between items-center max-w-7xl mx-auto border-t border-black/10 dark:border-white/10 pt-12 px-6 md:px-12 lg:px-20">
                             <Link to={`/project/${prevProjectId}`} className="group flex flex-col items-start text-left cursor-pointer max-w-[45%]">
                                 <span className="text-xs uppercase tracking-widest text-gray-500 dark:text-white mb-2 font-bold line-clamp-1">{projects.find(p => p.id === prevProjectId)?.client}</span>
-                                <div className="relative overflow-hidden h-10 md:h-16 w-full">
-                                    <span className="block text-3xl md:text-6xl font-black uppercase transition-transform duration-500 group-hover:-translate-y-full">Prev</span>
-                                    <span className="absolute top-0 left-0 block text-3xl md:text-6xl font-black uppercase transition-transform duration-500 translate-y-full group-hover:translate-y-0 text-gray-400 dark:text-white">Prev</span>
+                                <div className="relative overflow-hidden h-8 md:h-16 w-full">
+                                    <span className="block text-2xl md:text-6xl font-black uppercase transition-transform duration-500 group-hover:-translate-y-full">Prev</span>
+                                    <span className="absolute top-0 left-0 block text-2xl md:text-6xl font-black uppercase transition-transform duration-500 translate-y-full group-hover:translate-y-0 text-gray-400 dark:text-white">Prev</span>
                                 </div>
                             </Link>
                             <Link to={`/project/${nextProjectId}`} className="group flex flex-col items-end text-right cursor-pointer max-w-[45%]">
                                 <span className="text-xs uppercase tracking-widest text-gray-500 dark:text-white mb-2 font-bold line-clamp-1">{projects.find(p => p.id === nextProjectId)?.client}</span>
-                                <div className="relative overflow-hidden h-10 md:h-16 w-full flex justify-end">
-                                    <span className="block text-3xl md:text-6xl font-black uppercase transition-transform duration-500 group-hover:-translate-y-full">Next</span>
-                                    <span className="absolute top-0 right-0 block text-3xl md:text-6xl font-black uppercase transition-transform duration-500 translate-y-full group-hover:translate-y-0 text-gray-400 dark:text-white">Next</span>
+                                <div className="relative overflow-hidden h-8 md:h-16 w-full flex justify-end">
+                                    <span className="block text-2xl md:text-6xl font-black uppercase transition-transform duration-500 group-hover:-translate-y-full">Next</span>
+                                    <span className="absolute top-0 right-0 block text-2xl md:text-6xl font-black uppercase transition-transform duration-500 translate-y-full group-hover:translate-y-0 text-gray-400 dark:text-white">Next</span>
                                 </div>
                             </Link>
                         </nav>
@@ -315,7 +315,7 @@ const ProjectDetail = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 20 }}
                         onClick={scrollToTop}
-                        className="hidden md:block fixed bottom-10 right-10 z-[100] bg-white text-black p-4 rounded-full shadow-xl hover:scale-110 active:scale-95 transition-all cursor-pointer group"
+                        className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[100] bg-white text-black p-3 md:p-4 rounded-full shadow-xl hover:scale-110 active:scale-95 transition-all cursor-pointer group"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 group-hover:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 10l7-7m0 0l7 7m-7-7v18" />

@@ -69,7 +69,7 @@ const Hero = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={nameFinished ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-base md:text-xl lg:text-2xl font-light flex flex-col items-center md:items-end gap-1 text-center md:text-right"
+            className="text-base md:text-xl lg:text-2xl font-light flex flex-col items-center md:items-end gap-1 text-center md:text-right max-w-full overflow-hidden"
           >
             {/* Line 1: "I'm a [role]" */}
             <div className="flex items-baseline gap-1.5 justify-center md:justify-end">

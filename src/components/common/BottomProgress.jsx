@@ -5,7 +5,7 @@ const BottomProgress = ({ activeSection, totalSections, onLineClick }) => {
     <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] flex flex-col items-center">
       <div className="flex gap-4 items-center">
         {Array.from({ length: totalSections }).map((_, index) => (
-          <button key={index} onClick={() => onLineClick(index)} className="group relative h-6 flex items-center px-1">
+          <button key={index} onClick={() => onLineClick(index)} className="group relative min-h-[44px] flex items-center px-2">
             {/* Thicker lines */}
             <div className={`transition-all duration-700 rounded-full ${activeSection === index
               ? 'w-14 h-[4px] bg-[#c792ff] shadow-[0_0_15px_rgba(199,146,255,0.7)]'

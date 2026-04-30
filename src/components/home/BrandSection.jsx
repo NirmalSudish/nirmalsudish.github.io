@@ -26,12 +26,12 @@ const BrandSection = () => {
     <div className="h-auto md:h-[100dvh] flex flex-col justify-center text-center px-6 w-full max-w-[90vw] lg:max-w-6xl xl:max-w-7xl mx-auto">
       {/* 5-LINE PHILOSOPHY */}
       <ScrollReveal>
-        <div className="text-[15px] leading-[1.5] md:text-[clamp(1rem,1.8vw,2.5rem)] md:leading-[1.2] font-medium mb-6 md:mb-12 uppercase tracking-tight">
-          <div className="">DRIVEN BY THE LOGIC OF SYSTEMS AND</div>
-          <div className="">THE PRECISION OF VISUAL COMMUNICATION.</div>
-          <div className="">I BUILD <span className="font-black">HIGH-END DIGITAL PRODUCTS</span></div>
-          <div className="">THAT BRIDGE THE GAP BETWEEN COMPLEX</div>
-          <div className="">ENGINEERING AND <span className="text-purple-600 dark:text-[#c792ff] font-black italic">HUMAN-CENTERED UI/UX DESIGN.</span></div>
+        <div className="text-[15px] leading-[1.6] md:text-[clamp(1rem,1.8vw,2.5rem)] md:leading-[1.2] font-medium mb-6 md:mb-12 uppercase tracking-tight">
+          <span className="md:block">DRIVEN BY THE LOGIC OF SYSTEMS AND </span>
+          <span className="md:block">THE PRECISION OF VISUAL COMMUNICATION. </span>
+          <span className="md:block">I BUILD <span className="font-black">HIGH-END DIGITAL PRODUCTS </span></span>
+          <span className="md:block">THAT BRIDGE THE GAP BETWEEN COMPLEX </span>
+          <span className="md:block">ENGINEERING AND <span className="text-purple-600 dark:text-[#c792ff] font-black italic">HUMAN-CENTERED UI/UX DESIGN.</span></span>
         </div>
       </ScrollReveal>
 
@@ -41,11 +41,13 @@ const BrandSection = () => {
           Clients I have worked for
         </p>
 
-        <div className="bg-black/[0.03] dark:bg-white/[0.03] backdrop-blur-md border border-black/10 dark:border-white/10 rounded-2xl md:rounded-full py-4 md:py-6 px-4 md:px-12 w-full overflow-hidden">
+        <div className="bg-black/[0.07] dark:bg-white/[0.03] backdrop-blur-md border border-black/15 dark:border-white/10 rounded-2xl md:rounded-full py-4 md:py-6 px-4 md:px-12 w-full overflow-hidden">
           {/* Two identical sets — translateX(-50%) moves exactly one full set off screen for a seamless loop */}
           <div
             className="flex w-max gap-16 md:gap-20 items-center opacity-90 transition-opacity duration-300 hover:opacity-100"
             style={{ animation: 'marquee 50s linear infinite' }}
+            onTouchStart={e => e.currentTarget.style.animationPlayState = 'paused'}
+            onTouchEnd={e => e.currentTarget.style.animationPlayState = 'running'}
           >
             {[...logos, ...logos].map((logo, i) => (
               <div key={i} className="flex flex-col items-center justify-center shrink-0 w-24 md:w-32 h-12">

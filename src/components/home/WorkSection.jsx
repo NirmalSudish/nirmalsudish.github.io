@@ -199,7 +199,9 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, p
           <div className="rounded-xl overflow-hidden mb-3 md:mb-6 bg-zinc-900 aspect-video md:aspect-auto h-auto max-h-[30vh] md:max-h-none md:h-[clamp(260px,46vh,520px)] w-full relative border border-white/5">
             <img
               src={resolvePath(item.mainImageUrl)}
-              loading="lazy"
+              loading="eager"
+              decoding="async"
+              onError={(e) => { e.target.onerror = null; e.target.src = resolvePath(item.mainImageUrl); }}
               className="h-full w-full object-contain md:object-cover transition-transform duration-1000 dark:group-hover/card:scale-105"
               alt={item.client}
             />
@@ -398,7 +400,7 @@ const WorkSection = () => {
   }, [filteredItems.length, activeFilter]);
 
   return (
-    <section id="work" className="relative h-[100dvh] flex flex-col items-center pt-20 pb-4 md:pt-20 md:pb-0 lg:pt-24 bg-transparent z-10 overflow-hidden justify-center">
+    <section id="work" className="relative h-[100dvh] flex flex-col items-center pt-20 pb-4 md:pt-20 md:pb-0 lg:pt-24 lg:pb-16 bg-transparent z-10 overflow-hidden justify-center">
 
       <AnimatePresence>
         {selectedAsset && (
@@ -450,12 +452,12 @@ const WorkSection = () => {
             {[
               { id: 'ux-branding', label: 'UI / UX and BRANDING' },
               { id: 'packaging-print', label: 'PRINT & PACKAGING' },
-              { id: '3d', label: '3D DESIGN' },
               { id: 'visual', label: 'VISUAL DESIGN' },
-              { id: 'experimental', label: 'EXPERIMENTAL DESIGN' },
-              { id: 'motion', label: 'MOTION DESIGN' }
+              { id: 'motion', label: 'MOTION DESIGN' },
+              { id: '3d', label: '3D DESIGN' },
+              { id: 'experimental', label: 'EXPERIMENTAL DESIGN' }
             ].map(f => (
-              <button key={f.id} onClick={() => { setActiveFilter(f.id); setIsPaused(false); }} className={`group relative flex items-center justify-center gap-1 md:gap-1.5 px-2.5 py-1.5 md:px-5 md:py-2.5 rounded-full transition-all duration-500 text-[9px] md:text-[10px] font-black uppercase tracking-wider md:tracking-widest transform-gpu md:w-auto ${activeFilter === f.id ? 'bg-black text-white dark:bg-white dark:text-black ring-2 ring-transparent dark:ring-1 dark:ring-white scale-105 shadow-lg shadow-purple-500/30' : 'bg-white/5 ring-2 ring-inset ring-black/10 dark:ring-[0.5px] dark:ring-white/50 text-black dark:!text-white hover:bg-black/5 dark:hover:bg-white/10'}`}>
+              <button key={f.id} onClick={() => { setActiveFilter(f.id); setIsPaused(false); }} className={`group relative flex items-center justify-center gap-1 md:gap-1.5 px-2.5 py-1.5 md:px-5 md:py-2.5 rounded-full transition-all duration-500 text-[9px] md:text-[10px] font-black uppercase tracking-wider md:tracking-widest transform-gpu md:w-auto ${activeFilter === f.id ? 'bg-black text-white dark:bg-white dark:text-black ring-2 ring-transparent dark:ring-1 dark:ring-white scale-105 shadow-lg shadow-purple-500/30' : 'bg-white/5 ring-2 ring-inset ring-black/25 dark:ring-[0.5px] dark:ring-white/50 text-black dark:!text-white hover:bg-black/5 dark:hover:bg-white/10'}`}>
                 <span className="relative z-10">{categoryLogos[f.id]}</span><span className="relative z-10">{f.label}</span>
               </button>
             ))}
@@ -527,7 +529,7 @@ const WorkSection = () => {
               </button>
 
               {/* Gallery Slide Area */}
-              <div className="w-full px-8 overflow-hidden">
+              <div className="w-full px-14 overflow-hidden">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={`mobile-${filteredItems[mobileGalleryIndex]?.id}-${mobileGalleryIndex}`}

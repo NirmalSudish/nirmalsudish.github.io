@@ -60,26 +60,19 @@ body {
   /* scroll-snap-align and scroll-snap-stop removed for mobile/tablet */
 }
 
-/* REPAIRED: Snapping behavior for larger screens */
+/* Desktop: free scroll, no snap lock */
 @media (min-width: 1024px) {
 
-  /* Changed to 1024px for a more robust desktop breakpoint */
   .snap-container {
     height: 100dvh;
     overflow-y: scroll;
-    scroll-snap-type: y proximity;
-    /* Changed: proximity reduces jitter on desktop */
     scroll-behavior: smooth;
-    /* Added: smooth scroll behavior */
     overscroll-behavior-y: contain;
   }
 
   .snap-section {
     height: 100dvh;
     min-height: 0;
-    scroll-snap-align: start;
-    scroll-snap-stop: normal;
-    /* Changed: from always - less aggressive snapping */
     padding: 0;
   }
 
@@ -159,9 +152,10 @@ body {
    where height is the constraint, not width
    ======================================== */
 @media (min-width: 1280px) and (max-height: 860px) {
-  /* Reduce WorkSection top spacing so gallery has more room */
+  /* Must stay >= 6rem (96px) to clear the 96px fixed navbar */
   section#work {
-    padding-top: clamp(4rem, 8vh, 6rem) !important;
+    padding-top: clamp(6rem, 12vh, 7.5rem) !important;
+    padding-bottom: 4rem !important;
   }
 
   /* Tighten the header/title margin in WorkSection */
@@ -296,18 +290,17 @@ body {
    MOBILE PERFORMANCE OPTIMIZATIONS
    ======================================== */
 
-/* Respect user's preference for reduced motion - temporarily disabled as it prevents marquee on PCs with OS animations turned off
+/* Reduced motion: shorten transitions but keep marquee/scroll animations running */
 @media (prefers-reduced-motion: reduce) {
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
+  *:not([style*="animation"]) {
     transition-duration: 0.01ms !important;
   }
+  /* Stop Framer Motion and CSS keyframe animations that aren't positional marquees */
+  .animate-text-gradient,
+  .animate-spin {
+    animation: none !important;
+  }
 }
-*/
 
 /* Mobile-specific performance optimizations */
 @media (max-width: 768px) {

@@ -19,6 +19,8 @@ const Home = () => {
   const [isDesktop, setIsDesktop] = useState(false);
   const navType = useNavigationType();
   const saveTimeoutRef = useRef(null);
+  const autoScrollTimerRef = useRef(null);
+  const autoScrollIndexRef = useRef(0);
 
   // Debounced scroll position save - prevents excessive writes
   const debouncedSaveScroll = useCallback(() => {
@@ -108,6 +110,39 @@ const Home = () => {
       sectionRefs.current[index].scrollIntoView({ behavior: 'smooth' });
     }
   }, []);
+
+  // Mobile auto-scroll: advance one section every 6s, pause 10s on touch
+  useEffect(() => {
+    if (isDesktop) return;
+    const container = containerRef.current;
+    if (!container) return;
+    const TOTAL = 5;
+
+    const advance = () => {
+      autoScrollIndexRef.current = (autoScrollIndexRef.current + 1) % TOTAL;
+      const target = sectionRefs.current[autoScrollIndexRef.current];
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    const startTimer = (delay = 6000) => {
+      if (autoScrollTimerRef.current) clearTimeout(autoScrollTimerRef.current);
+      const tick = () => {
+        advance();
+        autoScrollTimerRef.current = setTimeout(tick, 6000);
+      };
+      autoScrollTimerRef.current = setTimeout(tick, delay);
+    };
+
+    const onTouch = () => startTimer(10000);
+
+    startTimer(6000);
+    container.addEventListener('touchstart', onTouch, { passive: true });
+
+    return () => {
+      if (autoScrollTimerRef.current) clearTimeout(autoScrollTimerRef.current);
+      container.removeEventListener('touchstart', onTouch);
+    };
+  }, [isDesktop]);
 
   return (
     <div className="relative w-full h-screen overflow-hidden">

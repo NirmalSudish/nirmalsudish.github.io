@@ -6,7 +6,7 @@ import { resolvePath } from '../../utils/imagePath';
 const About = () => {
   return (
     <section id="about" className="w-full h-full md:h-[100dvh] flex items-center justify-center bg-transparent relative z-10 overflow-visible pt-4 pb-16 md:pt-0 md:pb-0 lg:pt-20 xl:pt-0">
-      <div className="container mx-auto px-0 md:px-12 lg:px-[clamp(3rem,4vw,5rem)] h-full flex flex-col justify-center max-w-7xl">
+      <div className="container mx-auto px-6 md:px-12 lg:px-[clamp(3rem,4vw,5rem)] h-full flex flex-col justify-center max-w-7xl">
         {/* Mobile: Row Reverse (Text Left, Image Right) | Desktop: Normal Row (Image Left, Text Right) */}
         <div className="flex flex-col md:flex-row gap-5 md:gap-12 lg:gap-[clamp(2rem,4vw,5rem)] items-center md:items-center h-full md:h-auto pt-4 md:pt-0">
 
@@ -70,8 +70,8 @@ const About = () => {
 
               {/* MINIMALIST INFORMATION GRID - Stacked on Mobile to fit width */}
               <div className="flex flex-col gap-2.5 md:grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 md:gap-y-6 md:gap-x-12 lg:gap-y-[clamp(0.75rem,1.5vh,1.5rem)] pt-0 md:pt-8 lg:pt-[clamp(1rem,2vh,3rem)] border-t-0 md:border-t border-black/10 dark:border-white/10 mb-3 md:mb-6 lg:mb-[clamp(0.75rem,2vh,2rem)] w-full">
-                <div className="hidden md:flex flex-col items-center md:items-start">
-                  <span className="text-[10px] md:text-[10px] font-black text-[#c792ff] uppercase tracking-[0.3em] mb-1 md:mb-2">Based In</span>
+                <div className="flex flex-col items-center md:items-start">
+                  <span className="text-[10px] font-black text-[#c792ff] uppercase tracking-[0.3em] mb-1 md:mb-2">Based In</span>
                   <span className="text-base md:text-lg lg:text-xl font-bold uppercase">Dubai, UAE</span>
                 </div>
 
@@ -80,8 +80,8 @@ const About = () => {
                   <a href="https://www.instagram.com/yamanoteatelier/" target="_blank" rel="noopener noreferrer" className="text-base md:text-lg lg:text-xl font-bold uppercase hover:text-[#c792ff] transition-colors whitespace-nowrap">Yamanote Atelier</a>
                 </div>
 
-                <div className="hidden md:flex flex-col items-center md:items-start">
-                  <span className="text-[10px] md:text-[10px] font-black text-[#c792ff] uppercase tracking-[0.3em] mb-1 md:mb-2">Past</span>
+                <div className="flex flex-col items-center md:items-start">
+                  <span className="text-[10px] font-black text-[#c792ff] uppercase tracking-[0.3em] mb-1 md:mb-2">Past</span>
                   <span className="text-base md:text-lg lg:text-xl font-bold opacity-40 uppercase">Eye Studio</span>
                 </div>
               </div>
