@@ -181,7 +181,7 @@ export const projects = [
             '/images/cakebox3.jpg',
             '/images/cakebox4.jpg'
         ],
-        categories: ['branding', 'print']
+        categories: ['print']
     },
 
     {
@@ -200,7 +200,7 @@ export const projects = [
             '/images/sharingbox3.jpg',
             '/images/sharingbox4.jpg'
         ],
-        categories: ['branding', 'print']
+        categories: ['print']
     },
 
     {
@@ -219,7 +219,7 @@ export const projects = [
             '/images/osawa5.jpg',
             '/images/osawa1.jpg'
         ],
-        categories: ['branding', 'print']
+        categories: ['print']
     },
 
 
