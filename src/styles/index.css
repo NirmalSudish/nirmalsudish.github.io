@@ -152,9 +152,9 @@ body {
    where height is the constraint, not width
    ======================================== */
 @media (min-width: 1280px) and (max-height: 860px) {
-  /* Must stay >= 6rem (96px) to clear the 96px fixed navbar */
+  /* Must stay >= 7rem (112px) to clear the 96px navbar + blur bleed */
   section#work {
-    padding-top: clamp(6rem, 12vh, 7.5rem) !important;
+    padding-top: clamp(7rem, 13vh, 8rem) !important;
     padding-bottom: 4rem !important;
   }
 

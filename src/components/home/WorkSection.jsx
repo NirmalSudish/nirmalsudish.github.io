@@ -149,7 +149,7 @@ const MobileProjectCard = memo(({ item, onSelect, index, isVisible = false, isPr
 });
 
 // Desktop card component - OPTIMIZED with IntersectionObserver for videos
-const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, priority = false }) => {
+const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index }) => {
   const isProject = item.client !== undefined;
   const isVideo = typeof item.src === 'string' && item.src.endsWith('.mp4');
   const [isLoading, setIsLoading] = useState(false);
@@ -246,7 +246,9 @@ const ProjectCard = memo(({ item, onMouseEnter, onMouseLeave, onSelect, index, p
           ) : (
             <img
               src={resolvePath(item.src)}
-              loading={priority ? "eager" : "lazy"}
+              loading="eager"
+              decoding="async"
+              onError={(e) => { e.target.onerror = null; e.target.src = resolvePath(item.src); }}
               className="w-full h-auto md:h-full md:w-auto md:object-contain"
               alt=""
             />
@@ -400,7 +402,7 @@ const WorkSection = () => {
   }, [filteredItems.length, activeFilter]);
 
   return (
-    <section id="work" className="relative h-[100dvh] flex flex-col items-center pt-20 pb-4 md:pt-20 md:pb-0 lg:pt-24 lg:pb-16 bg-transparent z-10 overflow-hidden justify-center">
+    <section id="work" className="relative h-[100dvh] flex flex-col items-center pt-20 pb-4 md:pt-20 md:pb-0 lg:pt-32 lg:pb-16 bg-transparent z-10 overflow-hidden justify-center">
 
       <AnimatePresence>
         {selectedAsset && (
