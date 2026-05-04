@@ -196,9 +196,9 @@ const ProjectDetail = () => {
                 </div>
             </header>
 
-            <div className="pt-32 pb-20">
+            <div className="pt-[clamp(5rem,10vh,8rem)] pb-20">
                 <div className="container mx-auto max-w-7xl text-center">
-                    <div className="min-h-[80vh] flex flex-col items-center justify-center text-center px-4 sm:px-8">
+                    <div className="min-h-[50vh] flex flex-col items-center justify-center text-center px-4 sm:px-8">
                         <ScrollReveal>
                             <div className="max-w-4xl w-full">
                                 {project.client !== 'Icons of Kerala' && project.client !== 'Magazine Layout' && (
@@ -206,19 +206,19 @@ const ProjectDetail = () => {
                                         src={resolvePath(project.logoUrl)}
                                         alt="Logo"
                                         className={`
-                                    ${project.client === 'Northern Escape' ? 'h-48 md:h-80' :
-                                                project.client === 'Goldie Bun' ? 'h-56 md:h-[500px]' :
-                                                    project.client === 'Abu Crispy' ? 'h-48 md:h-96' :
-                                                        project.client === 'Novel Cafe' ? 'h-48 md:h-96' :
-                                                            project.client === 'Osawa Biriyani in Dubai' ? 'h-40 md:h-72' :
-                                                                project.client === 'Yamanote Cake Box' ? 'h-36 md:h-60' :
-                                                                    project.client === 'Wisebot' ? 'h-40 md:h-64' : 'h-32 md:h-40'} 
-                                    w-auto mx-auto mb-12 object-contain
+                                    ${project.client === 'Northern Escape' ? 'h-20 md:h-[clamp(6rem,18vh,18rem)]' :
+                                                project.client === 'Goldie Bun' ? 'h-24 md:h-[clamp(8rem,26vh,28rem)]' :
+                                                    project.client === 'Abu Crispy' ? 'h-20 md:h-[clamp(6rem,18vh,22rem)]' :
+                                                        project.client === 'Novel Cafe' ? 'h-20 md:h-[clamp(6rem,18vh,22rem)]' :
+                                                            project.client === 'Osawa Biriyani in Dubai' ? 'h-16 md:h-[clamp(5rem,14vh,16rem)]' :
+                                                                project.client === 'Yamanote Cake Box' ? 'h-16 md:h-[clamp(5rem,12vh,14rem)]' :
+                                                                    project.client === 'Wisebot' ? 'h-16 md:h-[clamp(5rem,14vh,15rem)]' : 'h-14 md:h-[clamp(4rem,9vh,9rem)]'}
+                                    w-auto mx-auto mb-8 object-contain
                                 `}
                                     />
                                 )}
-                                <h2 className="text-2xl md:text-8xl font-black mb-8 leading-tight uppercase">{project.client}</h2>
-                                <p className="text-base md:text-2xl leading-relaxed text-gray-800 dark:text-white font-light max-w-4xl mx-auto">{project.description}</p>
+                                <h2 className="text-2xl md:text-[clamp(2.5rem,5vw,6rem)] font-black mb-6 leading-tight uppercase">{project.client}</h2>
+                                <p className="text-sm md:text-[clamp(1rem,1.4vw,1.5rem)] leading-relaxed text-gray-800 dark:text-white font-light max-w-4xl mx-auto">{project.description}</p>
                                 <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 text-center border-t border-black/20 dark:border-white/20 pt-8">
                                     <div><p className="text-xs text-gray-600 dark:text-white uppercase tracking-widest mb-2 font-bold">Client</p><p className="font-bold text-sm md:text-lg">{project.client}</p></div>
                                     <div><p className="text-xs text-gray-600 dark:text-white uppercase tracking-widest mb-2 font-bold">Project</p><p className="font-bold text-sm md:text-lg">{project.project}</p></div>
