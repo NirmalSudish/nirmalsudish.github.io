@@ -321,7 +321,11 @@ const WorkSection = () => {
   const filteredItems = useMemo(() => {
     const pMatched = projects.filter(p => activeFilter === 'ux-branding' ? (p.categories.includes('ux-ui') || p.categories.includes('branding')) : (activeFilter === 'packaging-print' ? p.categories.includes('print') : p.categories.includes(activeFilter)));
     const aMap = { 'ux-branding': brandingAssets, 'packaging-print': packagingAssets, 'visual': visuals, 'motion': motionVideos, '3d': threeD, 'experimental': experiments };
-    const aMatched = (aMap[activeFilter] || []).map(src => ({ src, id: src }));
+    let aSource = aMap[activeFilter] || [];
+    if (activeFilter === 'visual') {
+      aSource = [...aSource].sort(() => Math.random() - 0.5);
+    }
+    const aMatched = aSource.map(src => ({ src, id: src }));
     // For indexing, we only use one set (no duplication)
     return [...pMatched, ...aMatched];
   }, [activeFilter]);
@@ -453,8 +457,8 @@ const WorkSection = () => {
           <div className="grid grid-cols-2 md:flex md:flex-row md:flex-wrap justify-center items-stretch md:items-center gap-2 md:gap-3 lg:gap-4 w-full max-w-4xl mx-auto">
             {[
               { id: 'ux-branding', label: 'UI / UX and BRANDING' },
-              { id: 'packaging-print', label: 'PRINT & PACKAGING' },
               { id: 'visual', label: 'VISUAL DESIGN' },
+              { id: 'packaging-print', label: 'PRINT & PACKAGING' },
               { id: 'motion', label: 'MOTION DESIGN' },
               { id: '3d', label: '3D DESIGN' },
               { id: 'experimental', label: 'EXPERIMENTAL DESIGN' }
@@ -478,7 +482,7 @@ const WorkSection = () => {
             className="flex gap-8 md:gap-16 px-[5vw] h-max"
             style={{
               /* Use CSS Animation for silky smooth auto-scroll */
-              animation: isPaused ? 'none' : `marquee ${filteredItems.length * 15}s linear infinite`,
+              animation: isPaused ? 'none' : `marquee ${filteredItems.length * (activeFilter === 'visual' ? 3 : 15)}s linear infinite`,
               width: 'max-content'
             }}
           >
